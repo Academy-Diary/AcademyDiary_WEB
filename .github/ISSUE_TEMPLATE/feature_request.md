@@ -1,10 +1,9 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: "[FEATURE]"
+title: '[FEATURE]'
 labels: enhancement
 assignees: ''
-
 ---
 
 ## 어떤 기능인가요?
