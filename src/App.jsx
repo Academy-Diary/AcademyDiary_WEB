@@ -21,19 +21,22 @@ function App() {
 
 function FirstPage() {
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Box sx={{ padding: '50px', marginBottom: '200px' }}>
-        <Typography variant="h4" align="center">
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h4" align="center" sx={{ mt: 5, mb: 30 }}>
           Academy Pro
         </Typography>
-      </Box>
-      <Box sx={{ margin: '10px' }}>
-        <Button variant="contained" size="large" sx={{ minWidth: '250px' }}>
+        <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth>
           로그인
         </Button>
-      </Box>
-      <Box sx={{ margin: '10px' }}>
-        <Button variant="contained" size="large" sx={{ minWidth: '250px' }}>
+        <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth>
           회원가입
         </Button>
       </Box>
