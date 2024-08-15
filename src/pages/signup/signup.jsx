@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Button, Typography, Container } from '@mui/material';
 
 function SignUp() {
