@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography, Container } from '@mui/material';
+import { Box, Button, Typography, Container, Link } from '@mui/material';
 
 function SignUp() {
   return (
@@ -27,6 +27,9 @@ function SignUp() {
         <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth>
           학생/학부모
         </Button>
+        <Link href="/login" variant="body2" sx={{ mt: 1 }}>
+          이미 계정이 있으신가요? 로그인
+        </Link>
       </Box>
     </Container>
   );
