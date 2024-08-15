@@ -1,7 +1,7 @@
 import React from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
-import { Login, NotFound, SignUp } from './pages';
+import { Login, SignUp } from './pages';
 
 function App() {
   return (
