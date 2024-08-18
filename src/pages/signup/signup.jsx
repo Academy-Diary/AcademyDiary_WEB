@@ -135,44 +135,8 @@ function SignupForm({ role, setSelected }) {
             id="password2"
           />
         </Grid>
-        {role === 'student' && (
-          <Grid item xs={12}>
-            <Typography>학생 정보</Typography>
-          </Grid>
-        )}
-        <Grid item xs={12}>
-          <TextField name="name" required fullWidth id="name" label="이름" />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography>생년월일</Typography>
-          <input type="date" />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField required fullWidth id="email" label="이메일 주소" name="email" />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField required fullWidth id="phonenumber" label="전화번호" name="phonenumber" />
-        </Grid>
-        {role === 'student' && (
-          <>
-            <Grid item xs={12}>
-              <Typography>학부모 정보</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TextField name="name" required fullWidth id="name" label="이름" />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>생년월일</Typography>
-              <input type="date" />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField required fullWidth id="email" label="이메일 주소" name="email" />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField required fullWidth id="phonenumber" label="전화번호" name="phonenumber" />
-            </Grid>
-          </>
-        )}
+        {role === 'student' ? <PersonalInfo title="학생 정보" /> : <PersonalInfo title="개인 정보" />}
+        {role === 'student' && <PersonalInfo title="학부모 정보" />}
       </Grid>
       <Button type="submit" fullWidth variant="contained" size="large" sx={{ mt: 3, mb: 2 }}>
         가입하기
@@ -185,5 +149,28 @@ function SignupForm({ role, setSelected }) {
         </Grid>
       </Grid>
     </Box>
+  );
+}
+
+function PersonalInfo({ title }) {
+  return (
+    <>
+      <Grid item xs={12} mt={2}>
+        <Typography>{title}</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <TextField name="name" required fullWidth id="name" label="이름" />
+      </Grid>
+      <Grid item xs={12}>
+        <Typography>생년월일</Typography>
+        <input type="date" />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField required fullWidth id="email" label="이메일 주소" name="email" />
+      </Grid>
+      <Grid item xs={12}>
+        <TextField required fullWidth id="phonenumber" label="전화번호" name="phonenumber" />
+      </Grid>
+    </>
   );
 }
