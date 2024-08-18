@@ -25,9 +25,18 @@ export default function SignUp() {
           Academy Pro
         </Typography>
         <Box mb={10}>
-          <Typography variant="h5">회원가입</Typography>
+          <Typography variant="h5" align="center" mb={1}>
+            회원가입
+          </Typography>
+          {selected && (
+            <Typography variant="body1" align="center">
+              {role === 'director' && '학원 대표'}
+              {role === 'teacher' && '학원 강사'}
+              {role === 'student' && '학생/학부모'}
+            </Typography>
+          )}
         </Box>
-        {selected ? <SignupForm setSelected={setSelected} role={role} /> : <RoleSelection handleClickRole={handleClickRole} />}
+        {selected ? <SignupForm role={role} setSelected={setSelected} /> : <RoleSelection handleClickRole={handleClickRole} />}
       </Box>
     </Container>
   );
@@ -56,7 +65,7 @@ function RoleSelection({ handleClickRole }) {
   );
 }
 
-function SignupForm({ setSelected }) {
+function SignupForm({ role, setSelected }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {
@@ -126,6 +135,11 @@ function SignupForm({ setSelected }) {
             id="password2"
           />
         </Grid>
+        {role === 'student' && (
+          <Grid item xs={12}>
+            <Typography>학생 정보</Typography>
+          </Grid>
+        )}
         <Grid item xs={12}>
           <TextField name="name" required fullWidth id="name" label="이름" />
         </Grid>
@@ -139,6 +153,26 @@ function SignupForm({ setSelected }) {
         <Grid item xs={12}>
           <TextField required fullWidth id="phonenumber" label="전화번호" name="phonenumber" />
         </Grid>
+        {role === 'student' && (
+          <>
+            <Grid item xs={12}>
+              <Typography>학부모 정보</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField name="name" required fullWidth id="name" label="이름" />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>생년월일</Typography>
+              <input type="date" />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField required fullWidth id="email" label="이메일 주소" name="email" />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField required fullWidth id="phonenumber" label="전화번호" name="phonenumber" />
+            </Grid>
+          </>
+        )}
       </Grid>
       <Button type="submit" fullWidth variant="contained" size="large" sx={{ mt: 3, mb: 2 }}>
         가입하기
