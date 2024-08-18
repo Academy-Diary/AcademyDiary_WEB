@@ -143,10 +143,10 @@ function SignupForm({ role, setSelected }) {
         {role === 'student' ? <PersonalInfo title="학생 정보" /> : <PersonalInfo title="개인 정보" />}
         {role === 'student' && <PersonalInfo title="학부모 정보" />}
       </Grid>
-      <Button type="submit" fullWidth variant="contained" size="large" sx={{ mt: 3, mb: 2 }}>
+      <Button type="submit" fullWidth variant="contained" size="large" sx={{ mt: 3 }}>
         가입하기
       </Button>
-      <Grid container justifyContent="flex-end">
+      <Grid container justifyContent="flex-end" sx={{ mt: 1, mb: 3 }}>
         <Grid item>
           <Button variant="text" onClick={() => setSelected(false)}>
             이전 화면으로
@@ -163,7 +163,7 @@ function PersonalInfo({ title }) {
   return (
     <>
       <Grid item xs={12} mt={2}>
-        <Typography>{title}</Typography>
+        <Typography fontWeight="medium">{title}</Typography>
       </Grid>
       <Grid item xs={12}>
         <TextField name="name" required fullWidth id="name" label="이름" />

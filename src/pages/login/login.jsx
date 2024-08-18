@@ -28,12 +28,12 @@ function Login() {
           alignItems: 'center',
         }}
       >
-        <Box sx={{ padding: '20px', marginBottom: '30px' }}>
-          <Typography variant="h4" align="center">
-            Academy Pro
-          </Typography>
-        </Box>
-        <Typography variant="h5">로그인</Typography>
+        <Typography variant="h4" align="center" mb={5}>
+          Academy Pro
+        </Typography>
+        <Typography variant="h5" align="center" mb={3}>
+          로그인
+        </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField margin="normal" required fullWidth id="userId" label="아이디" name="userId" autoComplete="on" autoFocus />
           <TextField
