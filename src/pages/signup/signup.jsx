@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Container, Link, Grid, TextField, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import dayjs from 'dayjs';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 export default function SignUp() {
   const [selected, setSelected] = useState(false);
@@ -153,6 +158,8 @@ function SignupForm({ role, setSelected }) {
 }
 
 function PersonalInfo({ title }) {
+  const [value, setValue] = useState(null);
+
   return (
     <>
       <Grid item xs={12} mt={2}>
@@ -162,8 +169,13 @@ function PersonalInfo({ title }) {
         <TextField name="name" required fullWidth id="name" label="이름" />
       </Grid>
       <Grid item xs={12}>
-        <Typography>생년월일</Typography>
-        <input type="date" />
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoContainer components={['DatePicker']}>
+            <DemoItem label="생년월일">
+              <DatePicker maxDate={dayjs()} value={value} onChange={(newValue) => setValue(newValue)} />
+            </DemoItem>
+          </DemoContainer>
+        </LocalizationProvider>
       </Grid>
       <Grid item xs={12}>
         <TextField required fullWidth id="email" label="이메일 주소" name="email" />
