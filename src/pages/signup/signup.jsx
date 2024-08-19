@@ -12,9 +12,9 @@ export default function SignUp() {
   const [status, setStatus] = useState(0);
   const [position, setPosition] = useState('');
 
-  const handleClickRole = (_role) => {
+  const handleSelect = (pos) => {
     setStatus(1);
-    setPosition(_role);
+    setPosition(pos);
   };
 
   return (
@@ -30,7 +30,7 @@ export default function SignUp() {
         <Typography variant="h4" align="center" mb={5}>
           Academy Pro
         </Typography>
-        {status === 0 && <RoleSelection handleClickRole={handleClickRole} />}
+        {status === 0 && <SelectPosition handleSelect={handleSelect} />}
         {status === 1 && <SignupForm position={position} setStatus={setStatus} />}
         {status === 2 && <Succeed name="홍길동" position={position} />}
       </Box>
@@ -38,20 +38,17 @@ export default function SignUp() {
   );
 }
 
-function RoleSelection({ handleClickRole }) {
+function SelectPosition({ handleSelect }) {
   return (
-    <Box>
+    <>
       <Typography variant="h5" align="center" mb={30}>
         회원가입
       </Typography>
-      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleClickRole('director')}>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('director')}>
         학원 대표
       </Button>
-      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleClickRole('teacher')}>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('teacher')}>
         학원 강사
-      </Button>
-      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleClickRole('student')}>
-        학생/학부모
       </Button>
       <Grid container justifyContent="flex-end">
         <Grid item>
@@ -60,7 +57,7 @@ function RoleSelection({ handleClickRole }) {
           </Link>
         </Grid>
       </Grid>
-    </Box>
+    </>
   );
 }
 
@@ -96,7 +93,6 @@ function SignupForm({ position, setStatus }) {
       <Typography variant="body1" align="center" mb={10}>
         {position === 'director' && '학원 대표'}
         {position === 'teacher' && '학원 강사'}
-        {position === 'student' && '학생/학부모'}
       </Typography>
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
@@ -146,8 +142,7 @@ function SignupForm({ position, setStatus }) {
               id="password2"
             />
           </Grid>
-          {position === 'student' ? <PersonalInfo title="학생 정보" /> : <PersonalInfo title="개인 정보" />}
-          {position === 'student' && <PersonalInfo title="학부모 정보" />}
+          <PersonalInfo title="개인 정보" />
         </Grid>
         <Button type="submit" fullWidth variant="contained" size="large" sx={{ mt: 3 }}>
           가입하기
