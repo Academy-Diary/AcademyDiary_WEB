@@ -200,7 +200,7 @@ function Succeed({ name, position }) {
         회원가입이 완료되었습니다!
       </Typography>
       <Button variant="contained" size="large" fullWidth href="/login">
-        로그인
+        로그인하기
       </Button>
     </Box>
   );

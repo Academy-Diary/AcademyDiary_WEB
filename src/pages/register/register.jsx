@@ -33,7 +33,7 @@ export default function Register({ name, position }) {
 
 function BeforeRegister({ name, position, handleClick }) {
   return (
-    <Box mt={10}>
+    <Box mt={10} sx={{ width: '100%' }}>
       {position === 'director' && (
         <Typography variant="h5" align="center" mb={20}>
           {name}(원장)님,
