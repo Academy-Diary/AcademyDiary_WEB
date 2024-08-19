@@ -10,11 +10,11 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 export default function SignUp() {
   // 0: 선택화면, 1: 회원가입화면 2: 완료화면
   const [status, setStatus] = useState(0);
-  const [role, setRole] = useState('');
+  const [position, setPosition] = useState('');
 
   const handleClickRole = (_role) => {
     setStatus(1);
-    setRole(_role);
+    setPosition(_role);
   };
 
   return (
@@ -31,8 +31,8 @@ export default function SignUp() {
           Academy Pro
         </Typography>
         {status === 0 && <RoleSelection handleClickRole={handleClickRole} />}
-        {status === 1 && <SignupForm role={role} setStatus={setStatus} />}
-        {status === 2 && <Succeed name="홍길동" role={role} />}
+        {status === 1 && <SignupForm position={position} setStatus={setStatus} />}
+        {status === 2 && <Succeed name="홍길동" position={position} />}
       </Box>
     </Container>
   );
@@ -64,7 +64,7 @@ function RoleSelection({ handleClickRole }) {
   );
 }
 
-function SignupForm({ role, setStatus }) {
+function SignupForm({ position, setStatus }) {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {
@@ -94,9 +94,9 @@ function SignupForm({ role, setStatus }) {
         회원가입
       </Typography>
       <Typography variant="body1" align="center" mb={10}>
-        {role === 'director' && '학원 대표'}
-        {role === 'teacher' && '학원 강사'}
-        {role === 'student' && '학생/학부모'}
+        {position === 'director' && '학원 대표'}
+        {position === 'teacher' && '학원 강사'}
+        {position === 'student' && '학생/학부모'}
       </Typography>
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
@@ -146,8 +146,8 @@ function SignupForm({ role, setStatus }) {
               id="password2"
             />
           </Grid>
-          {role === 'student' ? <PersonalInfo title="학생 정보" /> : <PersonalInfo title="개인 정보" />}
-          {role === 'student' && <PersonalInfo title="학부모 정보" />}
+          {position === 'student' ? <PersonalInfo title="학생 정보" /> : <PersonalInfo title="개인 정보" />}
+          {position === 'student' && <PersonalInfo title="학부모 정보" />}
         </Grid>
         <Button type="submit" fullWidth variant="contained" size="large" sx={{ mt: 3 }}>
           가입하기
@@ -194,13 +194,13 @@ function PersonalInfo({ title }) {
   );
 }
 
-function Succeed({ name, role }) {
+function Succeed({ name, position }) {
   return (
     <Box>
       <Typography variant="h5" align="center" mb={20}>
         {name}
-        {role === 'director' && '(원장)'}
-        {role === 'teacher' && '(강사)'}
+        {position === 'director' && '(원장)'}
+        {position === 'teacher' && '(강사)'}
         님, <br />
         회원가입이 완료되었습니다!
       </Typography>

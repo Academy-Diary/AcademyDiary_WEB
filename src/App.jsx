@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
-import { Login, SignUp } from './pages';
+import { Login, SignUp, Register } from './pages';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<FirstPage />} />
+          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path="*" element={isLoggedIn ? <Register name="홍길동" position="teacher" /> : <FirstPage />} />
           {/* notFound : 일치하는 라우트 없는 경우 처리 */}
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>

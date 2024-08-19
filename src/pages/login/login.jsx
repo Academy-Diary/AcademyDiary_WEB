@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Box, Button, TextField, Link, Grid, Typography, Container, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-function Login() {
+function Login({ setIsLoggedIn }) {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {
@@ -16,6 +19,10 @@ function Login() {
       email: data.get('email'),
       password: data.get('password'),
     });
+
+    // 로그인 성공 시
+    setIsLoggedIn(true);
+    navigate('/');
   };
 
   return (
