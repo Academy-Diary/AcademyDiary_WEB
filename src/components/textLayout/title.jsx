@@ -20,12 +20,8 @@ export default function Title({ title, subtitle, children }) {
       <Typography variant="h4" fontWeight="bold">
         {title}
       </Typography>
-      <Box display="flex" justifyContent="space-between">
-        {!subtitle ? null : (
-          <Typography variant="subtitle2" sx={{ mt: 2 }}>
-            {subtitle}
-          </Typography>
-        )}
+      <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
+        {!subtitle ? null : <Typography variant="subtitle2">{subtitle}</Typography>}
         {!children ? null : children}
       </Box>
     </Box>
