@@ -27,7 +27,7 @@ export default function Director() {
             AcademyPro
           </Typography>
           <Box sx={{ flexGrow: 1, ml: 5 }}>
-            <Button color="inherit" size="large" sx={{ mx: 2 }} onMouseOver={handleMouseOver}>
+            <Button color="inherit" size="large" sx={{ mx: 4 }} onMouseOver={handleMouseOver}>
               구성원 관리
             </Button>
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
@@ -35,10 +35,10 @@ export default function Director() {
               <MenuItem onClick={handleClose}>강사 목록</MenuItem>
               <MenuItem onClick={handleClose}>학생 목록</MenuItem>
             </Menu>
-            <Button color="inherit" size="large" sx={{ mx: 2 }}>
+            <Button color="inherit" size="large" sx={{ mx: 4 }}>
               강의 관리
             </Button>
-            <Button color="inherit" size="large" sx={{ mx: 2 }} onMouseOver={handleMouseOver2}>
+            <Button color="inherit" size="large" sx={{ mx: 4 }} onMouseOver={handleMouseOver2}>
               학원비
             </Button>
             <Menu anchorEl={anchorEl2} open={Boolean(anchorEl2)} onClose={handleClose2}>
@@ -46,7 +46,7 @@ export default function Director() {
               <MenuItem onClick={handleClose2}>학원비 구성</MenuItem>
               <MenuItem onClick={handleClose2}>학원비 청구</MenuItem>
             </Menu>
-            <Button color="inherit" size="large" sx={{ mx: 2 }}>
+            <Button color="inherit" size="large" sx={{ mx: 4 }}>
               전체 공지
             </Button>
           </Box>
