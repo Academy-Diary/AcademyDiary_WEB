@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Box, Avatar, Button, TextField, Link, Grid, Typography, Container, InputAdornment, IconButton } from '@mui/material';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useNavigate } from 'react-router-dom';
+
+import { Box, Button, TextField, Link, Grid, Typography, Container, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-function Login() {
+function Login({ setIsLoggedIn }) {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {
@@ -17,6 +19,10 @@ function Login() {
       email: data.get('email'),
       password: data.get('password'),
     });
+
+    // 로그인 성공 시
+    setIsLoggedIn(true);
+    navigate('/');
   };
 
   return (
@@ -29,14 +35,14 @@ function Login() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
+        <Typography variant="h4" align="center" mb={5}>
+          Academy Pro
+        </Typography>
+        <Typography variant="h5" align="center" mb={3}>
+          로그인
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" autoFocus />
+          <TextField margin="normal" required fullWidth id="userId" label="아이디" name="userId" autoComplete="on" autoFocus />
           <TextField
             margin="normal"
             required
@@ -52,13 +58,13 @@ function Login() {
             }}
             type={showPassword ? 'text' : 'password'}
             name="password"
-            label="Password"
+            label="비밀번호"
             id="password"
-            autoComplete="current-password"
+            autoComplete="off"
           />
           {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign In
+          <Button type="submit" fullWidth variant="contained" size="large" sx={{ my: 2 }}>
+            로그인
           </Button>
           <Grid container>
             <Grid item xs>
@@ -68,7 +74,7 @@ function Login() {
             </Grid>
             <Grid item>
               <Link href="/signup" variant="body2">
-                Don&apos;t have an account? Sign Up
+                계정이 없으신가요? 회원가입하러 가기
               </Link>
             </Grid>
           </Grid>
