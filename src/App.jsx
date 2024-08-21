@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
-import { Login, SignUp, Register } from './pages';
+import { Login, SignUp, Register, NotFound, TeacherHome } from './pages';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -10,11 +10,12 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={isLoggedIn ? <Register name="홍길동" position="teacher" /> : <FirstPage />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="*" element={isLoggedIn ? <Register name="홍길동" position="teacher" /> : <FirstPage />} />
+          <Route path="/teacher" element={<TeacherHome />} />
           {/* notFound : 일치하는 라우트 없는 경우 처리 */}
-          {/* <Route path="*" element={<NotFound />} /> */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
