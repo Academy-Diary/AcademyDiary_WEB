@@ -4,7 +4,7 @@ import TeacherHeader from '../header/teacherHeader';
 import TeacherSideBar from '../sidebar/teacherSidebar';
 
 /**
- *@description 강사화면 헤더, 사이드바 있는 레이아웃!
+ *@description 강사화면 헤더, 사이드바 있는 레이아웃
 
  @example 
  <Teacher>
