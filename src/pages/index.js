@@ -4,3 +4,4 @@ export { default as Login } from './login/login';
 
 export { default as TeacherHome } from './home/teacherHome';
 export { default as Register } from './register/register';
+export { default as Director } from './director/director';
