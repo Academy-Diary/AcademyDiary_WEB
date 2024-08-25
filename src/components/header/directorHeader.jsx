@@ -2,15 +2,7 @@ import React, { useState } from 'react';
 
 import { Box, Typography, AppBar, Toolbar, Button, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
 
-export default function Director() {
-  return (
-    <Box component="main">
-      <DirectorHeader />
-    </Box>
-  );
-}
-
-function DirectorHeader() {
+export default function DirectorHeader() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
 

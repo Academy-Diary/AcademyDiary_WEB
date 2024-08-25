@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
-import { Login, SignUp, Register, NotFound, Director, TeacherHome } from './pages';
+import { Login, SignUp, Register, NotFound, DirectorHome, TeacherHome } from './pages';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -16,7 +16,7 @@ function App() {
           <Route path="/teacher" element={<TeacherHome />} />
           {/* notFound : 일치하는 라우트 없는 경우 처리 */}
           <Route path="*" element={<NotFound />} />
-          <Route path="/director" element={<Director />} />
+          <Route path="/director" element={<DirectorHome />} />
         </Routes>
       </BrowserRouter>
     </div>
