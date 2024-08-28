@@ -47,7 +47,14 @@ export default function DirectorHeader() {
             >
               강사 관리
             </MenuItem>
-            <MenuItem onClick={handleClose}>학생 목록</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigate('/director/manage-members/students');
+              }}
+            >
+              학생 관리
+            </MenuItem>
           </Menu>
           <Button color="inherit" size="large" sx={{ mx: 4 }}>
             강의 관리

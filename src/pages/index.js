@@ -9,3 +9,4 @@ export { default as Register } from './register/register';
 export { default as DirectorHome } from './director/directorHome';
 export { default as DirectorReqList } from './director/directorReqList';
 export { default as ManageTeachers } from './director/manageTeachers';
+export { default as ManageStudents } from './director/manageStudents';
