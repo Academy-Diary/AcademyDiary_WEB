@@ -17,7 +17,7 @@ const teachers = [
 
 export default function ManageTeachers() {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState({});
+  const [selected, setSelected] = useState({ name: '', lectures: [], phone: '', email: '' });
 
   const handleCloseDialog = () => {
     setOpen(false);
