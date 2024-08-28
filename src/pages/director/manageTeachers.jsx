@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions } from '@mui/material';
+import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions, DialogContentText, Box, DialogTitle } from '@mui/material';
 
 import Director from '../../components/layouts/director';
 
@@ -17,12 +17,14 @@ const teachers = [
 
 export default function ManageTeachers() {
   const [open, setOpen] = useState(false);
+  const [selected, setSelected] = useState({});
 
   const handleCloseDialog = () => {
     setOpen(false);
   };
-  const handleClickDelete = () => {
+  const handleClickDelete = (selectedTeacher) => {
     setOpen(true);
+    setSelected(selectedTeacher);
   };
 
   return (
@@ -57,7 +59,7 @@ export default function ManageTeachers() {
                 <TableCell>{teacher.phone}</TableCell>
                 <TableCell>{teacher.email}</TableCell>
                 <TableCell align="right">
-                  <Button variant="outlined" onClick={handleClickDelete}>
+                  <Button variant="outlined" onClick={() => handleClickDelete(teacher)}>
                     삭제
                   </Button>
                 </TableCell>
@@ -67,7 +69,21 @@ export default function ManageTeachers() {
         </Table>
       </TableContainer>
       <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogContent>미나리님을 강사 목록에서 삭제하시겠습니까?</DialogContent>
+        <DialogTitle>{selected.name} 강사님을 강사 목록에서 삭제하시겠습니까?</DialogTitle>
+        <DialogContent>
+          <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
+            <DialogContentText>강사 이름: {selected.name}</DialogContentText>
+            <DialogContentText>
+              담당 과목:{' '}
+              {selected.lectures.map((lecture, idx) => {
+                if (idx < selected.lectures.length - 1) return `${lecture}, `;
+                return lecture;
+              })}{' '}
+            </DialogContentText>
+            <DialogContentText>연락처: {selected.phone}</DialogContentText>
+            <DialogContentText>이메일: {selected.email}</DialogContentText>
+          </Box>
+        </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>삭제</Button>
           <Button onClick={handleCloseDialog}>취소</Button>
