@@ -4,6 +4,20 @@ import { Typography, List, ListItem, ListItemText, Button, Grid, Dialog, DialogA
 
 import Director from '../../../components/layouts/director';
 
+const teachers = [
+  { name: '나미리', lectures: ['화법과 작문', '비문학'] },
+  { name: '이하람', lectures: ['미적분 2'] },
+  { name: '권해담', lectures: ['물리 1'] },
+  { name: '김대성', lectures: ['확률과 통계'] },
+];
+
+const students = [
+  { name: '신짱구', parentName: '봉미선' },
+  { name: '신짱아', parentName: '봉미선' },
+  { name: '김철수', parentName: '김미영' },
+  { name: '이훈이', parentName: '토마토' },
+];
+
 export default function RequestList() {
   const [openApprove, setOpenApprove] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
@@ -32,60 +46,9 @@ export default function RequestList() {
             강사 등록 요청
           </Typography>
           <List sx={{ overflow: 'auto', maxHeight: '50vh', bgcolor: 'background.paper' }}>
-            <ListItem>
-              <ListItemText primary="나미리" secondary="과목: 미적분 1" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="이하람" secondary="과목: 화법과 작문" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="권해담" secondary="과목: 물리 1" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="김대성" secondary="과목: 확률과 통계" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="김대성" secondary="과목: 확률과 통계" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="김대성" secondary="과목: 확률과 통계" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
+            {teachers.map((teacher) => (
+              <TeacherReqItem key={teacher.name} name={teacher.name} lectures={teacher.lectures} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleCloseApprove} />
+            ))}
           </List>
         </Grid>
         <Grid item xs={6}>
@@ -93,60 +56,9 @@ export default function RequestList() {
             학생 등록 요청
           </Typography>
           <List sx={{ overflow: 'auto', maxHeight: '50vh', bgcolor: 'background.paper' }}>
-            <ListItem>
-              <ListItemText primary="신짱구" secondary="학부모: 봉미선" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="신짱아" secondary="학부모: 봉미선" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="김철수" secondary="학부모: 김미영" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="이훈이" secondary="학부모: 토마토" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="이훈이" secondary="학부모: 토마토" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="이훈이" secondary="학부모: 토마토" />
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={handleOpenDecline}>
-                거절
-              </Button>
-            </ListItem>
+            {students.map((student) => (
+              <StudentReqItem key={student.name} name={student.name} parentName={student.parentName} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleCloseApprove} />
+            ))}
           </List>
         </Grid>
       </Grid>
@@ -169,5 +81,33 @@ export default function RequestList() {
         </DialogActions>
       </Dialog>
     </Director>
+  );
+}
+
+function TeacherReqItem({ name, lectures, handleOpenApprove, handleOpenDecline }) {
+  return (
+    <ListItem key={name}>
+      <ListItemText primary={name} secondary={`과목: ${lectures}`} />
+      <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
+        승인
+      </Button>
+      <Button variant="contained" onClick={handleOpenDecline}>
+        거절
+      </Button>
+    </ListItem>
+  );
+}
+
+function StudentReqItem({ name, parentName, handleOpenApprove, handleOpenDecline }) {
+  return (
+    <ListItem key={name}>
+      <ListItemText primary={name} secondary={`학부모: ${parentName}`} />
+      <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
+        승인
+      </Button>
+      <Button variant="contained" onClick={handleOpenDecline}>
+        거절
+      </Button>
+    </ListItem>
   );
 }
