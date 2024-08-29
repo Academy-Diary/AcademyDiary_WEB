@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Box, Typography, List, ListItem, ListItemText, Button, Grid, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/material';
 
-import Director from '../../components/layouts/director';
+import Director from '../../../components/layouts/director';
 
 export default function DirectorReqList() {
   const [openApprove, setOpenApprove] = useState(false);

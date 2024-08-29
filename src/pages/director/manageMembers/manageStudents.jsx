@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, Box } from '@mui/material';
 
-import Director from '../../components/layouts/director';
+import Director from '../../../components/layouts/director';
 
 function createData(name, parentName, phone, parentPhone) {
   return { name, parentName, phone, parentPhone };
