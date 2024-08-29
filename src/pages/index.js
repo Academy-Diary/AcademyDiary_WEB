@@ -7,6 +7,6 @@ export { default as Register } from './register/register';
 
 // 원장 페이지
 export { default as DirectorHome } from './director/directorHome';
-export { default as DirectorReqList } from './director/manageMembers/directorReqList';
+export { default as RequestList } from './director/manageMembers/requestList';
 export { default as ManageTeachers } from './director/manageMembers/manageTeachers';
 export { default as ManageStudents } from './director/manageMembers/manageStudents';

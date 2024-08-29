@@ -4,7 +4,7 @@ import { Box, Typography, List, ListItem, ListItemText, Button, Grid, Dialog, Di
 
 import Director from '../../../components/layouts/director';
 
-export default function DirectorReqList() {
+export default function RequestList() {
   const [openApprove, setOpenApprove] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
 
