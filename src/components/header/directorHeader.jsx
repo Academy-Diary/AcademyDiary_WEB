@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography, AppBar, Toolbar, Button, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
 
 export default function DirectorHeader() {
+  const navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
 
@@ -33,7 +36,7 @@ export default function DirectorHeader() {
             <MenuItem onClick={handleClose}>강사 목록</MenuItem>
             <MenuItem onClick={handleClose}>학생 목록</MenuItem>
           </Menu>
-          <Button color="inherit" size="large" sx={{ mx: 4 }}>
+          <Button color="inherit" size="large" sx={{ mx: 4 }} onClick={() => navigate('/director/manage-courses')}>
             강의 관리
           </Button>
           <Button color="inherit" size="large" sx={{ mx: 4 }} onMouseOver={handleMouseOver2}>
