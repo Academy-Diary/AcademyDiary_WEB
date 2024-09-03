@@ -7,3 +7,4 @@ export { default as Register } from './register/register';
 export { default as DirectorHome } from './director/directorHome';
 
 export { default as ManageCourses } from './director/manageCourses/manageCourses';
+export { default as AddCourse } from './director/manageCourses/addCourse';

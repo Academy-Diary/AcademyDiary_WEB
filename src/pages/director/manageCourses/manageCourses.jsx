@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { List, ListItem, ListItemText, Typography, Grid, Box, Button, ButtonGroup } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -12,6 +14,11 @@ const courses = [
 ];
 
 export default function ManageCourses() {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate('/director/manage-courses/add-course');
+  };
+
   return (
     <Director>
       <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
@@ -24,7 +31,7 @@ export default function ManageCourses() {
       </List>
       <Grid container justifyContent="flex-end" sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
         <Grid item>
-          <Button size="large" variant="contained" startIcon={<AddIcon />}>
+          <Button size="large" variant="contained" startIcon={<AddIcon />} onClick={handleClick}>
             새 강의 생성
           </Button>
         </Grid>

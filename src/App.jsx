@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
-import { Login, SignUp, Register, NotFound, DirectorHome, TeacherHome, ManageCourses } from './pages';
+import { Login, SignUp, Register, NotFound, DirectorHome, TeacherHome, ManageCourses, AddCourse } from './pages';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,6 +19,7 @@ function App() {
           <Route path="/director" element={<DirectorHome />} />
 
           <Route path="/director/manage-courses" element={<ManageCourses />} />
+          <Route path="/director/manage-courses/add-course" element={<AddCourse />} />
         </Routes>
       </BrowserRouter>
     </div>
