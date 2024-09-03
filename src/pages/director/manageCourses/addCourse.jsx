@@ -77,7 +77,7 @@ export default function AddCourse() {
               <Typography variant="h6">수강생 등록</Typography>
             </Grid>
             <Grid item xs={12}>
-              <TransferList leftList={students} rightList={[]} />
+              <TransferList leftList={students} rightList={[]} leftTitle="전체 학생 목록" rightTitle="수강생 목록" />
             </Grid>
             <Grid item xs={12}>
               <DialogActions>

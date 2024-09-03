@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Grid, List, ListItemButton, ListItemIcon, ListItemText, Checkbox, Button, Paper } from '@mui/material';
+import { Grid, List, ListSubheader, ListItemButton, ListItemIcon, ListItemText, Checkbox, Button, Paper } from '@mui/material';
 
 function not(a, b) {
   return a.filter((value) => b.indexOf(value) === -1);
@@ -10,7 +10,7 @@ function intersection(a, b) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 
-export default function TransferList({ leftList, rightList }) {
+export default function TransferList({ leftList, rightList, leftTitle, rightTitle }) {
   const [checked, setChecked] = useState([]);
   const [left, setLeft] = useState(leftList);
   const [right, setRight] = useState(rightList);
@@ -53,9 +53,9 @@ export default function TransferList({ leftList, rightList }) {
     setRight([]);
   };
 
-  const customList = (items) => (
+  const customList = (items, title) => (
     <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
-      <List dense component="div" role="list">
+      <List dense component="div" role="list" subheader={<ListSubheader component="div">{title}</ListSubheader>}>
         {items.map((value) => {
           const labelId = `transfer-list-item-${value}-label`;
 
@@ -81,7 +81,7 @@ export default function TransferList({ leftList, rightList }) {
 
   return (
     <Grid container spacing={2} sx={{ justifyContent: 'center', alignItems: 'center' }}>
-      <Grid item>{customList(left)}</Grid>
+      <Grid item>{customList(left, leftTitle)}</Grid>
       <Grid item>
         <Grid container direction="column" sx={{ alignItems: 'center' }}>
           <Button sx={{ my: 0.5 }} variant="outlined" size="small" onClick={handleAllRight} disabled={left.length === 0} aria-label="move all right">
@@ -98,7 +98,7 @@ export default function TransferList({ leftList, rightList }) {
           </Button>
         </Grid>
       </Grid>
-      <Grid item>{customList(right)}</Grid>
+      <Grid item>{customList(right, rightTitle)}</Grid>
     </Grid>
   );
 }
