@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Typography, Box, Button, TextField, Select, MenuItem, InputLabel, FormControl, IconButton, Grid, Dialog, DialogActions } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
@@ -10,12 +11,18 @@ const teachers = ['나미리', '이하람', '권해담', '김대성'];
 const students = ['신짱구', '신짱아', '이훈이', '김철수'];
 
 export default function AddCourse() {
+  const navigate = useNavigate();
+
   const [teacher, setTeacher] = useState('');
   const [open, setOpen] = useState(false);
 
   const handleChangeTeacher = (e) => {
     setTeacher(e.target.value);
   };
+  const handleCancle = () => {
+    navigate('/director/manage-courses');
+  };
+
   const handleOpenDialog = () => {
     setOpen(true);
   };
@@ -63,7 +70,7 @@ export default function AddCourse() {
             </Grid>
           </Grid>
           <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-            <Button size="large" variant="outlined" sx={{ width: 100, mr: 2 }}>
+            <Button size="large" variant="outlined" sx={{ width: 100, mr: 2 }} onClick={handleCancle}>
               취소
             </Button>
             <Button type="submit" size="large" variant="contained" sx={{ width: 120 }}>
