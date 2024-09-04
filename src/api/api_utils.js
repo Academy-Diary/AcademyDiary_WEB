@@ -98,15 +98,12 @@ export const tokenExpired = (exp) => {
 
 // ----------------------------------------------------------------------
 /**
- * store accessToken to localStorage
- * @param {any} token
+ * store accessToken to localStorage & axios header
+ * @param {any} accessToken
  */
-export const setSession = (token) => {
-  const { accessToken, refreshToken } = token;
-  // if (accessToken && refreshToken) {
+export const setSession = (accessToken) => {
   if (accessToken) {
     localStorage.setItem('accessToken', accessToken);
-    localStorage.setItem('refreshToken', refreshToken);
 
     axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
@@ -124,7 +121,6 @@ export const setSession = (token) => {
 
 export const removeSession = () => {
   localStorage.removeItem('accessToken');
-  localStorage.removeItem('refreshToken');
 
   delete axiosInstance.defaults.headers.common.Authorization;
 };
