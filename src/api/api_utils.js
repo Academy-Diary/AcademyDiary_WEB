@@ -1,5 +1,5 @@
-// routes
 // import { handleAlert } from 'react-handle-alert';
+import dayjs from 'dayjs';
 import { axiosInstance } from './axios';
 import { PATH_API } from './path';
 
@@ -22,7 +22,11 @@ function jwtDecode(token) {
 }
 
 // ----------------------------------------------------------------------
-
+/**
+ *
+ * @param {string} accessToken
+ * @returns {boolean} expiration
+ */
 export const isValidToken = (accessToken) => {
   if (!accessToken) {
     return false;
@@ -30,13 +34,13 @@ export const isValidToken = (accessToken) => {
 
   const decoded = jwtDecode(accessToken);
 
-  const currentTime = Date.now() / 1000;
-
-  return decoded.exp > currentTime;
+  return dayjs().isBefore(dayjs(decoded.exp));
 };
 
 // ----------------------------------------------------------------------
-
+/**
+ * refreshToken으로 토큰 재발급
+ */
 const tokenRefresh = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
   if (refreshToken) {
@@ -65,8 +69,12 @@ const tokenRefresh = async () => {
       window.location.reload();
     }
   }
+  return '';
 };
 
+/**
+ * 만료 되기 전에 토큰 갱신하도록 setTimeout
+ */
 export const tokenExpired = (exp) => {
   let expiredTimer;
 
@@ -89,7 +97,10 @@ export const tokenExpired = (exp) => {
 };
 
 // ----------------------------------------------------------------------
-
+/**
+ * store accessToken to localStorage
+ * @param {any} token
+ */
 export const setSession = (token) => {
   const { accessToken, refreshToken } = token;
   // if (accessToken && refreshToken) {
@@ -99,8 +110,9 @@ export const setSession = (token) => {
 
     axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-    const { exp } = jwtDecode(accessToken);
-    tokenExpired(exp);
+    // TODO: refresh 도입
+    // const { exp } = jwtDecode(accessToken);
+    // tokenExpired(exp);
   } else {
     localStorage.removeItem('accessToken');
 
@@ -119,13 +131,24 @@ export const removeSession = () => {
 
 // ----------------------------------------------------------------------
 
+/**
+ * @description user_id를 반환하는 함수
+ *
+ * @returns {string} "userId" | ""
+ *
+ * 빈 스트링이면 로그인 상태가 아님
+ */
 export const getUserId = () => {
   const accessToken = localStorage.getItem('accessToken');
   if (!accessToken) {
     return '';
   }
 
-  const { id } = jwtDecode(accessToken);
+  if (!isValidToken(accessToken)) {
+    return '';
+  }
 
-  return id;
+  const { user_id: userId } = jwtDecode(accessToken);
+
+  return userId;
 };
