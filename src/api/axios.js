@@ -8,7 +8,7 @@ const TIMEOUT_TIME = 10_000;
 export const axiosInstance = axios.create({
   baseURL: PATH_API.API_DOMAIN,
   headers: {
-    'Content-Type': 'application/vnd.api+json',
+    'Content-Type': 'application/json',
   },
   // withCredentials:true, // 쿠키 cors 통신 설정
 });
