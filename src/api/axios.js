@@ -10,7 +10,7 @@ export const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  // withCredentials:true, // 쿠키 cors 통신 설정
+  withCredentials: true, // 쿠키 cors 통신 설정
 });
 
 // 취소 토큰을 생성하는 함수
@@ -28,12 +28,14 @@ let firstRequestCancelToken = null;
 axiosInstance.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem('accessToken');
+    /* eslint-disable no-param-reassign */
     config.headers.Authorization = `Bearer ${token}`;
 
     firstRequestCancelToken = cancelTokenSource();
     config.cancelToken = firstRequestCancelToken.token;
     config.timeout = TIMEOUT_TIME;
     return config;
+    /* eslint-enable no-param-reassign */
   },
   (error) =>
     // 요청 전 에러 처리
@@ -46,8 +48,10 @@ axiosInstance.interceptors.response.use(
   async (error) => {
     // invalid token
     const originalRequest = error.config;
+    /* eslint-disable no-underscore-dangle */
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
       //   const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY!);
 
       // if (refreshToken) {
@@ -73,6 +77,8 @@ axiosInstance.interceptors.response.use(
       // }
       // }
     }
+    /* eslint-enable no-underscore-dangle */
+
     // timeout
     if (axios.isCancel(error)) {
       // 취소된 요청은 에러로 처리하지 않음
