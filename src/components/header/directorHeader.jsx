@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography, AppBar, Toolbar, Button, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
 
 export default function DirectorHeader() {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
 
@@ -29,9 +31,30 @@ export default function DirectorHeader() {
             구성원 관리
           </Button>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-            <MenuItem onClick={handleClose}>등록 요청 목록</MenuItem>
-            <MenuItem onClick={handleClose}>강사 목록</MenuItem>
-            <MenuItem onClick={handleClose}>학생 목록</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigate('/director/manage-members/request-list');
+              }}
+            >
+              등록 요청 목록
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigate('/director/manage-members/teachers');
+              }}
+            >
+              강사 관리
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigate('/director/manage-members/students');
+              }}
+            >
+              학생 관리
+            </MenuItem>
           </Menu>
           <Button color="inherit" size="large" sx={{ mx: 4 }}>
             강의 관리
