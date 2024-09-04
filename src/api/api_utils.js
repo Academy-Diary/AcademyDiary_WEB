@@ -1,5 +1,5 @@
 // routes
-import { handleAlert } from 'react-handle-alert';
+// import { handleAlert } from 'react-handle-alert';
 import { axiosInstance } from './axios';
 import { PATH_API } from './path';
 
@@ -56,7 +56,8 @@ const tokenRefresh = async () => {
 
       return newAccessToken;
     } catch {
-      handleAlert('로그인이 만료되었습니다.');
+      // handleAlert('로그인이 만료되었습니다.');
+      alert('로그인이 만료되었습니다.');
 
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
@@ -91,7 +92,8 @@ export const tokenExpired = (exp) => {
 
 export const setSession = (token) => {
   const { accessToken, refreshToken } = token;
-  if (accessToken && refreshToken) {
+  // if (accessToken && refreshToken) {
+  if (accessToken) {
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('refreshToken', refreshToken);
 
