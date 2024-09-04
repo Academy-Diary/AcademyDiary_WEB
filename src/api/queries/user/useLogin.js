@@ -6,9 +6,11 @@ import { axiosInstance } from '../../axios';
 import { QUERY_KEY } from '../../queryKeys';
 import { setSession } from '../../api_utils';
 import { PATH } from '../../../route/path';
+import { useUserAuthStore } from '../../../store';
 
 export const useLogin = (options) => {
   const navigate = useNavigate();
+  const { login } = useUserAuthStore();
 
   return useMutation({
     mutationKey: [QUERY_KEY.SIGN_IN],
@@ -17,7 +19,8 @@ export const useLogin = (options) => {
       return response.data;
     },
     onSuccess: (data) => {
-      setSession(data);
+      setSession(data.accessToken);
+      login({ ...data.user, userStatus: data.userStatus });
       navigate(PATH.root);
     },
     onError: (error) => {
