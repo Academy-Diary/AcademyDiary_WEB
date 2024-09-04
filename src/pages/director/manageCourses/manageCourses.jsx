@@ -15,8 +15,12 @@ const courses = [
 
 export default function ManageCourses() {
   const navigate = useNavigate();
-  const handleClick = () => {
+
+  const handleClickAdd = () => {
     navigate('/director/manage-courses/add-course');
+  };
+  const handleClickDetails = () => {
+    navigate('/director/manage-courses/course-details');
   };
 
   return (
@@ -26,12 +30,12 @@ export default function ManageCourses() {
       </Typography>
       <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
         {courses.map((course) => (
-          <CourseItem key={course.name} name={course.name} teacher={course.teacher} numStudents={course.numStudents} />
+          <CourseItem key={course.name} name={course.name} teacher={course.teacher} numStudents={course.numStudents} handleClickDetails={handleClickDetails} />
         ))}
       </List>
       <Grid container justifyContent="flex-end" sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
         <Grid item>
-          <Button size="large" variant="contained" startIcon={<AddIcon />} onClick={handleClick}>
+          <Button size="large" variant="contained" startIcon={<AddIcon />} onClick={handleClickAdd}>
             새 강의 생성
           </Button>
         </Grid>
@@ -40,14 +44,16 @@ export default function ManageCourses() {
   );
 }
 
-function CourseItem({ name, teacher, numStudents }) {
+function CourseItem({ name, teacher, numStudents, handleClickDetails }) {
   return (
     <ListItem sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
       <ListItemText primary={name} secondary={teacher} />
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <ListItemText align="right" secondary={`수강 인원: ${numStudents}`} sx={{ mb: 2 }} />
         <ButtonGroup size="small">
-          <Button variant="outlined">강의 상세</Button>
+          <Button variant="outlined" onClick={handleClickDetails}>
+            강의 상세
+          </Button>
           <Button variant="contained">폐강하기</Button>
         </ButtonGroup>
       </Box>
