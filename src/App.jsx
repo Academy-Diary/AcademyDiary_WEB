@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
 import { Login, SignUp, Register, NotFound, DirectorHome, TeacherHome, RequestList, ManageTeachers, ManageStudents } from './pages';
+import { PATH } from './route/path';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -10,9 +11,9 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Register name="홍길동" position="teacher" /> : <FirstPage />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+          <Route path={PATH.root} element={isLoggedIn ? <Register name="홍길동" position="teacher" /> : <FirstPage />} />
+          <Route path={PATH.SIGNUP} element={<SignUp />} />
+          <Route path={PATH.LOGIN} element={<Login setIsLoggedIn={setIsLoggedIn} />} />
           <Route path="/teacher" element={<TeacherHome />} />
           {/* notFound : 일치하는 라우트 없는 경우 처리 */}
           <Route path="*" element={<NotFound />} />
