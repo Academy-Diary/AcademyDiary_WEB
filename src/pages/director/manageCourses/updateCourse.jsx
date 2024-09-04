@@ -64,7 +64,7 @@ export default function UpdateCourse() {
               </Grid>
             </Grid>
             <Typography variant="body2">총 {students.length}명</Typography>
-            <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '40vh' }}>
+            <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '40vh', width: '50vw' }}>
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
