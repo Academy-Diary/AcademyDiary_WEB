@@ -3,16 +3,10 @@ import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
 import { Login, SignUp, Register, NotFound, DirectorHome, TeacherHome, RequestList, ManageTeachers, ManageStudents } from './pages';
 import { PATH } from './route/path';
+import { useUserAuthStore } from './store';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const accessToken = localStorage.getItem('accessToken');
-
-  useEffect(() => {
-    if (accessToken) {
-      setIsLoggedIn(true);
-    }
-  }, [accessToken]);
+  const { isLoggedIn } = useUserAuthStore();
 
   return (
     <div className="App">
