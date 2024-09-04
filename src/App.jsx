@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
+import { Teacher } from './components';
 import { Login, SignUp, Register, NotFound, DirectorHome, TeacherHome, RequestList, ManageTeachers, ManageStudents } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -15,7 +16,10 @@ function App() {
           <Route path={PATH.root} element={isLoggedIn ? <Register name="홍길동" position="teacher" /> : <FirstPage />} />
           <Route path={PATH.SIGNUP} element={<SignUp />} />
           <Route path={PATH.LOGIN} element={<Login />} />
-          <Route path="/teacher" element={<TeacherHome />} />
+          <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
+            <Route path="" element={<TeacherHome />} />
+            <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />
+          </Route>
           {/* notFound : 일치하는 라우트 없는 경우 처리 */}
           <Route path="*" element={<NotFound />} />
           <Route path="/director" element={<DirectorHome />} />
