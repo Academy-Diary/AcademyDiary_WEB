@@ -22,6 +22,10 @@ export default function CourseDetails() {
   const handleCancle = () => {
     navigate('/director/manage-courses/');
   };
+  const handleClickUpdate = () => {
+    navigate('/director/manage-courses/update');
+  };
+
   return (
     <Director>
       <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
@@ -65,7 +69,7 @@ export default function CourseDetails() {
             <Button size="large" variant="outlined" sx={{ width: 120, mr: 2 }} onClick={handleCancle}>
               목록으로
             </Button>
-            <Button type="submit" size="large" variant="contained" sx={{ width: 120 }}>
+            <Button size="large" variant="contained" sx={{ width: 120 }} onClick={handleClickUpdate}>
               수정하기
             </Button>
           </Box>

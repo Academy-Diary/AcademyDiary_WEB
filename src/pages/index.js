@@ -9,3 +9,4 @@ export { default as DirectorHome } from './director/directorHome';
 export { default as ManageCourses } from './director/manageCourses/manageCourses';
 export { default as AddCourse } from './director/manageCourses/addCourse';
 export { default as CourseDetails } from './director/manageCourses/courseDetails';
+export { default as UpdateCourse } from './director/manageCourses/updateCourse';
