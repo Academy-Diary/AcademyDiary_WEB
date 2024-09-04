@@ -36,7 +36,8 @@ export default function RequestList() {
   };
 
   return (
-    <Director>
+    // <Director>
+    <>
       <Typography variant="h5" sx={{ mt: 2, mb: 5 }}>
         등록 요청 목록
       </Typography>
@@ -80,7 +81,8 @@ export default function RequestList() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Director>
+    </>
+    // </Director>
   );
 }
 
