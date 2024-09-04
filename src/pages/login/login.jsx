@@ -4,9 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, TextField, Link, Grid, Typography, Container, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-function Login({ setIsLoggedIn }) {
+import { useLogin } from '../../api/queries/user/useLogin';
+import { PATH } from '../../route/path';
+
+function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const loginMutation = useLogin();
 
   const handleClick = () => {
     setShowPassword((prev) => !prev);
@@ -16,12 +20,25 @@ function Login({ setIsLoggedIn }) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      email: data.get('email'),
+      user_id: data.get('userId'),
       password: data.get('password'),
     });
 
-    // 로그인 성공 시
-    setIsLoggedIn(true);
+    loginMutation.mutate(
+      {
+        user_id: data.get('userId'),
+        password: data.get('password'),
+      },
+      {
+        onSuccess: () => {
+          navigate(PATH.root);
+        },
+        onError: (error) => {
+          console.log(error.message);
+        },
+      }
+    );
+
     navigate('/');
   };
 
@@ -67,7 +84,7 @@ function Login({ setIsLoggedIn }) {
             로그인
           </Button>
           <Grid container>
-            <Grid item xs>
+            <Grid item>
               {/* <Link href="#" variant="body2">
                 Forgot password?
               </Link> */}
