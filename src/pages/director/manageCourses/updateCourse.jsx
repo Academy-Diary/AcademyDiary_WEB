@@ -11,17 +11,20 @@ function createData(name, phone, email) {
   return { name, phone, email };
 }
 
-const students = [
-  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
+const nonAttendees = [
   createData('신짱아', '010-0000-0000', 'jjanga0@naver.com'),
   createData('김철수', '010-1004-1004', 'smartguy@gmail.com'),
   createData('이훈이', '010-1111-1111', 'hoonhoonguy@daum.net'),
 ];
-const allStudents = ['신짱구', '신짱아', '이훈이', '김철수'];
+const attendees = [createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com')];
 
 export default function UpdateCourse() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+
+  // 수강생 등록 TransferList에 넘겨줄 리스트 (왼,오)
+  const [left, setLeft] = useState(nonAttendees);
+  const [right, setRight] = useState(attendees);
 
   const handleCancle = () => {
     navigate('/director/manage-courses/course-details');
@@ -63,27 +66,29 @@ export default function UpdateCourse() {
                 </IconButton>
               </Grid>
             </Grid>
-            <Typography variant="body2">총 {students.length}명</Typography>
-            <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '40vh', width: '50vw' }}>
-              <Table stickyHeader>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>이름</TableCell>
-                    <TableCell>전화번호</TableCell>
-                    <TableCell>이메일</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {students.map((student) => (
-                    <TableRow key={student.name}>
-                      <TableCell>{student.name}</TableCell>
-                      <TableCell>{student.phone}</TableCell>
-                      <TableCell>{student.email}</TableCell>
+            <Typography variant="body2">총 {right.length}명</Typography>
+            {right.length > 0 && (
+              <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '40vh', width: '50vw' }}>
+                <Table stickyHeader>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>이름</TableCell>
+                      <TableCell>전화번호</TableCell>
+                      <TableCell>이메일</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                  </TableHead>
+                  <TableBody>
+                    {right.map((attendee) => (
+                      <TableRow key={attendee.name}>
+                        <TableCell>{attendee.name}</TableCell>
+                        <TableCell>{attendee.phone}</TableCell>
+                        <TableCell>{attendee.email}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
           </Grid>
           <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
             <Button size="large" variant="outlined" sx={{ width: 100, mr: 2 }} onClick={handleCancle}>
@@ -100,7 +105,7 @@ export default function UpdateCourse() {
               <Typography variant="h6">수강생 목록 수정</Typography>
             </Grid>
             <Grid item xs={12}>
-              <TransferList leftList={allStudents} rightList={[]} leftTitle="전체 학생 목록" rightTitle="수강생 목록" />
+              <TransferList leftTitle="비수강생 목록" rightTitle="수강생 목록" left={left} right={right} setLeft={setLeft} setRight={setRight} />
             </Grid>
             <Grid item xs={12}>
               <DialogActions>

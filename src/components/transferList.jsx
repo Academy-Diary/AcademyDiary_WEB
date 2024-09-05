@@ -10,10 +10,15 @@ function intersection(a, b) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 
-export default function TransferList({ leftList, rightList, leftTitle, rightTitle }) {
+/**
+ * 수강생 등록을 위한 양식 컴포넌트
+ *
+ * @param {List} left - 왼쪽 학생 객체(name, phone 속성 포함) 리스트
+ * @param {List} right - 오른쪽 학생 객체(name, phone 속성 포함) 리스트
+ */
+
+export default function TransferList({ leftTitle, rightTitle, left, right, setLeft, setRight }) {
   const [checked, setChecked] = useState([]);
-  const [left, setLeft] = useState(leftList);
-  const [right, setRight] = useState(rightList);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -56,14 +61,15 @@ export default function TransferList({ leftList, rightList, leftTitle, rightTitl
   const customList = (items, title) => (
     <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
       <List dense component="div" role="list" subheader={<ListSubheader component="div">{title}</ListSubheader>}>
-        {items.map((value) => {
+        {items.map((obj) => {
+          const value = `${obj.name}(${obj.phone.substr(9)})`;
           const labelId = `transfer-list-item-${value}-label`;
 
           return (
-            <ListItemButton key={value} role="listitem" onClick={handleToggle(value)}>
+            <ListItemButton key={value} role="listitem" onClick={handleToggle(obj)}>
               <ListItemIcon>
                 <Checkbox
-                  checked={checked.indexOf(value) !== -1}
+                  checked={checked.indexOf(obj) !== -1}
                   tabIndex={-1}
                   disableRipple
                   inputProps={{
