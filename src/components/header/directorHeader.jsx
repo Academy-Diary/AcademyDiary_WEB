@@ -32,9 +32,30 @@ export default function DirectorHeader() {
             구성원 관리
           </Button>
           <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-            <MenuItem onClick={handleClose}>등록 요청 목록</MenuItem>
-            <MenuItem onClick={handleClose}>강사 목록</MenuItem>
-            <MenuItem onClick={handleClose}>학생 목록</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigate('/director/manage-members/request-list');
+              }}
+            >
+              등록 요청 목록
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigate('/director/manage-members/teachers');
+              }}
+            >
+              강사 관리
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                navigate('/director/manage-members/students');
+              }}
+            >
+              학생 관리
+            </MenuItem>
           </Menu>
           <Button color="inherit" size="large" sx={{ mx: 4 }} onClick={() => navigate('/director/manage-courses')}>
             강의 관리
