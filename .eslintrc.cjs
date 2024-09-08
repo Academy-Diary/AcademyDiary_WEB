@@ -36,5 +36,6 @@ module.exports = {
     'no-console': 'off',
     'react/button-has-type': 'off',
     'no-unused-vars': 'off',
+    'import/prefer-default-export': 'off',
   },
 };
