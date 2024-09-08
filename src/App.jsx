@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, BrowserRouter, Outlet } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
 import { Director, Teacher } from './components';
-import { Login, SignUp, Register, NotFound, DirectorHome, TeacherHome, RequestList, ManageTeachers, ManageStudents } from './pages';
+import { Login, SignUp, Register, NotFound, DirectorHome, TeacherHome, RequestList, ManageTeachers, ManageStudents, ManageCourses, AddCourse, CourseDetails, UpdateCourse } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
 
@@ -34,6 +34,16 @@ function App() {
 
           {/* notFound : 일치하는 라우트 없는 경우 처리 */}
           <Route path="*" element={<NotFound />} />
+          <Route path="/director" element={<DirectorHome />} />
+
+          <Route path="/director/manage-members/request-list" element={<RequestList />} />
+          <Route path="/director/manage-members/teachers" element={<ManageTeachers />} />
+          <Route path="/director/manage-members/students" element={<ManageStudents />} />
+            
+          <Route path="/director/manage-courses" element={<ManageCourses />} />
+          <Route path="/director/manage-courses/add-course" element={<AddCourse />} />
+          <Route path="/director/manage-courses/course-details" element={<CourseDetails />} />
+          <Route path="/director/manage-courses/update" element={<UpdateCourse />} />
         </Routes>
       </BrowserRouter>
     </div>

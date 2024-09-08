@@ -5,6 +5,7 @@ import { Box, Typography, AppBar, Toolbar, Button, IconButton, Avatar, Menu, Men
 
 export default function DirectorHeader() {
   const navigate = useNavigate();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
 
@@ -56,7 +57,7 @@ export default function DirectorHeader() {
               학생 관리
             </MenuItem>
           </Menu>
-          <Button color="inherit" size="large" sx={{ mx: 4 }}>
+          <Button color="inherit" size="large" sx={{ mx: 4 }} onClick={() => navigate('/director/manage-courses')}>
             강의 관리
           </Button>
           <Button color="inherit" size="large" sx={{ mx: 4 }} onMouseOver={handleMouseOver2}>
