@@ -29,7 +29,8 @@ function App() {
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.TEACHERS} element={<ManageTeachers />} />
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.STUDENTS} element={<ManageStudents />} />
             </Route>
-            <Route path={PATH.DIRECTOR.MANAGE_COURSES.ROOT} element={<ManageCourses />}>
+            <Route path={PATH.DIRECTOR.MANAGE_COURSES.ROOT} element={<Outlet />}>
+              <Route path="" element={<ManageCourses />} />
               <Route path={PATH.DIRECTOR.MANAGE_COURSES.ADDCOURSE} element={<AddCourse />} />
               <Route path={PATH.DIRECTOR.MANAGE_COURSES.COURSEDETAILS} element={<CourseDetails />} />
               <Route path={PATH.DIRECTOR.MANAGE_COURSES.UPDATE} element={<UpdateCourse />} />

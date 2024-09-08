@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { List, ListItem, ListItemText, Typography, Grid, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 
-import Director from '../../../components/layouts/director';
-
 const courses = [
   { name: '미적분 1', teacher: '이하람', numStudents: 60 },
   { name: '확률과 통계', teacher: '김대성', numStudents: 45 },
@@ -33,7 +31,7 @@ export default function ManageCourses() {
   };
 
   return (
-    <Director>
+    <>
       <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
         강의 목록
       </Typography>
@@ -84,6 +82,6 @@ export default function ManageCourses() {
           </DialogActions>
         </Dialog>
       )}
-    </Director>
+    </>
   );
 }

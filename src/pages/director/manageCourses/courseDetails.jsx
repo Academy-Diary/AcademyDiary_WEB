@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 
 import { Typography, Box, Button, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer } from '@mui/material';
 
-import Director from '../../../components/layouts/director';
-
 function createData(name, phone, email) {
   return { name, phone, email };
 }
@@ -21,7 +19,7 @@ export default function CourseDetails() {
   };
 
   return (
-    <Director>
+    <>
       <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
         강의 상세
       </Typography>
@@ -69,6 +67,6 @@ export default function CourseDetails() {
           </Box>
         </Grid>
       </Box>
-    </Director>
+    </>
   );
 }

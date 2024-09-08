@@ -24,7 +24,6 @@ import {
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-import Director from '../../../components/layouts/director';
 import { TransferList } from '../../../components';
 
 function createData(name, phone, email) {
@@ -67,7 +66,7 @@ export default function AddCourse() {
   };
 
   return (
-    <Director>
+    <>
       <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
         강의 생성
       </Typography>
@@ -154,6 +153,6 @@ export default function AddCourse() {
           </Grid>
         </Dialog>
       </Box>
-    </Director>
+    </>
   );
 }

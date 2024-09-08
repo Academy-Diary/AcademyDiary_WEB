@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Typography, Box, Button, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, IconButton, Dialog, DialogActions } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-import Director from '../../../components/layouts/director';
 import { TransferList } from '../../../components';
 
 function createData(name, phone, email) {
@@ -41,7 +40,7 @@ export default function UpdateCourse() {
   };
 
   return (
-    <Director>
+    <>
       <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
         강의 수정
       </Typography>
@@ -117,6 +116,6 @@ export default function UpdateCourse() {
           </Grid>
         </Dialog>
       </Box>
-    </Director>
+    </>
   );
 }
