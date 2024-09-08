@@ -1,4 +1,5 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import TeacherHeader from '../header/teacherHeader';
 import TeacherSideBar from '../sidebar/teacherSidebar';
@@ -10,10 +11,9 @@ import TeacherSideBar from '../sidebar/teacherSidebar';
  <Teacher>
    Contents
  </Teacher>
-
  */
 
-export default function Teacher({ children }) {
+export default function Teacher() {
   return (
     <Box height="100%">
       <TeacherHeader />
@@ -22,7 +22,7 @@ export default function Teacher({ children }) {
           <TeacherSideBar />
         </Grid>
         <Grid item xs={10}>
-          {children}
+          <Outlet />
         </Grid>
       </Grid>
     </Box>

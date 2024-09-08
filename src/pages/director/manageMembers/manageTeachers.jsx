@@ -28,7 +28,8 @@ export default function ManageTeachers() {
   };
 
   return (
-    <Director>
+    // <Director>
+    <>
       <Typography variant="h5" sx={{ mt: 2, mb: 5 }}>
         강사 관리
       </Typography>
@@ -89,6 +90,7 @@ export default function ManageTeachers() {
           <Button onClick={handleCloseDialog}>취소</Button>
         </DialogActions>
       </Dialog>
-    </Director>
+    </>
+    // </Director>
   );
 }

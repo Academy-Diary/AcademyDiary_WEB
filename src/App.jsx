@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route, BrowserRouter, Outlet } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
+import { Director, Teacher } from './components';
 import { Login, SignUp, Register, NotFound, DirectorHome, TeacherHome, RequestList, ManageTeachers, ManageStudents, ManageCourses, AddCourse, CourseDetails, UpdateCourse } from './pages';
+import { PATH } from './route/path';
+import { useUserAuthStore } from './store';
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn } = useUserAuthStore();
 
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={isLoggedIn ? <Register name="홍길동" position="teacher" /> : <FirstPage />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/teacher" element={<TeacherHome />} />
+          <Route path={PATH.root} element={isLoggedIn ? <Register name="홍길동" position="teacher" /> : <FirstPage />} />
+          <Route path={PATH.SIGNUP} element={<SignUp />} />
+          <Route path={PATH.LOGIN} element={<Login />} />
+
+          <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
+            <Route path="" element={<TeacherHome />} />
+            <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />
+          </Route>
+
+          <Route path={PATH.DIRECTOR.ROOT} element={<Director />}>
+            <Route path="" element={<DirectorHome />} />
+            <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.ROOT} element={<Outlet />}>
+              <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.REQUESTLIST} element={<RequestList />} />
+              <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.TEACHERS} element={<ManageTeachers />} />
+              <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.STUDENTS} element={<ManageStudents />} />
+            </Route>
+            <Route path="*" element={<NotFound path={PATH.DIRECTOR.ROOT} />} />
+          </Route>
+
           {/* notFound : 일치하는 라우트 없는 경우 처리 */}
           <Route path="*" element={<NotFound />} />
           <Route path="/director" element={<DirectorHome />} />

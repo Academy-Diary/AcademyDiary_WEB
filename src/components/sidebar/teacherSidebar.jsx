@@ -14,6 +14,7 @@ export default function TeacherSidebar() {
       <List>
         {items.map((item) => (
           <ListItemButton
+            key={item.name}
             onClick={() => {
               navigate(item.link);
             }}
