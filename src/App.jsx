@@ -29,21 +29,13 @@ function App() {
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.TEACHERS} element={<ManageTeachers />} />
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.STUDENTS} element={<ManageStudents />} />
             </Route>
+            <Route path={PATH.DIRECTOR.MANAGE_COURSES.ROOT} element={<ManageCourses />}>
+              <Route path={PATH.DIRECTOR.MANAGE_COURSES.ADDCOURSE} element={<AddCourse />} />
+              <Route path={PATH.DIRECTOR.MANAGE_COURSES.COURSEDETAILS} element={<CourseDetails />} />
+              <Route path={PATH.DIRECTOR.MANAGE_COURSES.UPDATE} element={<UpdateCourse />} />
+            </Route>
             <Route path="*" element={<NotFound path={PATH.DIRECTOR.ROOT} />} />
           </Route>
-
-          {/* notFound : 일치하는 라우트 없는 경우 처리 */}
-          <Route path="*" element={<NotFound />} />
-          <Route path="/director" element={<DirectorHome />} />
-
-          <Route path="/director/manage-members/request-list" element={<RequestList />} />
-          <Route path="/director/manage-members/teachers" element={<ManageTeachers />} />
-          <Route path="/director/manage-members/students" element={<ManageStudents />} />
-            
-          <Route path="/director/manage-courses" element={<ManageCourses />} />
-          <Route path="/director/manage-courses/add-course" element={<AddCourse />} />
-          <Route path="/director/manage-courses/course-details" element={<CourseDetails />} />
-          <Route path="/director/manage-courses/update" element={<UpdateCourse />} />
         </Routes>
       </BrowserRouter>
     </div>
