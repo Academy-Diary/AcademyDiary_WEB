@@ -68,7 +68,7 @@ export default function DirectorHeader() {
             <MenuItem onClick={handleClose2}>학원비 구성</MenuItem>
             <MenuItem onClick={handleClose2}>학원비 청구</MenuItem>
           </Menu>
-          <Button color="inherit" size="large" sx={{ mx: 4 }}>
+          <Button color="inherit" size="large" sx={{ mx: 4 }} onClick={() => navigate('/director/notice')}>
             전체 공지
           </Button>
         </Box>

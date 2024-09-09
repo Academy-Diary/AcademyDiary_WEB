@@ -22,6 +22,9 @@ export const PATH = {
       COURSEDETAILS: 'course-details',
       UPDATE: 'update',
     },
+    NOTICE: {
+      ROOT: 'notice',
+    },
   },
 };
 
