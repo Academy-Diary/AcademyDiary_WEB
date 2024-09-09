@@ -17,6 +17,7 @@ import {
   CourseDetails,
   UpdateCourse,
   DirectorNotice,
+  AddNotice,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -50,7 +51,10 @@ function App() {
               <Route path={PATH.DIRECTOR.MANAGE_COURSES.COURSEDETAILS} element={<CourseDetails />} />
               <Route path={PATH.DIRECTOR.MANAGE_COURSES.UPDATE} element={<UpdateCourse />} />
             </Route>
-            <Route path={PATH.DIRECTOR.NOTICE.ROOT} element={<DirectorNotice />} />
+            <Route path={PATH.DIRECTOR.NOTICE.ROOT} element={<Outlet />}>
+              <Route path="" element={<DirectorNotice />} />
+              <Route path={PATH.DIRECTOR.NOTICE.ADD} element={<AddNotice />} />
+            </Route>
             <Route path="*" element={<NotFound path={PATH.DIRECTOR.ROOT} />} />
           </Route>
         </Routes>

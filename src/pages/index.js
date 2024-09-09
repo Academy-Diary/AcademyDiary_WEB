@@ -18,3 +18,4 @@ export { default as CourseDetails } from './director/manageCourses/courseDetails
 export { default as UpdateCourse } from './director/manageCourses/updateCourse';
 
 export { default as DirectorNotice } from './director/notice/directorNotice';
+export { default as AddNotice } from './director/notice/addNotice';

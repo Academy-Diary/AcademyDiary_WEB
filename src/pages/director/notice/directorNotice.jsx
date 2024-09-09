@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Grid, Button } from '@mui/material';
 import { MoreVert, Add } from '@mui/icons-material';
@@ -15,6 +16,12 @@ const notices = [
 ];
 
 export default function DirectorNotice() {
+  const navigate = useNavigate();
+
+  const handleClickAdd = () => {
+    navigate('/director/notice/add');
+  };
+
   return (
     <>
       <TitleMedium title="전체 공지사항" />
@@ -46,7 +53,7 @@ export default function DirectorNotice() {
       </TableContainer>
       <Grid container justifyContent="flex-end" sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
         <Grid item>
-          <Button size="large" variant="contained" startIcon={<Add />}>
+          <Button size="large" variant="contained" startIcon={<Add />} onClick={handleClickAdd}>
             새 공지사항 등록
           </Button>
         </Grid>

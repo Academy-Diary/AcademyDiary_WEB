@@ -24,6 +24,7 @@ export const PATH = {
     },
     NOTICE: {
       ROOT: 'notice',
+      ADD: 'add',
     },
   },
 };
