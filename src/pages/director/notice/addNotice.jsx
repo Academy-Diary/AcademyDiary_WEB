@@ -10,7 +10,20 @@ export default function AddNotice() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate('/director/notice');
+
+    const title = e.currentTarget.title.value;
+    const content = e.currentTarget.content.value;
+
+    if (title.length === 0) {
+      alert('제목을 입력해주세요.');
+    } else if (content.length === 0) {
+      alert('내용을 입력해주세요.');
+    } else {
+      console.log(title);
+      console.log(content);
+
+      navigate('/director/notice');
+    }
   };
   const handleCancel = () => {
     navigate('/director/notice');
@@ -22,10 +35,10 @@ export default function AddNotice() {
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2} sx={{ mt: 3, width: '60vw' }}>
           <Grid item xs={12}>
-            <TextField label="제목" fullWidth />
+            <TextField name="title" label="제목" fullWidth />
           </Grid>
           <Grid item xs={12}>
-            <TextField label="내용" fullWidth multiline rows={14} />
+            <TextField name="content" label="내용" fullWidth multiline rows={14} />
           </Grid>
         </Grid>
         <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
