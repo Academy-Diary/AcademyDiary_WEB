@@ -64,7 +64,7 @@ export default function DirectorNotice() {
   return (
     <>
       <TitleMedium title="전체 공지사항" />
-      <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '60vh' }}>
+      <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '60vh', width: '70vw' }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
