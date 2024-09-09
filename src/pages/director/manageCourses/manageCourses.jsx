@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { List, ListItem, ListItemText, Typography, Grid, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
+import { List, ListItem, ListItemText, Grid, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import { TitleMedium } from '../../../components';
 
 const courses = [
   { name: '미적분 1', teacher: '이하람', numStudents: 60 },
@@ -32,9 +33,7 @@ export default function ManageCourses() {
 
   return (
     <>
-      <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
-        강의 목록
-      </Typography>
+      <TitleMedium title="강의 목록" />
       <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
         {courses.map((course) => (
           <ListItem key={course.name} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>

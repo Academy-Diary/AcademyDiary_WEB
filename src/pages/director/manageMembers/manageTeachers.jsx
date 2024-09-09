@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions, DialogContentText, Box, DialogTitle } from '@mui/material';
-
-import Director from '../../../components/layouts/director';
+import { TitleMedium } from '../../../components';
 
 function createData(name, lectures, phone, email) {
   return { name, lectures, phone, email };
@@ -30,9 +29,7 @@ export default function ManageTeachers() {
   return (
     // <Director>
     <>
-      <Typography variant="h5" sx={{ mt: 2, mb: 5 }}>
-        강사 관리
-      </Typography>
+      <TitleMedium title="강사 관리" />
       <Typography mb={2}>강사 인원: {teachers.length}</Typography>
       <TableContainer component={Paper} sx={{ maxHeight: '65vh' }}>
         <Table sx={{ minWidth: 650 }}>

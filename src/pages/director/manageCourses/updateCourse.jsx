@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Typography, Box, Button, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, IconButton, Dialog, DialogActions } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-import { TransferList } from '../../../components';
+import { TitleMedium, TransferList } from '../../../components';
 
 function createData(name, phone, email) {
   return { name, phone, email };
@@ -41,9 +41,7 @@ export default function UpdateCourse() {
 
   return (
     <>
-      <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
-        강의 수정
-      </Typography>
+      <TitleMedium title="강의 수정" />
       <Box component="form" sx={{ mt: 5 }} onSubmit={handleSubmit}>
         <Grid container spacing={5}>
           <Grid item xs={12}>

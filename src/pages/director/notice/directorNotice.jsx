@@ -1,7 +1,9 @@
 import React from 'react';
 
-import { Typography, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Grid, Button } from '@mui/material';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Grid, Button } from '@mui/material';
 import { MoreVert, Add } from '@mui/icons-material';
+
+import { TitleMedium } from '../../../components';
 
 const notices = [
   { title: '8월 정기고사 안내', date: '2024-07-20', view: 55 },
@@ -15,9 +17,7 @@ const notices = [
 export default function DirectorNotice() {
   return (
     <>
-      <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
-        강의 상세
-      </Typography>
+      <TitleMedium title="전체 공지사항" />
       <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '60vh' }}>
         <Table stickyHeader>
           <TableHead>

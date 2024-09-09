@@ -24,7 +24,7 @@ import {
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-import { TransferList } from '../../../components';
+import { TitleMedium, TransferList } from '../../../components';
 
 function createData(name, phone, email) {
   return { name, phone, email };
@@ -67,9 +67,7 @@ export default function AddCourse() {
 
   return (
     <>
-      <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
-        강의 생성
-      </Typography>
+      <TitleMedium title="강의 생성" />
       <Box component="form" sx={{ mt: 5 }}>
         <Grid container spacing={5}>
           <Grid item xs={12}>

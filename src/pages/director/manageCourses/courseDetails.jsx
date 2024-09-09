@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Typography, Box, Button, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer } from '@mui/material';
+import { TitleMedium } from '../../../components';
 
 function createData(name, phone, email) {
   return { name, phone, email };
@@ -20,9 +21,7 @@ export default function CourseDetails() {
 
   return (
     <>
-      <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
-        강의 상세
-      </Typography>
+      <TitleMedium title="강의 상세" />
       <Box sx={{ mt: 5 }}>
         <Grid container spacing={5}>
           <Grid item xs={12}>
