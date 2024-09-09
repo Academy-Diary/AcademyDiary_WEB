@@ -18,7 +18,7 @@ export default function AddNotice() {
 
   return (
     <>
-      <TitleMedium title="새 공지사항 작성" />
+      <TitleMedium title="공지사항 작성" />
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2} sx={{ mt: 3, width: '60vw' }}>
           <Grid item xs={12}>
