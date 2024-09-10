@@ -16,6 +16,10 @@ export const PATH = {
       TEACHERS: 'teachers',
       STUDENTS: 'students',
     },
+    TUITION_FEES: {
+      ROOT: 'tuition-fees',
+      PAYMENTLIST: 'payment-list',
+    },
   },
 };
 
