@@ -19,6 +19,7 @@ import {
   DirectorNotice,
   AddNotice,
   UpdateNotice,
+  NoticeDetails,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -56,6 +57,7 @@ function App() {
               <Route path="" element={<DirectorNotice />} />
               <Route path={PATH.DIRECTOR.NOTICE.ADD} element={<AddNotice />} />
               <Route path={PATH.DIRECTOR.NOTICE.UPDATE} element={<UpdateNotice />} />
+              <Route path={PATH.DIRECTOR.NOTICE.DETAILS} element={<NoticeDetails />} />
             </Route>
             <Route path="*" element={<NotFound path={PATH.DIRECTOR.ROOT} />} />
           </Route>
