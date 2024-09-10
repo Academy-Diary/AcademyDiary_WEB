@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import {
   Typography,
@@ -24,7 +23,7 @@ import {
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-import { TitleMedium, TransferList } from '../../../components';
+import { TitleMedium, TransferList, SubmitButtons } from '../../../components';
 
 function createData(name, phone, email) {
   return { name, phone, email };
@@ -39,8 +38,6 @@ const students = [
 const teachers = ['나미리', '이하람', '권해담', '김대성'];
 
 export default function AddCourse() {
-  const navigate = useNavigate();
-
   const [teacher, setTeacher] = useState('');
   const [open, setOpen] = useState(false);
 
@@ -50,9 +47,6 @@ export default function AddCourse() {
 
   const handleChangeTeacher = (e) => {
     setTeacher(e.target.value);
-  };
-  const handleCancle = () => {
-    navigate('/director/manage-courses');
   };
 
   const handleOpenDialog = () => {
@@ -124,14 +118,7 @@ export default function AddCourse() {
               </>
             )}
           </Grid>
-          <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-            <Button size="large" variant="outlined" sx={{ width: 100, mr: 2 }} onClick={handleCancle}>
-              취소
-            </Button>
-            <Button type="submit" size="large" variant="contained" sx={{ width: 120 }}>
-              등록하기
-            </Button>
-          </Box>
+          <SubmitButtons submitTitle="등록하기" />
         </Grid>
         <Dialog open={open} onClose={handleCloseDialog}>
           <Grid container spacing={5} sx={{ py: 3, px: 5 }}>

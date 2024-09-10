@@ -1,27 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import {
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
-  IconButton,
-  Grid,
-  Button,
-  Menu,
-  MenuItem,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-} from '@mui/material';
-import { MoreVert, Add } from '@mui/icons-material';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Button, Menu, MenuItem, Dialog, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { MoreVert } from '@mui/icons-material';
 
-import { TitleMedium } from '../../../components';
+import { TitleMedium, AddButton } from '../../../components';
 
 const notices = [
   { id: 1, title: '8월 정기고사 안내', date: '2024-07-20', view: 55 },
@@ -96,13 +79,7 @@ export default function DirectorNotice() {
         <MenuItem onClick={handleClickUpdate}>수정</MenuItem>
         <MenuItem onClick={handleClickDelete}>삭제</MenuItem>
       </Menu>
-      <Grid container justifyContent="flex-end" sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-        <Grid item>
-          <Button size="large" variant="contained" startIcon={<Add />} onClick={handleClickAdd}>
-            새 공지사항 등록
-          </Button>
-        </Grid>
-      </Grid>
+      <AddButton title="새 공지사항 등록" onClick={handleClickAdd} />
       <Dialog open={open} onClose={handleCloseDialog}>
         <DialogContent>
           <DialogContentText color="black">해당 공지사항을 삭제하시겠습니까?</DialogContentText>

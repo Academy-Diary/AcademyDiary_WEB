@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { TextField, Box, Grid, Button } from '@mui/material';
 import { AttachFile } from '@mui/icons-material';
 
-import { TitleMedium } from '../../../components';
+import { TitleMedium, SubmitButtons } from '../../../components';
 
 const oldTitle = '8월 정기고사 안내';
 const oldContent = '안녕하세요. \n1학기 마지막 정기고사 안내입니다. \n...';
@@ -34,9 +34,6 @@ export default function UpdateNotice() {
       navigate('/director/notice');
     }
   };
-  const handleCancel = () => {
-    navigate(-1);
-  };
 
   return (
     <>
@@ -56,14 +53,7 @@ export default function UpdateNotice() {
             </Button>
           </Grid>
         </Grid>
-        <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-          <Button size="large" variant="outlined" sx={{ width: 100, mr: 2 }} onClick={handleCancel}>
-            취소
-          </Button>
-          <Button type="submit" size="large" variant="contained" sx={{ width: 120 }}>
-            수정 완료
-          </Button>
-        </Box>
+        <SubmitButtons submitTitle="수정 완료" />
       </Box>
     </>
   );

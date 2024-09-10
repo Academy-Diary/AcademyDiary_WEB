@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import { TextField, Box, Button, Grid } from '@mui/material';
 import { AttachFile } from '@mui/icons-material';
 
-import { TitleMedium } from '../../../components';
+import { TitleMedium, SubmitButtons } from '../../../components';
 
 const VisuallyHiddenInput = styled('input')({
   display: 'none',
@@ -31,9 +31,6 @@ export default function AddNotice() {
       navigate('/director/notice');
     }
   };
-  const handleCancel = () => {
-    navigate('/director/notice');
-  };
 
   return (
     <>
@@ -53,14 +50,7 @@ export default function AddNotice() {
             </Button>
           </Grid>
         </Grid>
-        <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-          <Button size="large" variant="outlined" sx={{ width: 100, mr: 2 }} onClick={handleCancel}>
-            취소
-          </Button>
-          <Button type="submit" size="large" variant="contained" sx={{ width: 120 }}>
-            등록하기
-          </Button>
-        </Box>
+        <SubmitButtons submitTitle="등록하기" />
       </Box>
     </>
   );

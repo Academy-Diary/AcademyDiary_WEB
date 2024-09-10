@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { List, ListItem, ListItemText, Grid, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { TitleMedium } from '../../../components';
+import { List, ListItem, ListItemText, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
+
+import { TitleMedium, AddButton } from '../../../components';
 
 const courses = [
   { name: '미적분 1', teacher: '이하람', numStudents: 60 },
@@ -58,13 +58,7 @@ export default function ManageCourses() {
           </ListItem>
         ))}
       </List>
-      <Grid container justifyContent="flex-end" sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-        <Grid item>
-          <Button size="large" variant="contained" startIcon={<AddIcon />} onClick={handleClickAdd}>
-            새 강의 생성
-          </Button>
-        </Grid>
-      </Grid>
+      <AddButton title="새 강의 생성" onClick={handleClickAdd} />
       {selected && (
         <Dialog open={open} onClose={handleCloseDialog}>
           <DialogTitle>{selected.name} 강의를 폐강하시겠습니까?</DialogTitle>

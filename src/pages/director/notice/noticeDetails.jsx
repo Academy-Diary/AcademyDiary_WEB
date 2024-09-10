@@ -1,9 +1,9 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { Grid, Paper, Typography, Box, Button } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 
-import { TitleMedium } from '../../../components';
+import { TitleMedium, BottomTwoButtons } from '../../../components';
 
 const noticeList = [
   {
@@ -63,14 +63,7 @@ export default function NoticeDetails() {
           </Paper>
         </Grid>
       </Grid>
-      <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-        <Button size="large" variant="outlined" sx={{ width: 120, mr: 2 }} onClick={handleClickBefore}>
-          목록으로
-        </Button>
-        <Button size="large" variant="contained" sx={{ width: 120 }} onClick={handleClickUpdate}>
-          수정하기
-        </Button>
-      </Box>
+      <BottomTwoButtons first="목록으로" second="수정하기" onClickFirst={handleClickBefore} onClickSecond={handleClickUpdate} />
     </>
   );
 }
