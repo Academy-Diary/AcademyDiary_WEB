@@ -19,3 +19,4 @@ export { default as UpdateCourse } from './director/manageCourses/updateCourse';
 
 export { default as PaymentList } from './director/tuitionFees/paymentList';
 export { default as ClaimFee } from './director/tuitionFees/claimFee';
+export { default as MakeClass } from './director/tuitionFees/makeClass';

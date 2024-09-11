@@ -18,6 +18,7 @@ import {
   UpdateCourse,
   PaymentList,
   ClaimFee,
+  MakeClass,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -48,6 +49,7 @@ function App() {
             <Route path={PATH.DIRECTOR.TUITION_FEES.ROOT} element={<Outlet />}>
               <Route path={PATH.DIRECTOR.TUITION_FEES.PAYMENTLIST} element={<PaymentList />} />
               <Route path={PATH.DIRECTOR.TUITION_FEES.CLAIM} element={<ClaimFee />} />
+              <Route path={PATH.DIRECTOR.TUITION_FEES.MAKE_CLASS} element={<MakeClass />} />
             </Route>
             <Route path="*" element={<NotFound path={PATH.DIRECTOR.ROOT} />} />
           </Route>
