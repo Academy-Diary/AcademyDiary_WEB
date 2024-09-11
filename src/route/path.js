@@ -19,6 +19,7 @@ export const PATH = {
     TUITION_FEES: {
       ROOT: 'tuition-fees',
       PAYMENTLIST: 'payment-list',
+      CLAIM: 'claim',
     },
   },
 };

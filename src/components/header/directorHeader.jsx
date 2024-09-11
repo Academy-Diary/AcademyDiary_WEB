@@ -72,7 +72,14 @@ export default function DirectorHeader() {
             >
               학원비 납부 목록
             </MenuItem>
-            <MenuItem onClick={handleClose2}>학원비 청구</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose2();
+                navigate('/director/tuition-fees/claim');
+              }}
+            >
+              학원비 청구
+            </MenuItem>
             <MenuItem onClick={handleClose2}>학원비 구성</MenuItem>
           </Menu>
           <Button color="inherit" size="large" sx={{ mx: 4 }}>
