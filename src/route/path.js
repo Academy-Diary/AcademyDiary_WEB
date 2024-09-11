@@ -16,6 +16,18 @@ export const PATH = {
       TEACHERS: 'teachers',
       STUDENTS: 'students',
     },
+    MANAGE_COURSES: {
+      ROOT: 'manage-courses',
+      ADDCOURSE: 'add-course',
+      COURSEDETAILS: 'course-details',
+      UPDATE: 'update',
+    },
+    NOTICE: {
+      ROOT: 'notice',
+      ADD: 'add',
+      UPDATE: 'update',
+      DETAILS: ':id',
+    },
   },
 };
 
