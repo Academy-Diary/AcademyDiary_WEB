@@ -9,11 +9,36 @@ const classes = [
   { name: '국어 집중반', fee: 250000, period: '30' },
 ];
 
+function DialogForm({ type, open, onClose }) {
+  const title = type === 'add' ? '수강반 추가' : '수강반 수정';
+
+  return (
+    <Dialog component="form" open={open} onClose={onClose}>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent sx={{ mt: 3 }}>
+        <TextField label="수강반 이름" required fullWidth sx={{ mb: 2 }} />
+        <TextField label="기간 (일)" type="number" required fullWidth sx={{ mb: 2 }} />
+        <TextField label="가격" type="number" required fullWidth sx={{ mb: 2 }} />
+      </DialogContent>
+      <DialogActions sx={{ m: 3 }}>
+        <Button variant="outlined" onClick={onClose}>
+          취소
+        </Button>
+        <Button type="submit" variant="contained">
+          완료
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 export default function MakeClass() {
   const [open, setOpen] = useState(false);
+  const [dialogType, setDialogType] = useState('add');
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (type) => {
     setOpen(true);
+    setDialogType(type);
   };
   const handleCloseDialog = () => {
     setOpen(false);
@@ -44,7 +69,9 @@ export default function MakeClass() {
                   <Grid container spacing={1}>
                     <Grid item xs={4} />
                     <Grid item xs={4}>
-                      <Button variant="outlined">수정</Button>
+                      <Button variant="outlined" onClick={() => handleOpenDialog('update')}>
+                        수정
+                      </Button>
                     </Grid>
                     <Grid item xs={4}>
                       <Button variant="contained">삭제</Button>
@@ -57,26 +84,11 @@ export default function MakeClass() {
         </Table>
       </TableContainer>
       <Box sx={{ position: 'fixed', right: '3vw', bottom: '3vh' }}>
-        <Button variant="contained" size="large" startIcon={<Add />} onClick={handleOpenDialog}>
+        <Button variant="contained" size="large" startIcon={<Add />} onClick={() => handleOpenDialog('add')}>
           수강반 추가
         </Button>
       </Box>
-      <Dialog component="form" open={open} onClose={handleCloseDialog}>
-        <DialogTitle>수강반 추가</DialogTitle>
-        <DialogContent sx={{ mt: 3 }}>
-          <TextField label="수강반 이름" required fullWidth sx={{ mb: 2 }} />
-          <TextField label="기간 (일)" type="number" required fullWidth sx={{ mb: 2 }} />
-          <TextField label="가격" type="number" required fullWidth sx={{ mb: 2 }} />
-        </DialogContent>
-        <DialogActions sx={{ m: 3 }}>
-          <Button variant="outlined" onClick={handleCloseDialog}>
-            취소
-          </Button>
-          <Button type="submit" variant="contained">
-            완료
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DialogForm type={dialogType} open={open} onClose={handleCloseDialog} />
     </>
   );
 }
