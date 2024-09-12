@@ -1,6 +1,24 @@
 import React, { useState } from 'react';
 
-import { Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Button, Box, Dialog, DialogTitle, DialogContent, TextField, DialogActions } from '@mui/material';
+import {
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Grid,
+  Button,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
+  DialogContentText,
+} from '@mui/material';
 import { Add } from '@mui/icons-material';
 
 const classes = [
@@ -33,15 +51,24 @@ function DialogForm({ type, open, onClose }) {
 }
 
 export default function MakeClass() {
-  const [open, setOpen] = useState(false);
+  const [openFormDialog, setOpenFormDialog] = useState(false);
   const [dialogType, setDialogType] = useState('add');
 
-  const handleOpenDialog = (type) => {
-    setOpen(true);
+  const [openDeleteDialog, setDeleteDialog] = useState(false);
+  const [selected, setSelected] = useState('');
+
+  const handleOpenFormDialog = (type) => {
+    setOpenFormDialog(true);
     setDialogType(type);
   };
-  const handleCloseDialog = () => {
-    setOpen(false);
+  const handleCloseFormDialog = () => {
+    setOpenFormDialog(false);
+  };
+
+  // 수강반 삭제 핸들러
+  const handleDelete = (_class) => {
+    setDeleteDialog(true);
+    setSelected(_class);
   };
 
   return (
@@ -69,12 +96,14 @@ export default function MakeClass() {
                   <Grid container spacing={1}>
                     <Grid item xs={4} />
                     <Grid item xs={4}>
-                      <Button variant="outlined" onClick={() => handleOpenDialog('update')}>
+                      <Button variant="outlined" onClick={() => handleOpenFormDialog('update')}>
                         수정
                       </Button>
                     </Grid>
                     <Grid item xs={4}>
-                      <Button variant="contained">삭제</Button>
+                      <Button variant="contained" onClick={() => handleDelete(c)}>
+                        삭제
+                      </Button>
                     </Grid>
                   </Grid>
                 </TableCell>
@@ -84,11 +113,25 @@ export default function MakeClass() {
         </Table>
       </TableContainer>
       <Box sx={{ position: 'fixed', right: '3vw', bottom: '3vh' }}>
-        <Button variant="contained" size="large" startIcon={<Add />} onClick={() => handleOpenDialog('add')}>
+        <Button variant="contained" size="large" startIcon={<Add />} onClick={() => handleOpenFormDialog('add')}>
           수강반 추가
         </Button>
       </Box>
-      <DialogForm type={dialogType} open={open} onClose={handleCloseDialog} />
+      <DialogForm type={dialogType} open={openFormDialog} onClose={handleCloseFormDialog} />
+      <Dialog open={openDeleteDialog} onClose={() => setDeleteDialog(false)}>
+        <DialogTitle>해당 수강반을 삭제하시겠습니까?</DialogTitle>
+        <DialogContent>
+          <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
+            <DialogContentText>수강반 이름: {selected.name}</DialogContentText>
+            <DialogContentText>기간 (일): {selected.period}</DialogContentText>
+            <DialogContentText>가격: {selected.fee}</DialogContentText>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteDialog(false)}>취소</Button>
+          <Button onClick={() => setDeleteDialog(false)}>삭제</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
