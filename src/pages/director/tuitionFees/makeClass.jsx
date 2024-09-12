@@ -4,9 +4,9 @@ import { Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHe
 import { Add } from '@mui/icons-material';
 
 const classes = [
-  { name: '수학 집중반', fee: 270000, due: '2024.01.01~2024.01.31' },
-  { name: '토익반', fee: 150000, due: '2024.01.01~2024.01.31' },
-  { name: '국어 집중반', fee: 250000, due: '2024.01.01~2024.01.31' },
+  { name: '수학 집중반', fee: 270000, period: '30' },
+  { name: '토익반', fee: 150000, period: '60' },
+  { name: '국어 집중반', fee: 250000, period: '30' },
 ];
 
 export default function MakeClass() {
@@ -29,7 +29,7 @@ export default function MakeClass() {
           <TableHead>
             <TableRow>
               <TableCell>수강반 이름</TableCell>
-              <TableCell align="right">기간</TableCell>
+              <TableCell align="right">기간 (일)</TableCell>
               <TableCell align="right">가격</TableCell>
               <TableCell />
             </TableRow>
@@ -38,7 +38,7 @@ export default function MakeClass() {
             {classes.map((c) => (
               <TableRow key={c.name}>
                 <TableCell>{c.name}</TableCell>
-                <TableCell align="right">{c.due}</TableCell>
+                <TableCell align="right">{c.period}</TableCell>
                 <TableCell align="right">{c.fee}</TableCell>
                 <TableCell sx={{ width: '25%' }}>
                   <Grid container spacing={1}>
