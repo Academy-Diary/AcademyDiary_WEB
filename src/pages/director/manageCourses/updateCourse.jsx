@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Typography, Box, Button, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, IconButton, Dialog, DialogActions } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-import Director from '../../../components/layouts/director';
-import { TransferList } from '../../../components';
+import { TitleMedium, TransferList, SubmitButtons } from '../../../components';
 
 function createData(name, phone, email) {
   return { name, phone, email };
@@ -26,9 +25,6 @@ export default function UpdateCourse() {
   const [left, setLeft] = useState(nonAttendees);
   const [right, setRight] = useState(attendees);
 
-  const handleCancle = () => {
-    navigate('/director/manage-courses/course-details');
-  };
   const handleOpenDialog = () => {
     setOpen(true);
   };
@@ -41,10 +37,8 @@ export default function UpdateCourse() {
   };
 
   return (
-    <Director>
-      <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
-        강의 수정
-      </Typography>
+    <>
+      <TitleMedium title="강의 수정" />
       <Box component="form" sx={{ mt: 5 }} onSubmit={handleSubmit}>
         <Grid container spacing={5}>
           <Grid item xs={12}>
@@ -90,14 +84,7 @@ export default function UpdateCourse() {
               </TableContainer>
             )}
           </Grid>
-          <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-            <Button size="large" variant="outlined" sx={{ width: 100, mr: 2 }} onClick={handleCancle}>
-              취소
-            </Button>
-            <Button type="submit" size="large" variant="contained" sx={{ width: 120 }}>
-              수정 완료
-            </Button>
-          </Box>
+          <SubmitButtons submitTitle="수정 완료" />
         </Grid>
         <Dialog open={open} onClose={handleCloseDialog}>
           <Grid container spacing={5} sx={{ py: 3, px: 5 }}>
@@ -117,6 +104,6 @@ export default function UpdateCourse() {
           </Grid>
         </Dialog>
       </Box>
-    </Director>
+    </>
   );
 }

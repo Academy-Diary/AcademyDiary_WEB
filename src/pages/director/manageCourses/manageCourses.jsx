@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { List, ListItem, ListItemText, Typography, Grid, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { List, ListItem, ListItemText, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
 
-import Director from '../../../components/layouts/director';
+import { TitleMedium, AddButton } from '../../../components';
 
 const courses = [
   { name: '미적분 1', teacher: '이하람', numStudents: 60 },
@@ -33,10 +32,8 @@ export default function ManageCourses() {
   };
 
   return (
-    <Director>
-      <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
-        강의 목록
-      </Typography>
+    <>
+      <TitleMedium title="강의 목록" />
       <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
         {courses.map((course) => (
           <ListItem key={course.name} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
@@ -61,13 +58,7 @@ export default function ManageCourses() {
           </ListItem>
         ))}
       </List>
-      <Grid container justifyContent="flex-end" sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-        <Grid item>
-          <Button size="large" variant="contained" startIcon={<AddIcon />} onClick={handleClickAdd}>
-            새 강의 생성
-          </Button>
-        </Grid>
-      </Grid>
+      <AddButton title="새 강의 생성" onClick={handleClickAdd} />
       {selected && (
         <Dialog open={open} onClose={handleCloseDialog}>
           <DialogTitle>{selected.name} 강의를 폐강하시겠습니까?</DialogTitle>
@@ -84,6 +75,6 @@ export default function ManageCourses() {
           </DialogActions>
         </Dialog>
       )}
-    </Director>
+    </>
   );
 }

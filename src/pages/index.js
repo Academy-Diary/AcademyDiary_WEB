@@ -20,3 +20,8 @@ export { default as UpdateCourse } from './director/manageCourses/updateCourse';
 export { default as PaymentList } from './director/tuitionFees/paymentList';
 export { default as ClaimFee } from './director/tuitionFees/claimFee';
 export { default as MakeClass } from './director/tuitionFees/makeClass';
+
+export { default as DirectorNotice } from './director/notice/directorNotice';
+export { default as AddNotice } from './director/notice/addNotice';
+export { default as UpdateNotice } from './director/notice/updateNotice';
+export { default as NoticeDetails } from './director/notice/noticeDetails';

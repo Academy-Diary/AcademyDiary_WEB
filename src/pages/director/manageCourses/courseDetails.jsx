@@ -1,9 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Typography, Box, Button, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer } from '@mui/material';
-
-import Director from '../../../components/layouts/director';
+import { Typography, Box, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer } from '@mui/material';
+import { TitleMedium, BottomTwoButtons } from '../../../components';
 
 function createData(name, phone, email) {
   return { name, phone, email };
@@ -21,10 +20,8 @@ export default function CourseDetails() {
   };
 
   return (
-    <Director>
-      <Typography variant="h5" sx={{ mt: 2, mb: 3 }}>
-        강의 상세
-      </Typography>
+    <>
+      <TitleMedium title="강의 상세" />
       <Box sx={{ mt: 5 }}>
         <Grid container spacing={5}>
           <Grid item xs={12}>
@@ -59,16 +56,9 @@ export default function CourseDetails() {
               </Table>
             </TableContainer>
           </Grid>
-          <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-            <Button size="large" variant="outlined" sx={{ width: 120, mr: 2 }} onClick={handleCancle}>
-              목록으로
-            </Button>
-            <Button size="large" variant="contained" sx={{ width: 120 }} onClick={handleClickUpdate}>
-              수정하기
-            </Button>
-          </Box>
+          <BottomTwoButtons first="목록으로" second="수정하기" onClickFirst={handleCancle} onClickSecond={handleClickUpdate} />
         </Grid>
       </Box>
-    </Director>
+    </>
   );
 }

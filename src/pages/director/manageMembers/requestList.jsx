@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 import { Typography, List, ListItem, ListItemText, Button, Grid, Dialog, DialogActions, DialogContent } from '@mui/material';
-
-import Director from '../../../components/layouts/director';
+import { TitleMedium } from '../../../components';
 
 const teachers = [
   { name: '나미리', lectures: ['화법과 작문', '비문학'] },
@@ -38,9 +37,7 @@ export default function RequestList() {
   return (
     // <Director>
     <>
-      <Typography variant="h5" sx={{ mt: 2, mb: 5 }}>
-        등록 요청 목록
-      </Typography>
+      <TitleMedium title="등록 요청 목록" />
       <Grid container spacing="10vw">
         <Grid item xs={6}>
           <Typography variant="h6" p={1.5}>
