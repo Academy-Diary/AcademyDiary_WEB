@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-import { Typography, Box, Tabs, Tab, List, ListItemText } from '@mui/material';
+import { Box, Tabs, Tab, List, ListItemText } from '@mui/material';
+
+import { TitleMedium } from '../../../components';
 
 const unpaidList = [
   { name: '신짱구', amount: 250000, class: '수학 종합반', due: '2024.01.01~2024.01.31' },
@@ -25,9 +27,7 @@ export default function PaymentList() {
 
   return (
     <>
-      <Typography variant="h6" sx={{ pt: 2, pb: 3 }}>
-        학원비 납부 목록
-      </Typography>
+      <TitleMedium title="학원비 납부 목록" />
       <Box>
         <Box>
           <Tabs value={tabIndex} onChange={handleChangeTab}>

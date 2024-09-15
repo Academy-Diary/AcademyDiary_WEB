@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import {
-  Typography,
   Paper,
   Table,
   TableBody,
@@ -19,7 +18,8 @@ import {
   DialogActions,
   DialogContentText,
 } from '@mui/material';
-import { Add } from '@mui/icons-material';
+
+import { TitleMedium, AddButton } from '../../../components';
 
 const classes = [
   { name: '수학 집중반', fee: 270000, period: '30' },
@@ -73,9 +73,7 @@ export default function MakeClass() {
 
   return (
     <>
-      <Typography variant="h6" sx={{ pt: 2, pb: 3 }}>
-        학원비 구성
-      </Typography>
+      <TitleMedium title="학원비 구성" />
       <TableContainer component={Paper} sx={{ width: '70vw', maxHeight: '70vh', overflow: 'auto' }}>
         <Table>
           <TableHead>
@@ -112,11 +110,7 @@ export default function MakeClass() {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box sx={{ position: 'fixed', right: '3vw', bottom: '3vh' }}>
-        <Button variant="contained" size="large" startIcon={<Add />} onClick={() => handleOpenFormDialog('add')}>
-          수강반 추가
-        </Button>
-      </Box>
+      <AddButton title="수강반 추가" onClick={() => handleOpenFormDialog('add')} />
       <DialogForm type={dialogType} open={openFormDialog} onClose={handleCloseFormDialog} />
       <Dialog open={openDeleteDialog} onClose={() => setDeleteDialog(false)}>
         <DialogTitle>해당 수강반을 삭제하시겠습니까?</DialogTitle>

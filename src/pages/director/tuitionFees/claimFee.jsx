@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { Typography, Box, Grid, Select, FormControl, InputLabel, MenuItem, ToggleButton, ToggleButtonGroup, Button } from '@mui/material';
 
+import { TitleMedium } from '../../../components';
+
 function createData(name, parentName, phone, parentPhone) {
   return { name, parentName, phone, parentPhone };
 }
@@ -34,9 +36,7 @@ export default function ClaimFee() {
 
   return (
     <>
-      <Typography variant="h6" sx={{ pt: 2, pb: 3 }}>
-        학원비 청구
-      </Typography>
+      <TitleMedium title="학원비 청구" />
       <Box component="form" sx={{ mt: 5 }}>
         <Grid container spacing={10}>
           <Grid item xs={12}>
