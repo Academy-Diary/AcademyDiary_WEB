@@ -16,6 +16,9 @@ import {
   AddCourse,
   CourseDetails,
   UpdateCourse,
+  PaymentList,
+  ClaimFee,
+  MakeClass,
   DirectorNotice,
   AddNotice,
   UpdateNotice,
@@ -52,6 +55,11 @@ function App() {
               <Route path={PATH.DIRECTOR.MANAGE_COURSES.ADDCOURSE} element={<AddCourse />} />
               <Route path={PATH.DIRECTOR.MANAGE_COURSES.COURSEDETAILS} element={<CourseDetails />} />
               <Route path={PATH.DIRECTOR.MANAGE_COURSES.UPDATE} element={<UpdateCourse />} />
+            </Route>
+            <Route path={PATH.DIRECTOR.TUITION_FEES.ROOT} element={<Outlet />}>
+              <Route path={PATH.DIRECTOR.TUITION_FEES.PAYMENTLIST} element={<PaymentList />} />
+              <Route path={PATH.DIRECTOR.TUITION_FEES.CLAIM} element={<ClaimFee />} />
+              <Route path={PATH.DIRECTOR.TUITION_FEES.MAKE_CLASS} element={<MakeClass />} />
             </Route>
             <Route path={PATH.DIRECTOR.NOTICE.ROOT} element={<Outlet />}>
               <Route path="" element={<DirectorNotice />} />

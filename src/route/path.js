@@ -22,6 +22,12 @@ export const PATH = {
       COURSEDETAILS: 'course-details',
       UPDATE: 'update',
     },
+    TUITION_FEES: {
+      ROOT: 'tuition-fees',
+      PAYMENTLIST: 'payment-list',
+      CLAIM: 'claim',
+      MAKE_CLASS: 'make-class',
+    },
     NOTICE: {
       ROOT: 'notice',
       ADD: 'add',
