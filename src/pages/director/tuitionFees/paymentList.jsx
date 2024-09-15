@@ -38,7 +38,7 @@ export default function PaymentList() {
         <TabPanel value={tabIndex} index={0}>
           <List>
             {unpaidList.map((unpaid) => (
-              <Box sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
+              <Box key={unpaid.name} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
                 <ListItemText primary={unpaid.name} secondary={`수강반: ${unpaid.class}/ 기간: ${unpaid.due}`} />
                 <ListItemText align="right" primary={unpaid.amount} secondary="미납" sx={{ mb: 2 }} />
               </Box>
@@ -48,7 +48,7 @@ export default function PaymentList() {
         <TabPanel value={tabIndex} index={1}>
           <List>
             {paidList.map((unpaid) => (
-              <Box sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
+              <Box key={unpaid.name} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
                 <ListItemText primary={unpaid.name} secondary={`수강반: ${unpaid.class}/ 기간: ${unpaid.due}`} />
                 <ListItemText align="right" primary={unpaid.amount} secondary="납부 완료" sx={{ mb: 2 }} />
               </Box>
