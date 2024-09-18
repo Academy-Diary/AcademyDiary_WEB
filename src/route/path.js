@@ -12,6 +12,7 @@ export const PATH = {
     ROOT: '/director',
     PROFILE: {
       ROOT: 'profile',
+      UPDATE: 'update',
     },
     MANAGE_MEMBERS: {
       ROOT: 'manage-members',

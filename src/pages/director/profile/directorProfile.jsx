@@ -1,9 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Avatar, Box, Container, Grid, IconButton, Typography } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 
 export default function DirectorProfile() {
+  const navigate = useNavigate();
+
+  const handleClickUpdate = () => {
+    navigate('/director/profile/update');
+  };
+
   return (
     <Container sx={{ width: '50vw', padding: 5 }}>
       <Grid container spacing={5}>
@@ -12,7 +19,7 @@ export default function DirectorProfile() {
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="h6">권지옹 원장</Typography>
-          <IconButton sx={{ m: 2 }}>
+          <IconButton sx={{ m: 2 }} onClick={handleClickUpdate}>
             <Edit />
           </IconButton>
         </Grid>

@@ -24,6 +24,7 @@ import {
   UpdateNotice,
   NoticeDetails,
   DirectorProfile,
+  DirectorProfileUpdate,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -70,6 +71,7 @@ function App() {
             </Route>
             <Route path={PATH.DIRECTOR.PROFILE.ROOT} element={<Outlet />}>
               <Route path="" element={<DirectorProfile />} />
+              <Route path={PATH.DIRECTOR.PROFILE.UPDATE} element={<DirectorProfileUpdate />} />
             </Route>
             <Route path="*" element={<NotFound path={PATH.DIRECTOR.ROOT} />} />
           </Route>
