@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Typography, Container, Link, Grid, TextField, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import dayjs from 'dayjs';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -173,9 +173,7 @@ function PersonalInfo({ title }) {
       <Grid item xs={12}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker']}>
-            <DemoItem label="생년월일">
-              <DatePicker maxDate={dayjs()} value={value} onChange={(newValue) => setValue(newValue)} />
-            </DemoItem>
+            <DatePicker label="생년월일" maxDate={dayjs()} value={value} onChange={(newValue) => setValue(newValue)} />
           </DemoContainer>
         </LocalizationProvider>
       </Grid>
