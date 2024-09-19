@@ -24,8 +24,15 @@ export default function DirectorHeader() {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" mx={2}>
-          AcademyPro
+        <Typography
+          variant="h6"
+          component="div"
+          mx={2}
+          onClick={() => {
+            navigate('/director');
+          }}
+        >
+          아카다
         </Typography>
         <Box sx={{ flexGrow: 1, ml: 5 }}>
           <Button color="inherit" size="large" sx={{ mx: 4 }} onMouseOver={handleMouseOver}>
