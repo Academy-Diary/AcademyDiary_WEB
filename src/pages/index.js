@@ -25,3 +25,6 @@ export { default as DirectorNotice } from './director/notice/directorNotice';
 export { default as AddNotice } from './director/notice/addNotice';
 export { default as UpdateNotice } from './director/notice/updateNotice';
 export { default as NoticeDetails } from './director/notice/noticeDetails';
+
+export { default as DirectorProfile } from './director/profile/directorProfile';
+export { default as DirectorProfileUpdate } from './director/profile/updateProfile';

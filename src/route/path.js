@@ -10,6 +10,10 @@ export const PATH = {
   },
   DIRECTOR: {
     ROOT: '/director',
+    PROFILE: {
+      ROOT: 'profile',
+      UPDATE: 'update',
+    },
     MANAGE_MEMBERS: {
       ROOT: 'manage-members',
       REQUESTLIST: 'request-list',

@@ -93,7 +93,7 @@ export default function DirectorHeader() {
             전체 공지
           </Button>
         </Box>
-        <IconButton>
+        <IconButton onClick={() => navigate('/director/profile')}>
           <Avatar />
         </IconButton>
       </Toolbar>
