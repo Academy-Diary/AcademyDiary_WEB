@@ -27,7 +27,6 @@ export default function ManageTeachers() {
   };
 
   return (
-    // <Director>
     <>
       <TitleMedium title="강사 관리" />
       <Typography mb={2}>강사 인원: {teachers.length}</Typography>
@@ -83,11 +82,10 @@ export default function ManageTeachers() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>삭제</Button>
           <Button onClick={handleCloseDialog}>취소</Button>
+          <Button onClick={handleCloseDialog}>삭제</Button>
         </DialogActions>
       </Dialog>
     </>
-    // </Director>
   );
 }
