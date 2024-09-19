@@ -31,7 +31,7 @@ export default function ManageTeachers() {
       <TitleMedium title="강사 관리" />
       <Typography mb={2}>강사 인원: {teachers.length}</Typography>
       <TableContainer component={Paper} sx={{ maxHeight: '65vh', width: '80vw' }}>
-        <Table sx={{ minWidth: 650 }}>
+        <Table stickyHeader sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
               <TableCell>강사 이름</TableCell>

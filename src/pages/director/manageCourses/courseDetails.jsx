@@ -7,7 +7,12 @@ import { TitleMedium, BottomTwoButtons } from '../../../components';
 function createData(name, phone, email) {
   return { name, phone, email };
 }
-const attendees = [createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com')];
+const attendees = [
+  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
+  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
+  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
+  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
+];
 
 export default function CourseDetails() {
   const navigate = useNavigate();
@@ -35,7 +40,7 @@ export default function CourseDetails() {
           <Grid item xs={12}>
             <Typography sx={{ py: 1 }}>수강생 목록</Typography>
             <Typography variant="body2">총 {attendees.length}명</Typography>
-            <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '40vh', width: '50vw' }}>
+            <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '25vh', width: '50vw' }}>
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>

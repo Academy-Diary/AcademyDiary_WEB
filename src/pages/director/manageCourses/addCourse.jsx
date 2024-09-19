@@ -95,7 +95,7 @@ export default function AddCourse() {
             {right.length > 0 && (
               <>
                 <Typography variant="body2">총 {right.length}명</Typography>
-                <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '40vh', width: '50vw' }}>
+                <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '25vh', width: '50vw' }}>
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow>
