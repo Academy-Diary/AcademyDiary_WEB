@@ -22,7 +22,7 @@ export default function DirectorHeader() {
     setAnchorEl2(null);
   };
   return (
-    <AppBar position="static">
+    <AppBar position="fixed">
       <Toolbar>
         <Typography
           variant="h6"

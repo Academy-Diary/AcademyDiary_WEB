@@ -19,7 +19,7 @@ export default function Director() {
   return (
     <Box component="main">
       <DirectorHeader />
-      <Box sx={{ py: 2, px: 5 }}>
+      <Box sx={{ py: 10, px: 5, maxHeight: '100vh', overflow: 'auto' }}>
         <Outlet />
       </Box>
     </Box>
