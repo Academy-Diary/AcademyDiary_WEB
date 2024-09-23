@@ -35,7 +35,6 @@ export default function RequestList() {
   };
 
   return (
-    // <Director>
     <>
       <TitleMedium title="등록 요청 목록" />
       <Grid container spacing="10vw">
@@ -45,7 +44,7 @@ export default function RequestList() {
           </Typography>
           <List sx={{ overflow: 'auto', maxHeight: '50vh', bgcolor: 'background.paper' }}>
             {teachers.map((teacher) => (
-              <TeacherReqItem key={teacher.name} name={teacher.name} lectures={teacher.lectures} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleCloseApprove} />
+              <TeacherReqItem key={teacher.name} name={teacher.name} lectures={teacher.lectures} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleOpenDecline} />
             ))}
           </List>
         </Grid>
@@ -55,7 +54,7 @@ export default function RequestList() {
           </Typography>
           <List sx={{ overflow: 'auto', maxHeight: '50vh', bgcolor: 'background.paper' }}>
             {students.map((student) => (
-              <StudentReqItem key={student.name} name={student.name} parentName={student.parentName} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleCloseApprove} />
+              <StudentReqItem key={student.name} name={student.name} parentName={student.parentName} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleOpenDecline} />
             ))}
           </List>
         </Grid>
@@ -79,7 +78,6 @@ export default function RequestList() {
         </DialogActions>
       </Dialog>
     </>
-    // </Director>
   );
 }
 

@@ -27,12 +27,11 @@ export default function ManageTeachers() {
   };
 
   return (
-    // <Director>
     <>
       <TitleMedium title="강사 관리" />
       <Typography mb={2}>강사 인원: {teachers.length}</Typography>
       <TableContainer component={Paper} sx={{ maxHeight: '65vh', width: '80vw' }}>
-        <Table sx={{ minWidth: 650 }}>
+        <Table stickyHeader sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
               <TableCell>강사 이름</TableCell>
@@ -83,11 +82,10 @@ export default function ManageTeachers() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>삭제</Button>
           <Button onClick={handleCloseDialog}>취소</Button>
+          <Button onClick={handleCloseDialog}>삭제</Button>
         </DialogActions>
       </Dialog>
     </>
-    // </Director>
   );
 }

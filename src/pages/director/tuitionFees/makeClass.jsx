@@ -75,7 +75,7 @@ export default function MakeClass() {
     <>
       <TitleMedium title="학원비 구성" />
       <TableContainer component={Paper} sx={{ width: '70vw', maxHeight: '70vh', overflow: 'auto' }}>
-        <Table>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>수강반 이름</TableCell>
