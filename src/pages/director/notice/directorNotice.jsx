@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Button, Menu, MenuItem, Dialog, DialogContent, DialogContentText, DialogActions } from '@mui/material';
-import { MoreVert } from '@mui/icons-material';
-
-import { TitleMedium, AddButton } from '../../../components';
+import { TitleMedium, Notice, AddButton } from '../../../components';
+import { useUserAuthStore } from '../../../store';
 
 const notices = [
   { id: 1, title: '8월 정기고사 안내', date: '2024-07-20', view: 55 },
@@ -16,79 +14,24 @@ const notices = [
 ];
 
 export default function DirectorNotice() {
+  const { user } = useUserAuthStore();
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
 
   const handleClickAdd = () => {
     navigate('/director/notice/add');
   };
 
-  const handleClickMore = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleClickUpdate = () => {
-    handleClose();
-    navigate('/director/notice/update');
-  };
-  const handleClickDelete = () => {
-    handleClose();
-    setOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setOpen(false);
+  const handleClickDelete = (id) => {
+    // TODO: 전체공지 삭제 api 연동
+    console.log('delete', id);
   };
 
   return (
     <>
       <TitleMedium title="전체 공지사항" />
-      <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '60vh', width: '70vw' }}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              <TableCell>제목</TableCell>
-              <TableCell align="right">올린 날짜</TableCell>
-              <TableCell align="right">조회수</TableCell>
-              <TableCell align="right" />
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {notices.map((notice) => (
-              <TableRow key={`${notice.title}_${notice.date}`}>
-                <TableCell>
-                  <Link to={`/director/notice/${notice.id}`}>{notice.title}</Link>
-                </TableCell>
-                <TableCell align="right">{notice.date}</TableCell>
-                <TableCell align="right">{notice.view}</TableCell>
-                <TableCell align="right">
-                  <IconButton onClick={handleClickMore}>
-                    <MoreVert />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={handleClickUpdate}>수정</MenuItem>
-        <MenuItem onClick={handleClickDelete}>삭제</MenuItem>
-      </Menu>
+      {/* TODO: editable 주석 제거 */}
+      <Notice notices={notices} /* editable={user.role === 'CHIEF'} */ updateURL="/director/notice/update" handleClickDelete={handleClickDelete} />
       <AddButton title="새 공지사항 등록" onClick={handleClickAdd} />
-      <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogContent>
-          <DialogContentText color="black">해당 공지사항을 삭제하시겠습니까?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>취소</Button>
-          <Button onClick={handleCloseDialog}>삭제</Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 }
