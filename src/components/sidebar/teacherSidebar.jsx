@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 export default function TeacherSidebar() {
   const navigate = useNavigate();
   const items = [
-    { name: 'My 강의 목록', link: '/teacher/#' },
-    { name: '학생 상담', link: '/teacher/#' },
-    { name: '전체 공지', link: '/teacher/#' },
+    { name: 'My 강의 목록', link: '/teacher/class' },
+    { name: '학생 상담', link: '/teacher/counseling' },
+    { name: '공지 게시판', link: '/teacher/notice' },
   ];
   return (
     <Box sx={{ backgroundColor: 'lightgrey', height: '100%' }}>
