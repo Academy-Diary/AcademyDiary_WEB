@@ -11,7 +11,7 @@ import { MoreVert } from '@mui/icons-material';
  * @param {List} notices 공지 리스트
  * @param {boolean} editable 수정권한
  * @param {string} updateURL 공지 수정 url
- * @param {Function(id:number)} handleClickDelete 삭제 함수
+ * @param {Function} handleClickDelete 삭제 함수
  */
 function Notice({
   notices,
