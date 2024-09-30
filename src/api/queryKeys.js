@@ -7,5 +7,6 @@ export const QUERY_KEY = {
 
   // manage members
   REQUESTLIST: PATH_API.REQUESTLIST,
+  TEACHER: PATH_API.TEACHER,
 };
 export default QUERY_KEY;

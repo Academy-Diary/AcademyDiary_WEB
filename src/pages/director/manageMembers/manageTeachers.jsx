@@ -2,17 +2,18 @@ import React, { useState } from 'react';
 
 import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions, DialogContentText, Box, DialogTitle } from '@mui/material';
 import { TitleMedium } from '../../../components';
+import useTeacherList from '../../../api/queries/members/useTeacherList';
 
-function createData(name, lectures, phone, email) {
-  return { name, lectures, phone, email };
-}
+// function createData(name, lectures, phone, email) {
+//   return { name, lectures, phone, email };
+// }
 
-const teachers = [
-  createData('미나리', ['화법과 작문', '비문학'], '010-1234-5678', 'minary@gmail.com'),
-  createData('이하람', ['미적분 1'], '010-0000-0000', 'haram99@naver.com'),
-  createData('권해담', ['물리 1'], '010-1004-1004', 'godeka@naver.com'),
-  createData('김대성', ['확률과 통계'], '010-1111-1111', 'bigcastle@gmail.com'),
-];
+// const teachers = [
+//   createData('미나리', ['화법과 작문', '비문학'], '010-1234-5678', 'minary@gmail.com'),
+//   createData('이하람', ['미적분 1'], '010-0000-0000', 'haram99@naver.com'),
+//   createData('권해담', ['물리 1'], '010-1004-1004', 'godeka@naver.com'),
+//   createData('김대성', ['확률과 통계'], '010-1111-1111', 'bigcastle@gmail.com'),
+// ];
 
 export default function ManageTeachers() {
   const [open, setOpen] = useState(false);
@@ -26,10 +27,12 @@ export default function ManageTeachers() {
     setSelected(selectedTeacher);
   };
 
+  const { data: teachers } = useTeacherList('test_academy');
+
   return (
     <>
       <TitleMedium title="강사 관리" />
-      <Typography mb={2}>강사 인원: {teachers.length}</Typography>
+      <Typography mb={2}>강사 인원: {teachers?.length}</Typography>
       <TableContainer component={Paper} sx={{ maxHeight: '65vh', width: '80vw' }}>
         <Table stickyHeader sx={{ minWidth: 650 }}>
           <TableHead>
@@ -42,8 +45,8 @@ export default function ManageTeachers() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {teachers.map((teacher) => (
-              <TableRow key={teacher.name}>
+            {teachers?.map((teacher) => (
+              <TableRow key={teacher.user_name}>
                 <TableCell component="th" scope="row">
                   {teacher.name}
                 </TableCell>
@@ -53,7 +56,7 @@ export default function ManageTeachers() {
                     return lecture;
                   })}
                 </TableCell>
-                <TableCell>{teacher.phone}</TableCell>
+                <TableCell>{teacher.phone_number}</TableCell>
                 <TableCell>{teacher.email}</TableCell>
                 <TableCell align="right">
                   <Button variant="outlined" onClick={() => handleClickDelete(teacher)}>

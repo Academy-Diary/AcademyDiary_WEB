@@ -8,6 +8,7 @@ export const PATH_API = {
 
   // manage members
   REQUESTLIST: '/registeration/list/user',
+  TEACHER: '/teacher',
 };
 
 export default PATH_API;
