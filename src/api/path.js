@@ -5,6 +5,9 @@ export const PATH_API = {
   // user
   SIGN_IN: '/user/login',
   SIGN_UP: '/user/signup',
+
+  // manage members
+  REQUESTLIST: '/registeration/list/user',
 };
 
 export default PATH_API;

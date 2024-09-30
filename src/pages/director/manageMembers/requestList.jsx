@@ -2,24 +2,28 @@ import React, { useState } from 'react';
 
 import { Typography, List, ListItem, ListItemText, Button, Grid, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { TitleMedium } from '../../../components';
+import { useRequestList } from '../../../api/queries/members/useRequestList';
 
-const teachers = [
-  { name: '나미리', lectures: ['화법과 작문', '비문학'] },
-  { name: '이하람', lectures: ['미적분 2'] },
-  { name: '권해담', lectures: ['물리 1'] },
-  { name: '김대성', lectures: ['확률과 통계'] },
-];
+// const teachers = [
+//   { name: '나미리', lectures: ['화법과 작문', '비문학'] },
+//   { name: '이하람', lectures: ['미적분 2'] },
+//   { name: '권해담', lectures: ['물리 1'] },
+//   { name: '김대성', lectures: ['확률과 통계'] },
+// ];
 
-const students = [
-  { name: '신짱구', parentName: '봉미선' },
-  { name: '신짱아', parentName: '봉미선' },
-  { name: '김철수', parentName: '김미영' },
-  { name: '이훈이', parentName: '토마토' },
-];
+// const students = [
+//   { name: '신짱구', parentName: '봉미선' },
+//   { name: '신짱아', parentName: '봉미선' },
+//   { name: '김철수', parentName: '김미영' },
+//   { name: '이훈이', parentName: '토마토' },
+// ];
 
 export default function RequestList() {
   const [openApprove, setOpenApprove] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
+
+  const { data: teacherData } = useRequestList('TEACHER', 'test_academy');
+  const { data: studentData } = useRequestList('STUDENT', 'test_academy');
 
   const handleOpenApprove = () => {
     setOpenApprove(true);
@@ -43,9 +47,13 @@ export default function RequestList() {
             강사 등록 요청
           </Typography>
           <List sx={{ overflow: 'auto', maxHeight: '50vh', bgcolor: 'background.paper' }}>
-            {teachers.map((teacher) => (
-              <TeacherReqItem key={teacher.name} name={teacher.name} lectures={teacher.lectures} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleOpenDecline} />
-            ))}
+            {teacherData?.length > 0 &&
+              teacherData?.map((teacher) => {
+                const teacherInfo = teacher.user;
+                return (
+                  <TeacherReqItem key={teacherInfo.user_id} name={teacherInfo.user_name} lectures={teacherInfo.lectures} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleOpenDecline} />
+                );
+              })}
           </List>
         </Grid>
         <Grid item xs={6}>
@@ -53,9 +61,19 @@ export default function RequestList() {
             학생 등록 요청
           </Typography>
           <List sx={{ overflow: 'auto', maxHeight: '50vh', bgcolor: 'background.paper' }}>
-            {students.map((student) => (
-              <StudentReqItem key={student.name} name={student.name} parentName={student.parentName} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleOpenDecline} />
-            ))}
+            {studentData?.length > 0 &&
+              studentData?.map((student) => {
+                const studentInfo = student.user;
+                return (
+                  <StudentReqItem
+                    key={studentInfo.user_id}
+                    name={studentInfo.user_name}
+                    parentName={studentInfo.parent_name}
+                    handleOpenApprove={handleOpenApprove}
+                    handleOpenDecline={handleOpenDecline}
+                  />
+                );
+              })}
           </List>
         </Grid>
       </Grid>
