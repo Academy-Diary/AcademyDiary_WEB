@@ -3,7 +3,7 @@ import { QUERY_KEY } from '../../queryKeys';
 import { axiosInstance } from '../../axios';
 import { PATH_API } from '../../path';
 
-export const useRequestList = (role, academyId) =>
+const useRequestList = (role, academyId) =>
   useQuery({
     queryKey: [QUERY_KEY.REQUESTLIST, role],
     queryFn: async () => {
@@ -13,3 +13,5 @@ export const useRequestList = (role, academyId) =>
       return [];
     },
   });
+
+export default useRequestList;

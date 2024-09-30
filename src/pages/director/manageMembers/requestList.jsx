@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Typography, List, ListItem, ListItemText, Button, Grid, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { TitleMedium } from '../../../components';
-import { useRequestList } from '../../../api/queries/members/useRequestList';
+import useRequestList from '../../../api/queries/members/useRequestList';
 
 // const teachers = [
 //   { name: '나미리', lectures: ['화법과 작문', '비문학'] },
