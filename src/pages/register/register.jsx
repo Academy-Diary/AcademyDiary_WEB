@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
 
 import { Box, Container, Typography, Button, TextField, Grid } from '@mui/material';
+import useLogout from '../../api/queries/user/useLogout';
 
 export default function Register({ name, position }) {
   // 0: 요청 버튼, 1: 학원 등록, 2: 강사 등록
   const [status, setStatus] = useState(0);
+
+  const logoutMutation = useLogout();
+
   const handleClick = () => {
     if (position === 'director') setStatus(1);
     else if (position === 'teacher') setStatus(2);
+  };
+
+  const handleSignOut = () => {
+    logoutMutation.mutate();
   };
 
   return (
@@ -23,7 +31,7 @@ export default function Register({ name, position }) {
         <Typography variant="h4" align="center">
           Academy Pro
         </Typography>
-        {status === 0 && <BeforeRegister name={name} position={position} handleClick={handleClick} />}
+        {status === 0 && <BeforeRegister name={name} position={position} handleClick={handleClick} handleSignOut={handleSignOut} />}
         {status === 1 && <RegisterAcademy />}
         {status === 2 && <RegisterTeacher />}
       </Box>
@@ -31,7 +39,7 @@ export default function Register({ name, position }) {
   );
 }
 
-function BeforeRegister({ name, position, handleClick }) {
+function BeforeRegister({ name, position, handleClick, handleSignOut }) {
   return (
     <Box mt={10} sx={{ width: '100%' }}>
       {position === 'director' && (
@@ -50,6 +58,9 @@ function BeforeRegister({ name, position, handleClick }) {
       )}
       <Button variant="contained" size="large" fullWidth onClick={handleClick}>
         {position === 'director' ? '우리 학원 등록하기' : '학원에 등록 요청하기'}
+      </Button>
+      <Button size="large" fullWidth onClick={handleSignOut}>
+        로그아웃
       </Button>
     </Box>
   );
