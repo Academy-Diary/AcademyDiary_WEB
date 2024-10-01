@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, TextField, Link, Grid, Typography, Container, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { useLogin } from '../../api/queries/user/useLogin';
-import { PATH } from '../../route/path';
-import { useUserAuthStore } from '../../store';
 
 function Login() {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const loginMutation = useLogin();
-  const { user } = useUserAuthStore();
 
   const handleClick = () => {
     setShowPassword((prev) => !prev);
@@ -26,23 +21,10 @@ function Login() {
       password: data.get('password'),
     });
 
-    loginMutation.mutate(
-      {
-        user_id: data.get('userId'),
-        password: data.get('password'),
-      },
-      {
-        onSuccess: () => {
-          if (user.role === 'DIRECTOR') navigate(PATH.DIRECTOR.ROOT);
-          else if (user.role === 'TEACHER') navigate(PATH.TEACHER.ROOT);
-        },
-        onError: (error) => {
-          console.log(error.message);
-        },
-      }
-    );
-
-    navigate('/');
+    loginMutation.mutate({
+      user_id: data.get('userId'),
+      password: data.get('password'),
+    });
   };
 
   return (
