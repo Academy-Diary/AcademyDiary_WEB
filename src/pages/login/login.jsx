@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 
-import { Box, Button, TextField, Link, Grid, Typography, Container, InputAdornment, IconButton } from '@mui/material';
+import { Box, Button, TextField, Link, Grid, Typography, Container, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { useLogin } from '../../api/queries/user/useLogin';
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [hasFailed, setHasFailed] = useState(false);
+
   const loginMutation = useLogin();
 
   const handleClick = () => {
@@ -21,10 +23,17 @@ function Login() {
       password: data.get('password'),
     });
 
-    loginMutation.mutate({
-      user_id: data.get('userId'),
-      password: data.get('password'),
-    });
+    loginMutation.mutate(
+      {
+        user_id: data.get('userId'),
+        password: data.get('password'),
+      },
+      {
+        onError: () => {
+          setHasFailed(true);
+        },
+      }
+    );
   };
 
   return (
@@ -65,6 +74,7 @@ function Login() {
             autoComplete="off"
           />
           {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
+          {hasFailed ? <Alert severity="error">아이디 혹은 비밀번호를 확인하세요.</Alert> : null}
           <Button type="submit" fullWidth variant="contained" size="large" sx={{ my: 2 }}>
             로그인
           </Button>
