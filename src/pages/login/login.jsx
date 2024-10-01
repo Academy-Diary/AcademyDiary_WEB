@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, TextField, Link, Grid, Typography, Container, InputAdornment, IconButton } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { useLogin } from '../../api/queries/user/useLogin';
-import { PATH } from '../../route/path';
 
 function Login() {
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const loginMutation = useLogin();
 
@@ -24,22 +21,10 @@ function Login() {
       password: data.get('password'),
     });
 
-    loginMutation.mutate(
-      {
-        user_id: data.get('userId'),
-        password: data.get('password'),
-      },
-      {
-        onSuccess: () => {
-          navigate(PATH.root);
-        },
-        onError: (error) => {
-          console.log(error.message);
-        },
-      }
-    );
-
-    navigate('/');
+    loginMutation.mutate({
+      user_id: data.get('userId'),
+      password: data.get('password'),
+    });
   };
 
   return (

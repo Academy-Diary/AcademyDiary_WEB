@@ -21,7 +21,9 @@ export const useLogin = (options) => {
     onSuccess: (data) => {
       setSession(data.accessToken);
       login({ ...data.user, userStatus: data.userStatus });
-      navigate(PATH.root);
+
+      if (data.user.role === 'CHIEF') navigate(PATH.DIRECTOR.ROOT);
+      else if (data.user.role === 'TEACHER') navigate(PATH.TEACHER.ROOT);
     },
     onError: (error) => {
       console.log('error occurred at useLogin:', error);

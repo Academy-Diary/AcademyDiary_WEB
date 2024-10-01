@@ -30,23 +30,24 @@ import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
 
 function App() {
-  const { isLoggedIn } = useUserAuthStore();
+  const { isLoggedIn, user } = useUserAuthStore();
+  const hasRegistered = user.academy_id !== null && user.academy_id !== undefined;
 
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path={PATH.root} element={isLoggedIn ? <Register name="홍길동" position="teacher" /> : <FirstPage />} />
+          <Route path={PATH.root} element={<FirstPage />} />
           <Route path={PATH.SIGNUP} element={<SignUp />} />
           <Route path={PATH.LOGIN} element={<Login />} />
 
           <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
-            <Route path="" element={<TeacherHome />} />
+            <Route path="" element={hasRegistered ? <TeacherHome /> : <Register name={user.user_name} position="teacher" />} />
             <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />
           </Route>
 
           <Route path={PATH.DIRECTOR.ROOT} element={<Director />}>
-            <Route path="" element={<DirectorHome />} />
+            <Route path="" element={hasRegistered ? <DirectorHome /> : <Register name={user.user_name} position="director" />} />
             <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.ROOT} element={<Outlet />}>
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.REQUESTLIST} element={<RequestList />} />
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.TEACHERS} element={<ManageTeachers />} />
