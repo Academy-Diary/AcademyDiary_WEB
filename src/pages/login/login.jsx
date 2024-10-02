@@ -67,7 +67,7 @@ function Login() {
           로그인
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField margin="normal" required fullWidth id="userId" label="아이디" name="userId" autoComplete="on" autoFocus error={isEmptyId} onChange={handleChangeId} />
+          <TextField margin="normal" required fullWidth id="userId" label="아이디" name="userId" autoComplete="on" autoFocus error={hasFailed || isEmptyId} onChange={handleChangeId} />
           <TextField
             margin="normal"
             required
@@ -86,7 +86,7 @@ function Login() {
             label="비밀번호"
             id="password"
             autoComplete="off"
-            error={isEmptyPw}
+            error={hasFailed || isEmptyPw}
             onChange={handleChangePw}
           />
           {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
