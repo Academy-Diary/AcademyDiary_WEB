@@ -19,6 +19,9 @@ export const useLogin = (options) => {
       return response.data;
     },
     onSuccess: (data) => {
+      // role 이 STUDENT or PARENT 이면 에러 발생
+      if (data.user.role === 'STUDENT' || data.user.role === 'PARENT') throw new Error();
+
       setSession(data.accessToken);
       login({ ...data.user, userStatus: data.userStatus });
 
