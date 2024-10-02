@@ -8,7 +8,6 @@ import { useLogin } from '../../api/queries/user/useLogin';
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [hasFailed, setHasFailed] = useState(false); // alert 띄울지 여부
-  const [isEmpty, setIsEmpty] = useState(false); // alert 띄울지 여부
   const [isEmptyId, setIsEmptyId] = useState(false);
   const [isEmptyPw, setIsEmptyPw] = useState(false);
 
@@ -34,12 +33,9 @@ function Login() {
     // });
 
     if (!data.get('userId') || !data.get('password')) {
-      setIsEmpty(true);
       if (!data.get('userId')) setIsEmptyId(true);
       if (!data.get('password')) setIsEmptyPw(true);
     } else {
-      setIsEmpty(false);
-
       loginMutation.mutate(
         {
           user_id: data.get('userId'),
@@ -95,7 +91,8 @@ function Login() {
           />
           {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
           {hasFailed ? <Alert severity="error">아이디 혹은 비밀번호를 확인하세요.</Alert> : null}
-          {isEmpty ? <Alert severity="error">아이디와 비밀번호를 모두 입력해주세요. </Alert> : null}
+          {isEmptyId ? <Alert severity="error">아이디를 입력해주세요. </Alert> : null}
+          {isEmptyPw ? <Alert severity="error">비밀번호를 입력해주세요. </Alert> : null}
           <Button type="submit" fullWidth variant="contained" size="large" sx={{ my: 2 }}>
             로그인
           </Button>
