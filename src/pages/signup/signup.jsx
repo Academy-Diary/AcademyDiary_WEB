@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Container, Link, Grid, TextField, InputAdornment, IconButton } from '@mui/material';
+import { Box, Button, Typography, Container, Link, Grid, TextField, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useCheckDuplicate } from '../../api/queries/user/useSignup';
 
 export default function SignUp() {
   // 0: 선택화면, 1: 회원가입화면 2: 완료화면
@@ -63,9 +64,32 @@ function SelectPosition({ handleSelect }) {
 
 function SignupForm({ position, setStatus }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [duplicated, setDuplicated] = useState(false);
+  const [checkedDup, setCheckedDup] = useState(false); // 중복체크 여부
+
+  const checkDupMutation = useCheckDuplicate();
 
   const handleClick = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  // 아이디 중복체크
+  const handleChangeUserId = (e) => {
+    setUserId(e.target.value);
+  };
+  const handleCheckDup = () => {
+    checkDupMutation.mutate(userId, {
+      onSuccess: () => {
+        setCheckedDup(true); // 체크 완료
+        setDuplicated(false);
+      },
+      onError: (error) => {
+        setCheckedDup(true); // 체크 완료
+        setDuplicated(true);
+        console.log(error.message);
+      },
+    });
   };
 
   const handleSubmit = (event) => {
@@ -97,13 +121,18 @@ function SignupForm({ position, setStatus }) {
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={8}>
-            <TextField name="userid" id="userid" label="아이디" required fullWidth autoFocus />
+            <TextField name="userid" id="userid" label="아이디" required fullWidth autoFocus onChange={handleChangeUserId} error={duplicated} disabled={checkedDup && !duplicated} />
           </Grid>
           <Grid item xs={4}>
-            <Button variant="contained" size="large" sx={{ m: 1 }}>
-              중복확인
+            <Button variant="contained" size="large" sx={{ m: 1 }} onClick={handleCheckDup}>
+              중복 확인
             </Button>
           </Grid>
+          {checkedDup && (
+            <Grid item xs={12}>
+              {duplicated ? <Alert severity="error">이미 사용 중인 아이디입니다.</Alert> : <Alert severity="success">사용 가능한 아이디입니다.</Alert>}
+            </Grid>
+          )}
           <Grid item xs={12}>
             <TextField
               InputProps={{
