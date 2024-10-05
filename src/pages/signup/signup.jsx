@@ -132,7 +132,8 @@ function SignupForm({ position, setStatus, setName }) {
           console.log(res.message);
         },
         onError: (error) => {
-          alert('서버 오류로 회원가입에 실패하였습니다. 나중에 다시 시도해주세요.');
+          if (error.errorCode === 409) alert('이미 등록된 이메일입니다. \n다른 이메일로 다시 시도해주세요.');
+          else alert('서버 오류로 회원가입에 실패하였습니다. \n나중에 다시 시도해주세요.');
           console.log(error.message);
         },
       });
