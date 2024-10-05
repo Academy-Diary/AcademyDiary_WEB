@@ -21,7 +21,7 @@ export default function Teacher() {
         <Grid item xs={2} height="100%">
           <TeacherSideBar />
         </Grid>
-        <Grid item xs={10}>
+        <Grid item xs={10} sx={{ px: 5, py: 5 }}>
           <Outlet />
         </Grid>
       </Grid>
