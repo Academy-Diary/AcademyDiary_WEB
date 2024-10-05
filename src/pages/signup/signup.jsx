@@ -110,6 +110,7 @@ function SignupForm({ position, setStatus }) {
     const data = new FormData(event.currentTarget);
 
     if (!checkedDup) alert('아이디 중복 확인을 해주세요.');
+    else if (duplicated) alert('사용 가능한 아이디로 다시 시도해주세요.');
     else if (data.get('password') !== data.get('password2')) alert('입력한 두 비밀번호가 일치하지 않습니다.');
     else {
       const submitData = {
@@ -128,6 +129,7 @@ function SignupForm({ position, setStatus }) {
           setStatus(2);
         },
         onError: (error) => {
+          alert('서버 오류로 회원가입에 실패하였습니다. 나중에 다시 시도해주세요.');
           console.log(error.message);
         },
       });
