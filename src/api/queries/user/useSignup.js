@@ -9,3 +9,11 @@ export const useCheckDuplicate = () =>
       return response.data;
     },
   });
+
+export const useSignup = () =>
+  useMutation({
+    mutationFn: async (payload) => {
+      const response = await axiosInstance.post(PATH_API.SIGN_UP, payload);
+      return response.data;
+    },
+  });

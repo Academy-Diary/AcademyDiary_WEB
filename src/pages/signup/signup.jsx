@@ -6,7 +6,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useCheckDuplicate } from '../../api/queries/user/useSignup';
+import { useCheckDuplicate, useSignup } from '../../api/queries/user/useSignup';
 
 export default function SignUp() {
   // 0: 선택화면, 1: 회원가입화면 2: 완료화면
@@ -45,10 +45,10 @@ function SelectPosition({ handleSelect }) {
       <Typography variant="h5" align="center" mb={30}>
         회원가입
       </Typography>
-      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('director')}>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('CHIEF')}>
         학원 대표
       </Button>
-      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('teacher')}>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('TEACHER')}>
         학원 강사
       </Button>
       <Grid container justifyContent="flex-end">
@@ -62,6 +62,17 @@ function SelectPosition({ handleSelect }) {
   );
 }
 
+// 회원가입 request body
+// {
+//   "user_id": "john_doe_123",
+//   "email": "john.doe@example.com",
+//   "birth_date": "2000-01-01T00:00:00Z", //ISO 8601형식으로 입력되어야 함!! 그래야 시간 오차 안생김
+//   "user_name": "John Doe",
+//   "password": "$2b$10$uE3xvfH4SsvoeIS9phH6N.NADvpWfM/WG10FMeZQhCBcKS3P5QoB2",
+//   "phone_number": "010-1234-5678",
+//   "role": "STUDENT"
+// }
+
 function SignupForm({ position, setStatus }) {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState('');
@@ -69,6 +80,7 @@ function SignupForm({ position, setStatus }) {
   const [checkedDup, setCheckedDup] = useState(false); // 중복체크 여부
 
   const checkDupMutation = useCheckDuplicate();
+  const signupMutation = useSignup();
 
   const handleClick = () => {
     setShowPassword((prev) => !prev);
@@ -95,17 +107,29 @@ function SignupForm({ position, setStatus }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const submitData = {
-      name: data.get('name'),
-      email: data.get('email'),
-      password: data.get('password'),
-      password2: data.get('password2'),
-    };
 
-    if (submitData.password !== submitData.password2) alert('입력한 두 비밀번호가 일치하지 않습니다.');
+    if (!checkedDup) alert('아이디 중복 확인을 해주세요.');
+    else if (data.get('password') !== data.get('password2')) alert('입력한 두 비밀번호가 일치하지 않습니다.');
     else {
-      console.log(submitData);
-      setStatus(2);
+      const submitData = {
+        user_id: data.get('userid'),
+        password: data.get('password'),
+        user_name: data.get('name'),
+        birth_date: new Date(data.get('birthdate')).toISOString(),
+        email: data.get('email'),
+        phone_number: data.get('phonenumber'),
+        role: position,
+      };
+
+      // console.log(submitData);
+      signupMutation.mutate(submitData, {
+        onSuccess: () => {
+          setStatus(2);
+        },
+        onError: (error) => {
+          console.log(error.message);
+        },
+      });
     }
   };
 
@@ -202,7 +226,7 @@ function PersonalInfo({ title }) {
       <Grid item xs={12}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker']}>
-            <DatePicker label="생년월일" maxDate={dayjs()} value={value} onChange={(newValue) => setValue(newValue)} />
+            <DatePicker label="생년월일" name="birthdate" maxDate={dayjs()} value={value} onChange={(newValue) => setValue(newValue)} />
           </DemoContainer>
         </LocalizationProvider>
       </Grid>
