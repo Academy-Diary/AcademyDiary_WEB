@@ -2,7 +2,10 @@ export { default as NotFound } from './notFound/notFound';
 export { default as SignUp } from './signup/signup';
 export { default as Login } from './login/login';
 
+// 강사 페이지
 export { default as TeacherHome } from './home/teacherHome';
+export { default as TeacherNotice } from './teacher/notice/teacherNotice';
+export { default as TeacherNoticeDetails } from './teacher/notice/noticeDetails';
 export { default as Register } from './register/register';
 
 // 원장 페이지

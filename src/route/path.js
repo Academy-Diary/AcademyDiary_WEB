@@ -6,7 +6,10 @@ export const PATH = {
     ROOT: '/teacher',
     CLASS: 'class', // 강의목록
     COUNSELING: 'counseling', // 학생상담
-    NOTICE: 'notice', // 전체공지
+    NOTICE: {
+      ROOT: 'notice',
+      DETAILS: ':id',
+    }, // 전체공지
   },
   DIRECTOR: {
     ROOT: '/director',

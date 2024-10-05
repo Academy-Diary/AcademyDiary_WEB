@@ -9,6 +9,8 @@ import {
   NotFound,
   DirectorHome,
   TeacherHome,
+  TeacherNotice,
+  TeacherNoticeDetails,
   RequestList,
   ManageTeachers,
   ManageStudents,
@@ -43,6 +45,10 @@ function App() {
 
           <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
             <Route path="" element={hasRegistered ? <TeacherHome /> : <Register name={user.user_name} position="teacher" />} />
+            <Route path={PATH.TEACHER.NOTICE.ROOT} element={<Outlet />}>
+              <Route path="" element={<TeacherNotice />} />
+              <Route path={PATH.TEACHER.NOTICE.DETAILS} element={<TeacherNoticeDetails />} />
+            </Route>
             <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />
           </Route>
 
