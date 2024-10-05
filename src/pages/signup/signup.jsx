@@ -12,6 +12,7 @@ export default function SignUp() {
   // 0: 선택화면, 1: 회원가입화면 2: 완료화면
   const [status, setStatus] = useState(0);
   const [position, setPosition] = useState('');
+  const [name, setName] = useState('');
 
   const handleSelect = (pos) => {
     setStatus(1);
@@ -32,8 +33,8 @@ export default function SignUp() {
           Academy Pro
         </Typography>
         {status === 0 && <SelectPosition handleSelect={handleSelect} />}
-        {status === 1 && <SignupForm position={position} setStatus={setStatus} />}
-        {status === 2 && <Succeed name="홍길동" position={position} />}
+        {status === 1 && <SignupForm position={position} setStatus={setStatus} setName={setName} />}
+        {status === 2 && <Succeed name={name} position={position} />}
       </Box>
     </Container>
   );
@@ -73,7 +74,7 @@ function SelectPosition({ handleSelect }) {
 //   "role": "STUDENT"
 // }
 
-function SignupForm({ position, setStatus }) {
+function SignupForm({ position, setStatus, setName }) {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState('');
   const [duplicated, setDuplicated] = useState(false);
@@ -125,8 +126,10 @@ function SignupForm({ position, setStatus }) {
 
       // console.log(submitData);
       signupMutation.mutate(submitData, {
-        onSuccess: () => {
+        onSuccess: (res) => {
+          setName(submitData.user_name);
           setStatus(2);
+          console.log(res.message);
         },
         onError: (error) => {
           alert('서버 오류로 회원가입에 실패하였습니다. 나중에 다시 시도해주세요.');
