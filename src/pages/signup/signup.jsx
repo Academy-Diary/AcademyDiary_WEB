@@ -89,6 +89,7 @@ function SignupForm({ position, setStatus }) {
   // 아이디 중복체크
   const handleChangeUserId = (e) => {
     setUserId(e.target.value);
+    setCheckedDup(false); // 변경할 때마다 다시 중복체크 필요
   };
   const handleCheckDup = () => {
     checkDupMutation.mutate(userId, {
@@ -145,7 +146,7 @@ function SignupForm({ position, setStatus }) {
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={8}>
-            <TextField name="userid" id="userid" label="아이디" required fullWidth autoFocus onChange={handleChangeUserId} error={duplicated} disabled={checkedDup && !duplicated} />
+            <TextField name="userid" id="userid" label="아이디" required fullWidth autoFocus onChange={handleChangeUserId} error={duplicated} />
           </Grid>
           <Grid item xs={4}>
             <Button variant="contained" size="large" sx={{ m: 1 }} onClick={handleCheckDup}>
