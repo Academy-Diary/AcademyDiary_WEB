@@ -149,7 +149,7 @@ function SignupForm({ position, setStatus, setName }) {
         {position === 'director' && '학원 대표'}
         {position === 'teacher' && '학원 강사'}
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={8}>
             <TextField name="userid" id="userid" label="아이디" required fullWidth autoFocus onChange={handleChangeUserId} error={duplicated} />
