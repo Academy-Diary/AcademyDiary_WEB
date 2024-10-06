@@ -13,14 +13,16 @@ const notices = [
   { id: 6, title: '3월 정기고사 안내', date: '2024-02-29', view: 201 },
 ];
 
-export default function TeacherNotice() {
+export default function TeacherNotice({ category }) {
   const { user } = useUserAuthStore();
   const navigate = useNavigate();
 
+  const isClassNotice = category !== '전체'; // category가 전체가 아니면 true
+
   return (
     <>
-      <TitleMedium title="전체 공지사항" />
-      <Notice notices={notices} editable={false} />
+      <TitleMedium title={`${category} 공지사항`} />
+      <Notice notices={notices} editable={isClassNotice} />
     </>
   );
 }
