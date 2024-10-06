@@ -7,7 +7,7 @@ export default function TeacherSidebar() {
   const items = [
     { name: 'My 강의 목록', link: '/teacher/class' },
     { name: '학생 상담', link: '/teacher/counseling' },
-    { name: '공지 게시판', link: '/teacher/notice' },
+    { name: '학원 공지', link: '/teacher/notice' },
   ];
   return (
     <Box sx={{ backgroundColor: 'lightgrey', height: '100%' }}>
@@ -18,6 +18,7 @@ export default function TeacherSidebar() {
             onClick={() => {
               navigate(item.link);
             }}
+            
           >
             <ListItemText>{item.name}</ListItemText>
           </ListItemButton>
