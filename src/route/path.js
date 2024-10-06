@@ -4,7 +4,18 @@ export const PATH = {
   LOGIN: 'login',
   TEACHER: {
     ROOT: '/teacher',
-    CLASS: 'class', // 강의목록
+    CLASS: {
+      ROOT: 'class', // 강의목록
+      DETAIL: {
+        ROOT: ':id', // 각 강의 페이지
+        LECTURENOTICE: {
+          ROOT: 'notice', // 각 강의별 공지사항
+          ADD: 'add',
+          UPDATE: 'update',
+          DETAIL: ':id',
+        },
+      },
+    },
     COUNSELING: 'counseling', // 학생상담
     NOTICE: {
       ROOT: 'notice',
