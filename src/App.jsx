@@ -34,9 +34,7 @@ import { useUserAuthStore } from './store';
 
 function App() {
   const { isLoggedIn, user } = useUserAuthStore();
-  const hasRegistered = user.academy_id !== null && user.academy_id !== undefined;
-
-  console.log(PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE);
+  const hasRegistered = user && user.academy_id !== null; 
 
   return (
     <div className="App">
