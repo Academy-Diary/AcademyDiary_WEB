@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Container, Link, Grid, TextField, InputAdornment, IconButton } from '@mui/material';
+import { Box, Button, Typography, Container, Link, Grid, TextField, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { useCheckDuplicate, useSignup } from '../../api/queries/user/useSignup';
 
 export default function SignUp() {
   // 0: 선택화면, 1: 회원가입화면 2: 완료화면
   const [status, setStatus] = useState(0);
   const [position, setPosition] = useState('');
+  const [name, setName] = useState('');
 
   const handleSelect = (pos) => {
     setStatus(1);
@@ -31,8 +33,8 @@ export default function SignUp() {
           Academy Pro
         </Typography>
         {status === 0 && <SelectPosition handleSelect={handleSelect} />}
-        {status === 1 && <SignupForm position={position} setStatus={setStatus} />}
-        {status === 2 && <Succeed name="홍길동" position={position} />}
+        {status === 1 && <SignupForm position={position} setStatus={setStatus} setName={setName} />}
+        {status === 2 && <Succeed name={name} position={position} />}
       </Box>
     </Container>
   );
@@ -44,10 +46,10 @@ function SelectPosition({ handleSelect }) {
       <Typography variant="h5" align="center" mb={30}>
         회원가입
       </Typography>
-      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('director')}>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('CHIEF')}>
         학원 대표
       </Button>
-      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('teacher')}>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('TEACHER')}>
         학원 강사
       </Button>
       <Grid container justifyContent="flex-end">
@@ -61,27 +63,80 @@ function SelectPosition({ handleSelect }) {
   );
 }
 
-function SignupForm({ position, setStatus }) {
+// 회원가입 request body
+// {
+//   "user_id": "john_doe_123",
+//   "email": "john.doe@example.com",
+//   "birth_date": "2000-01-01T00:00:00Z", //ISO 8601형식으로 입력되어야 함!! 그래야 시간 오차 안생김
+//   "user_name": "John Doe",
+//   "password": "$2b$10$uE3xvfH4SsvoeIS9phH6N.NADvpWfM/WG10FMeZQhCBcKS3P5QoB2",
+//   "phone_number": "010-1234-5678",
+//   "role": "STUDENT"
+// }
+
+function SignupForm({ position, setStatus, setName }) {
   const [showPassword, setShowPassword] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [duplicated, setDuplicated] = useState(false);
+  const [checkedDup, setCheckedDup] = useState(false); // 중복체크 여부
+
+  const checkDupMutation = useCheckDuplicate();
+  const signupMutation = useSignup();
 
   const handleClick = () => {
     setShowPassword((prev) => !prev);
   };
 
+  // 아이디 중복체크
+  const handleChangeUserId = (e) => {
+    setUserId(e.target.value);
+    setCheckedDup(false); // 변경할 때마다 다시 중복체크 필요
+  };
+  const handleCheckDup = () => {
+    checkDupMutation.mutate(userId, {
+      onSuccess: () => {
+        setCheckedDup(true); // 체크 완료
+        setDuplicated(false);
+      },
+      onError: (error) => {
+        setCheckedDup(true); // 체크 완료
+        setDuplicated(true);
+        console.log(error.message);
+      },
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const submitData = {
-      name: data.get('name'),
-      email: data.get('email'),
-      password: data.get('password'),
-      password2: data.get('password2'),
-    };
 
-    if (submitData.password !== submitData.password2) alert('입력한 두 비밀번호가 일치하지 않습니다.');
+    if (!checkedDup) alert('아이디 중복 확인을 해주세요.');
+    else if (duplicated) alert('사용 가능한 아이디로 다시 시도해주세요.');
+    else if (data.get('password') !== data.get('password2')) alert('입력한 두 비밀번호가 일치하지 않습니다.');
     else {
-      console.log(submitData);
-      setStatus(2);
+      const submitData = {
+        user_id: data.get('userid'),
+        password: data.get('password'),
+        user_name: data.get('name'),
+        birth_date: new Date(data.get('birthdate')).toISOString(),
+        email: data.get('email'),
+        phone_number: data.get('phonenumber'),
+        role: position,
+      };
+
+      // console.log(submitData);
+      signupMutation.mutate(submitData, {
+        onSuccess: (res) => {
+          setName(submitData.user_name);
+          setStatus(2);
+          console.log(res.message);
+        },
+        onError: (error) => {
+          if (error.errorCode === 409) alert('이미 등록된 이메일입니다. \n다른 이메일로 다시 시도해주세요.');
+          else alert('서버 오류로 회원가입에 실패하였습니다. \n나중에 다시 시도해주세요.');
+          console.log(error.message);
+        },
+      });
     }
   };
 
@@ -94,16 +149,21 @@ function SignupForm({ position, setStatus }) {
         {position === 'director' && '학원 대표'}
         {position === 'teacher' && '학원 강사'}
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={8}>
-            <TextField name="userid" id="userid" label="아이디" required fullWidth autoFocus />
+            <TextField name="userid" id="userid" label="아이디" required fullWidth autoFocus onChange={handleChangeUserId} error={duplicated} />
           </Grid>
           <Grid item xs={4}>
-            <Button variant="contained" size="large" sx={{ m: 1 }}>
-              중복확인
+            <Button variant="contained" size="large" sx={{ m: 1 }} onClick={handleCheckDup}>
+              중복 확인
             </Button>
           </Grid>
+          {checkedDup && (
+            <Grid item xs={12}>
+              {duplicated ? <Alert severity="error">이미 사용 중인 아이디입니다.</Alert> : <Alert severity="success">사용 가능한 아이디입니다.</Alert>}
+            </Grid>
+          )}
           <Grid item xs={12}>
             <TextField
               InputProps={{
@@ -173,7 +233,7 @@ function PersonalInfo({ title }) {
       <Grid item xs={12}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker']}>
-            <DatePicker label="생년월일" maxDate={dayjs()} value={value} onChange={(newValue) => setValue(newValue)} />
+            <DatePicker label="생년월일" name="birthdate" maxDate={dayjs()} value={value} onChange={(newValue) => setValue(newValue)} />
           </DemoContainer>
         </LocalizationProvider>
       </Grid>
