@@ -51,66 +51,57 @@ function Login() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h4" align="center" mb={5}>
-          Academy Pro
-        </Typography>
-        <Typography variant="h5" align="center" mb={3}>
+    <>
+      <Typography variant="h4" align="center" mb={5}>
+        Academy Pro
+      </Typography>
+      <Typography variant="h5" align="center" mb={3}>
+        로그인
+      </Typography>
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <TextField margin="normal" required fullWidth id="userId" label="아이디" name="userId" autoComplete="on" autoFocus error={hasFailed || isEmptyId} onChange={handleChangeId} />
+        <TextField
+          margin="normal"
+          required
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={handleClick} edge="end">
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          type={showPassword ? 'text' : 'password'}
+          name="password"
+          label="비밀번호"
+          id="password"
+          autoComplete="off"
+          error={hasFailed || isEmptyPw}
+          onChange={handleChangePw}
+        />
+        {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
+        {hasFailed ? <Alert severity="error">아이디 혹은 비밀번호를 확인하세요.</Alert> : null}
+        {isEmptyId ? <Alert severity="error">아이디를 입력해주세요. </Alert> : null}
+        {isEmptyPw ? <Alert severity="error">비밀번호를 입력해주세요. </Alert> : null}
+        <Button type="submit" fullWidth variant="contained" size="large" sx={{ my: 2 }}>
           로그인
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField margin="normal" required fullWidth id="userId" label="아이디" name="userId" autoComplete="on" autoFocus error={hasFailed || isEmptyId} onChange={handleChangeId} />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleClick} edge="end">
-                    {showPassword ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            type={showPassword ? 'text' : 'password'}
-            name="password"
-            label="비밀번호"
-            id="password"
-            autoComplete="off"
-            error={hasFailed || isEmptyPw}
-            onChange={handleChangePw}
-          />
-          {/* <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" /> */}
-          {hasFailed ? <Alert severity="error">아이디 혹은 비밀번호를 확인하세요.</Alert> : null}
-          {isEmptyId ? <Alert severity="error">아이디를 입력해주세요. </Alert> : null}
-          {isEmptyPw ? <Alert severity="error">비밀번호를 입력해주세요. </Alert> : null}
-          <Button type="submit" fullWidth variant="contained" size="large" sx={{ my: 2 }}>
-            로그인
-          </Button>
-          <Grid container>
-            <Grid item>
-              <Link href="/signup" variant="body2">
-                회원가입
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/login/findId" variant="body2">
-                아이디 찾기
-              </Link>
-            </Grid>
+        </Button>
+        <Grid container>
+          <Grid item>
+            <Link href="/signup" variant="body2">
+              회원가입
+            </Link>
           </Grid>
-        </Box>
+          <Grid item>
+            <Link href="/login/findId" variant="body2">
+              아이디 찾기
+            </Link>
+          </Grid>
+        </Grid>
       </Box>
-    </Container>
+    </>
   );
 }
 

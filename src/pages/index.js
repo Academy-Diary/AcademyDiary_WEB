@@ -1,4 +1,5 @@
 export { default as NotFound } from './notFound/notFound';
+export { default as StartPage } from './start/startPage';
 export { default as SignUp } from './signup/signup';
 export { default as Login } from './login/login';
 export { default as FindId } from './login/findId';
