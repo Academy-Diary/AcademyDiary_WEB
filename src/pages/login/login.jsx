@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
-import { Box, Button, TextField, Link, Grid, Typography, Container, InputAdornment, IconButton, Alert } from '@mui/material';
+import { Box, Button, TextField, Link, Typography, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { useLogin } from '../../api/queries/user/useLogin';
+import { PATH } from '../../route/path';
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -89,10 +90,10 @@ function Login() {
           로그인
         </Button>
         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Link href="/signup" variant="body2">
+          <Link href={PATH.SIGNUP} variant="body2">
             회원가입
           </Link>
-          <Link href="/login/findId" variant="body2">
+          <Link href={PATH.LOGIN.FIND_ID} variant="body2">
             아이디 찾기
           </Link>
         </Box>

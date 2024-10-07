@@ -3,7 +3,7 @@ export const PATH = {
   SIGNUP: 'signup',
   LOGIN: {
     ROOT: '/login',
-    FIND_ID: 'findId',
+    FIND_ID: 'find-id',
   },
   TEACHER: {
     ROOT: '/teacher',
