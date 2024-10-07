@@ -88,18 +88,14 @@ function Login() {
         <Button type="submit" fullWidth variant="contained" size="large" sx={{ my: 2 }}>
           로그인
         </Button>
-        <Grid container>
-          <Grid item>
-            <Link href="/signup" variant="body2">
-              회원가입
-            </Link>
-          </Grid>
-          <Grid item>
-            <Link href="/login/findId" variant="body2">
-              아이디 찾기
-            </Link>
-          </Grid>
-        </Grid>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Link href="/signup" variant="body2">
+            회원가입
+          </Link>
+          <Link href="/login/findId" variant="body2">
+            아이디 찾기
+          </Link>
+        </Box>
       </Box>
     </>
   );
