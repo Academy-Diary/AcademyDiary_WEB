@@ -4,6 +4,7 @@ export const PATH = {
   LOGIN: {
     ROOT: '/login',
     FIND_ID: 'find-id',
+    RESET_PW: 'reset-pw',
   },
   TEACHER: {
     ROOT: '/teacher',

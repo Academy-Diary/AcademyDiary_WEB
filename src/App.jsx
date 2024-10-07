@@ -30,6 +30,7 @@ import {
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
+import ResetPassword from './pages/login/resetPassword';
 
 function App() {
   const { isLoggedIn, user } = useUserAuthStore();
@@ -45,6 +46,7 @@ function App() {
             <Route path={PATH.LOGIN.ROOT} element={<Outlet />}>
               <Route path="" element={<Login />} />
               <Route path={PATH.LOGIN.FIND_ID} element={<FindId />} />
+              <Route path={PATH.LOGIN.RESET_PW} element={<ResetPassword />} />
             </Route>
           </Route>
 
