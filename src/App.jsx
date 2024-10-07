@@ -10,6 +10,7 @@ import {
   DirectorHome,
   TeacherHome,
   ClassHome,
+  ClassPage,
   TeacherNotice,
   TeacherNoticeDetails,
   RequestList,
@@ -34,7 +35,7 @@ import { useUserAuthStore } from './store';
 
 function App() {
   const { isLoggedIn, user } = useUserAuthStore();
-  const hasRegistered = user && user.academy_id !== null; 
+  const hasRegistered = user && user.academy_id !== null;
 
   return (
     <div className="App">
@@ -48,10 +49,13 @@ function App() {
             <Route path="" element={hasRegistered ? <TeacherHome /> : <Register name={user.user_name} position="teacher" />} />
             <Route path={PATH.TEACHER.CLASS.ROOT} element={<Outlet />}>
               <Route path="" element={<ClassHome />} />
-              <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ROOT} element={<TeacherNotice category="미적분" />} />
+              <Route path={PATH.TEACHER.CLASS.DETAIL.ROOT} element={<Outlet />}>
+                <Route path="" element={<ClassPage />} />
+                <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ROOT} element={<TeacherNotice />} />
+              </Route>
             </Route>
             <Route path={PATH.TEACHER.NOTICE.ROOT} element={<Outlet />}>
-              <Route path="" element={<TeacherNotice category="전체" />} />
+              <Route path="" element={<TeacherNotice />} />
               <Route path={PATH.TEACHER.NOTICE.DETAILS} element={<TeacherNoticeDetails />} />
             </Route>
             <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />

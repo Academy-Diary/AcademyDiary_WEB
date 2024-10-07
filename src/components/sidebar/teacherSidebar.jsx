@@ -18,7 +18,6 @@ export default function TeacherSidebar() {
             onClick={() => {
               navigate(item.link);
             }}
-            
           >
             <ListItemText>{item.name}</ListItemText>
           </ListItemButton>
