@@ -1,6 +1,6 @@
 export const PATH = {
   root: '/',
-  SIGNUP: 'signup',
+  SIGNUP: '/signup',
   LOGIN: {
     ROOT: '/login',
     FIND_ID: 'find-id',
