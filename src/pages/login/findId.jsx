@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Box, Button, TextField, Grid } from '@mui/material';
+import { Box, Button, TextField, Grid, Typography } from '@mui/material';
 import { TitleMedium } from '../../components';
 import useFindId from '../../api/queries/user/useFindId';
 
 export default function FindId() {
+  const [found, setFound] = useState(false);
+  const [userId, setUserId] = useState('');
+
   const findIdMutation = useFindId();
 
   const handleSubmit = (event) => {
@@ -18,6 +21,8 @@ export default function FindId() {
     // console.log(submitData);
     findIdMutation.mutate(submitData, {
       onSuccess: (res) => {
+        setFound(true);
+        setUserId(res.data.user_id);
         console.log(res.data.user_id);
       },
       onError: (error) => {
@@ -29,21 +34,34 @@ export default function FindId() {
   return (
     <>
       <TitleMedium title="아이디 찾기" />
-      <Box component="form" sx={{ mt: 5 }} onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <TextField label="이메일" name="email" required fullWidth />
+      {found ? (
+        <Grid container spacing={5} sx={{ mt: 5 }}>
+          <Grid item xs={6}>
+            <Typography variant="body2">ID: {userId}</Typography>
           </Grid>
           <Grid item xs={12}>
-            <TextField label="전화번호" name="phonenumber" required fullWidth />
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 3 }}>
-              찾기
+            <Button variant="contained" size="large" fullWidth href="/login">
+              로그인하기
             </Button>
           </Grid>
         </Grid>
-      </Box>
+      ) : (
+        <Box component="form" sx={{ mt: 5 }} onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField label="이메일" name="email" required fullWidth />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField label="전화번호" name="phonenumber" required fullWidth />
+            </Grid>
+            <Grid item xs={12}>
+              <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 3 }}>
+                찾기
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      )}
     </>
   );
 }
