@@ -1,7 +1,10 @@
 export const PATH = {
   root: '/',
   SIGNUP: 'signup',
-  LOGIN: 'login',
+  LOGIN: {
+    ROOT: '/login',
+    FIND_ID: 'findId',
+  },
   TEACHER: {
     ROOT: '/teacher',
     CLASS: 'class', // 강의목록

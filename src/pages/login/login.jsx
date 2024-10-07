@@ -98,13 +98,13 @@ function Login() {
           </Button>
           <Grid container>
             <Grid item>
-              {/* <Link href="#" variant="body2">
-                Forgot password?
-              </Link> */}
+              <Link href="/signup" variant="body2">
+                회원가입
+              </Link>
             </Grid>
             <Grid item>
-              <Link href="/signup" variant="body2">
-                계정이 없으신가요? 회원가입하러 가기
+              <Link href="/login/findId" variant="body2">
+                아이디 찾기
               </Link>
             </Grid>
           </Grid>

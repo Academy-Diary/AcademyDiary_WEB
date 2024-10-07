@@ -25,6 +25,7 @@ import {
   NoticeDetails,
   DirectorProfile,
   DirectorProfileUpdate,
+  FindId,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -39,7 +40,10 @@ function App() {
         <Routes>
           <Route path={PATH.root} element={<FirstPage />} />
           <Route path={PATH.SIGNUP} element={<SignUp />} />
-          <Route path={PATH.LOGIN} element={<Login />} />
+          <Route path={PATH.LOGIN.ROOT} element={<Outlet />}>
+            <Route path="" element={<Login />} />
+            <Route path={PATH.LOGIN.FIND_ID} element={<FindId />} />
+          </Route>
 
           <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
             <Route path="" element={hasRegistered ? <TeacherHome /> : <Register name={user.user_name} position="teacher" />} />
