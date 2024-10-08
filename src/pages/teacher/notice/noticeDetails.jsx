@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Box, Grid, Typography, Paper } from '@mui/material';
-import { TitleMedium } from '../../../components';
+import { BottomTwoButtons, TitleMedium } from '../../../components';
 
 const noticeList = [
   {
@@ -25,11 +25,18 @@ const noticeList = [
 ];
 
 export default function TeacherNoticeDetails() {
-  const params = useParams();
+  const { courseid, id } = useParams();
   const navigate = useNavigate();
 
-  const noticeID = Number(params.id);
+  const noticeID = Number(id);
   const notice = noticeList.filter((n) => n.id === noticeID)[0];
+
+  const handleClickList = () => {
+    navigate(`/teacher/class/${courseid}/notice`);
+  };
+  const handleClickUpdate = () => {
+    navigate(`/teacher/class/${courseid}/notice/update?id=${id}`);
+  };
 
   return (
     <>
@@ -54,16 +61,20 @@ export default function TeacherNoticeDetails() {
           </Paper>
         </Grid>
       </Grid>
-      <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-        <Button
-          variant="contained"
-          onClick={() => {
-            navigate('/teacher/notice');
-          }}
-        >
-          목록으로
-        </Button>
-      </Box>
+      {courseid === undefined ? (
+        <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigate('/teacher/notice');
+            }}
+          >
+            목록으로
+          </Button>
+        </Box>
+      ) : (
+        <BottomTwoButtons first="목록으로" second="수정하기" onClickFirst={handleClickList} onClickSecond={handleClickUpdate} />
+      )}
     </>
   );
 }
