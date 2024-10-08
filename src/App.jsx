@@ -11,6 +11,7 @@ import {
   TeacherHome,
   ClassHome,
   ClassPage,
+  CourseNotice,
   TeacherNotice,
   TeacherNoticeDetails,
   RequestList,
@@ -51,7 +52,12 @@ function App() {
               <Route path="" element={<ClassHome />} />
               <Route path={PATH.TEACHER.CLASS.DETAIL.ROOT} element={<Outlet />}>
                 <Route path="" element={<ClassPage />} />
-                <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ROOT} element={<TeacherNotice />} />
+                <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ROOT} element={<Outlet />}>
+                  <Route path="" element={<CourseNotice />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ADD} element={<>추가</>} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.UPDATE} element={<>수정</>} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.DETAIL} element={<TeacherNoticeDetails />} />
+                </Route>
               </Route>
             </Route>
             <Route path={PATH.TEACHER.NOTICE.ROOT} element={<Outlet />}>
