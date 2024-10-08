@@ -5,6 +5,7 @@ export const PATH_API = {
   // user
   SIGN_IN: '/user/login',
   FIND_ID: '/user/find-id',
+  RESET_PW: '/user/reset-password',
   SIGN_UP: '/user/signup',
   CHECK_DUP: '/user/check-id',
   SIGN_OUT: '/user/logout',
