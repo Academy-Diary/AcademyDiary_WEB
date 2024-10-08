@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Box, Button, TextField, Grid, Typography, Alert } from '@mui/material';
 import { TitleMedium } from '../../components';
+import { PATH } from '../../route/path';
 import useFindId from '../../api/queries/user/useFindId';
 
 export default function FindId() {
@@ -44,7 +45,7 @@ export default function FindId() {
             <Typography variant="body2">ID: {userId}</Typography>
           </Grid>
           <Grid item xs={12}>
-            <Button variant="contained" size="large" fullWidth href="/login">
+            <Button variant="contained" size="large" fullWidth href={PATH.LOGIN.ROOT}>
               로그인하기
             </Button>
           </Grid>
