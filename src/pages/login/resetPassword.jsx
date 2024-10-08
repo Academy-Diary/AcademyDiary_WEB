@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material';
 
 import { TitleMedium } from '../../components';
+import { PATH } from '../../route/path';
 import useResetPw from '../../api/queries/user/useResetPw';
 
 export default function ResetPassword() {
@@ -43,9 +44,14 @@ export default function ResetPassword() {
     <>
       <TitleMedium title="비밀번호 변경하기" />
       {sent ? (
-        <Typography variant="body1" align="center">
-          입력하신 주소로 메일을 전송하였습니다
-        </Typography>
+        <>
+          <Typography variant="body1" align="center">
+            입력하신 주소로 메일을 전송하였습니다.
+          </Typography>
+          <Button variant="contained" size="large" sx={{ mt: 5 }} href={PATH.LOGIN.ROOT}>
+            로그인하기
+          </Button>
+        </>
       ) : (
         <>
           <Typography variant="body1" align="center">
