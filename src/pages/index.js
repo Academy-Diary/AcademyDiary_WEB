@@ -7,6 +7,7 @@ export { default as TeacherHome } from './home/teacherHome';
 export { default as ClassHome } from './teacher/class/classHome';
 export { default as ClassPage } from './teacher/class/classPage';
 export { default as CourseNotice } from './teacher/notice/courseNotice';
+export { default as TeacherAddNotice } from './teacher/notice/addNotice';
 export { default as TeacherNotice } from './teacher/notice/teacherNotice';
 export { default as TeacherNoticeDetails } from './teacher/notice/noticeDetails';
 export { default as Register } from './register/register';
