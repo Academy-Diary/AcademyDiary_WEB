@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { Box, Button, TextField, Grid, Typography, Alert } from '@mui/material';
-import { TitleMedium } from '../../components';
+import { CustomLink, TitleMedium } from '../../components';
 import { PATH } from '../../route/path';
 import useFindId from '../../api/queries/user/useFindId';
 
@@ -66,6 +66,9 @@ export default function FindId() {
               <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 3 }}>
                 찾기
               </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <CustomLink to={PATH.LOGIN.ROOT} text="로그인" />
             </Grid>
           </Grid>
         </Box>

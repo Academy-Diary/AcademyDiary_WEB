@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material';
 
-import { TitleMedium } from '../../components';
+import { TitleMedium, CustomLink } from '../../components';
 import { PATH } from '../../route/path';
 import useResetPw from '../../api/queries/user/useResetPw';
 
@@ -78,6 +78,9 @@ export default function ResetPassword() {
                 <Button type="submit" size="large" variant="contained" fullWidth>
                   이메일 전송하기
                 </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <CustomLink to={PATH.LOGIN.ROOT} text="로그인" />
               </Grid>
             </Grid>
           </Box>
