@@ -14,7 +14,7 @@ export default function ClassPage() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const classID = Number(params.id);
+  const classID = Number(params.courseid);
   const course = courses.filter((n) => n.id === classID)[0];
 
   const handleNoticeClick = () => {

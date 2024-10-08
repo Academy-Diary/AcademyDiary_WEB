@@ -7,7 +7,7 @@ export const PATH = {
     CLASS: {
       ROOT: 'class', // 강의목록
       DETAIL: {
-        ROOT: ':id', // 각 강의 페이지
+        ROOT: ':courseid', // 각 강의 페이지
         LECTURENOTICE: {
           ROOT: 'notice', // 각 강의별 공지사항
           ADD: 'add',
