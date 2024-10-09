@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Container, Typography, Button, TextField, Grid } from '@mui/material';
+import { Box, Container, Typography, Button, TextField, Grid, Alert } from '@mui/material';
 import useLogout from '../../api/queries/user/useLogout';
 import { useUserAuthStore } from '../../store';
 import { useRegisterTeacher } from '../../api/queries/register/useRegister';
@@ -112,6 +112,9 @@ function RegisterTeacher() {
   const { user } = useUserAuthStore();
   const registerTeacherMutation = useRegisterTeacher();
 
+  const [isError, setIsError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -120,8 +123,19 @@ function RegisterTeacher() {
       academy_key: data.get('academykey'),
     };
 
-    console.log(submitData);
-    registerTeacherMutation.mutate(submitData);
+    // console.log(submitData);
+    registerTeacherMutation.mutate(submitData, {
+      onError: (error) => {
+        setIsError(true);
+        if (error.errorCode === 404) {
+          setErrorMsg('학원을 찾을 수 없습니다. 초대키를 확인해주세요.');
+        } else if (error.errorCode === 409) {
+          setErrorMsg('이미 등록 요청된 상태입니다.');
+        } else if (error.errorCode === 500) {
+          setErrorMsg('등록 요청 중 오류가 발생했습니다.');
+        }
+      },
+    });
   };
 
   return (
@@ -130,6 +144,11 @@ function RegisterTeacher() {
         강사 등록
       </Typography>
       <TextField name="academykey" id="academykey" label="학원 초대키" required fullWidth />
+      {isError && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {errorMsg}
+        </Alert>
+      )}
       <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 2 }}>
         등록 요청하기
       </Button>
