@@ -129,15 +129,8 @@ function RegisterTeacher() {
       <Typography variant="h5" align="center" mb={10}>
         강사 등록
       </Typography>
-      <Grid container spacing={2} mb={3}>
-        <Grid item xs={12}>
-          <TextField name="academykey" id="academykey" label="학원 초대키" required fullWidth />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField name="name" id="name" label="강사 이름" required fullWidth />
-        </Grid>
-      </Grid>
-      <Button type="submit" variant="contained" size="large" fullWidth mt={2}>
+      <TextField name="academykey" id="academykey" label="학원 초대키" required fullWidth />
+      <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 2 }}>
         등록 요청하기
       </Button>
     </Box>
