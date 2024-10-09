@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import { Box, Container, Typography, Button, TextField, Grid } from '@mui/material';
 import useLogout from '../../api/queries/user/useLogout';
+import { useUserAuthStore } from '../../store';
+import { useRegisterTeacher } from '../../api/queries/register/useRegister';
 
 export default function Register({ name, position }) {
   // 0: 요청 버튼, 1: 학원 등록, 2: 강사 등록
@@ -107,15 +109,19 @@ function RegisterAcademy() {
 }
 
 function RegisterTeacher() {
+  const { user } = useUserAuthStore();
+  const registerTeacherMutation = useRegisterTeacher();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const submitData = {
-      invitkey: data.get('invitkey'),
-      name: data.get('name'),
+      user_id: user.user_id,
+      academy_key: data.get('academykey'),
     };
 
     console.log(submitData);
+    registerTeacherMutation.mutate(submitData);
   };
 
   return (
@@ -125,7 +131,7 @@ function RegisterTeacher() {
       </Typography>
       <Grid container spacing={2} mb={3}>
         <Grid item xs={12}>
-          <TextField name="invitkey" id="invitkey" label="학원 초대키" required fullWidth />
+          <TextField name="academykey" id="academykey" label="학원 초대키" required fullWidth />
         </Grid>
         <Grid item xs={12}>
           <TextField name="name" id="name" label="강사 이름" required fullWidth />

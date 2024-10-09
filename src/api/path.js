@@ -9,6 +9,8 @@ export const PATH_API = {
   SIGN_UP: '/user/signup',
   CHECK_DUP: '/user/check-id',
   SIGN_OUT: '/user/logout',
+  // register
+  REGISTER_TEACHER: '/registeration/request/user',
 };
 
 export default PATH_API;
