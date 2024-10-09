@@ -3,6 +3,7 @@ import { Routes, Route, BrowserRouter, Outlet } from 'react-router-dom';
 import { Container, Box, Typography, Button } from '@mui/material';
 import { Director, Teacher } from './components';
 import {
+  StartPage,
   Login,
   SignUp,
   Register,
@@ -25,9 +26,11 @@ import {
   NoticeDetails,
   DirectorProfile,
   DirectorProfileUpdate,
+  FindId,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
+import ResetPassword from './pages/login/resetPassword';
 
 function App() {
   const { isLoggedIn, user } = useUserAuthStore();
@@ -37,9 +40,15 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path={PATH.root} element={<FirstPage />} />
-          <Route path={PATH.SIGNUP} element={<SignUp />} />
-          <Route path={PATH.LOGIN} element={<Login />} />
+          <Route path={PATH.root} element={<StartPage />}>
+            <Route path="" element={<FirstPage />} />
+            <Route path={PATH.SIGNUP} element={<SignUp />} />
+            <Route path={PATH.LOGIN.ROOT} element={<Outlet />}>
+              <Route path="" element={<Login />} />
+              <Route path={PATH.LOGIN.FIND_ID} element={<FindId />} />
+              <Route path={PATH.LOGIN.RESET_PW} element={<ResetPassword />} />
+            </Route>
+          </Route>
 
           <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
             <Route path="" element={hasRegistered ? <TeacherHome /> : <Register name={user.user_name} position="teacher" />} />
@@ -84,26 +93,17 @@ function App() {
 
 function FirstPage() {
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h4" align="center" sx={{ mt: 5, mb: 30 }}>
-          Academy Pro
-        </Typography>
-        <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/login">
-          로그인
-        </Button>
-        <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/signup">
-          회원가입
-        </Button>
-      </Box>
-    </Container>
+    <>
+      <Typography variant="h4" align="center" sx={{ mt: 5, mb: 30 }}>
+        Academy Pro
+      </Typography>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/login">
+        로그인
+      </Button>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/signup">
+        회원가입
+      </Button>
+    </>
   );
 }
 

@@ -20,23 +20,14 @@ export default function SignUp() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h4" align="center" mb={5}>
-          Academy Pro
-        </Typography>
-        {status === 0 && <SelectPosition handleSelect={handleSelect} />}
-        {status === 1 && <SignupForm position={position} setStatus={setStatus} setName={setName} />}
-        {status === 2 && <Succeed name={name} position={position} />}
-      </Box>
-    </Container>
+    <>
+      <Typography variant="h4" align="center" mb={5}>
+        Academy Pro
+      </Typography>
+      {status === 0 && <SelectPosition handleSelect={handleSelect} />}
+      {status === 1 && <SignupForm position={position} setStatus={setStatus} setName={setName} />}
+      {status === 2 && <Succeed name={name} position={position} />}
+    </>
   );
 }
 
