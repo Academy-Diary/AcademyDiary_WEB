@@ -25,8 +25,14 @@ export const useLogin = (options) => {
       setSession(data.accessToken);
       login({ ...data.user, userStatus: data.userStatus });
 
-      if (data.user.role === 'CHIEF') navigate(PATH.DIRECTOR.ROOT);
-      else if (data.user.role === 'TEACHER') navigate(PATH.TEACHER.ROOT);
+      const hasRegistered = data.user.academy_id !== null;
+      if (data.user.role === 'CHIEF') {
+        if (!hasRegistered) navigate(PATH.REGISTER_ACADEMY);
+        else navigate(PATH.DIRECTOR.ROOT);
+      } else if (data.user.role === 'TEACHER') {
+        if (!hasRegistered) navigate(PATH.REGISTER_TEACHER);
+        else navigate(PATH.TEACHER.ROOT);
+      }
     },
     onError: (error) => {
       console.log('error occurred at useLogin:', error);
