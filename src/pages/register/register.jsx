@@ -6,7 +6,7 @@ import { useUserAuthStore } from '../../store';
 import { useRegisterAcademy, useRegisterTeacher } from '../../api/queries/register/useRegister';
 
 export default function Register({ name, position }) {
-  // 0: 요청 버튼, 1: 학원 등록, 2: 강사 등록
+  // 0: 요청 버튼, 1: 학원 등록, 2: 강사 등록, 3: 등록요청 완료
   const [status, setStatus] = useState(0);
 
   const logoutMutation = useLogout();
@@ -34,8 +34,9 @@ export default function Register({ name, position }) {
           Academy Pro
         </Typography>
         {status === 0 && <BeforeRegister name={name} position={position} handleClick={handleClick} handleSignOut={handleSignOut} />}
-        {status === 1 && <RegisterAcademy />}
-        {status === 2 && <RegisterTeacher />}
+        {status === 1 && <RegisterAcademy setStatus={setStatus} />}
+        {status === 2 && <RegisterTeacher setStatus={setStatus} />}
+        {status === 3 && <AfterRegister handleSignOut={handleSignOut} />}
       </Box>
     </Container>
   );
@@ -68,7 +69,7 @@ function BeforeRegister({ name, position, handleClick, handleSignOut }) {
   );
 }
 
-function RegisterAcademy() {
+function RegisterAcademy({ setStatus }) {
   const registerAcademyMutation = useRegisterAcademy();
 
   const [isError, setIsError] = useState(false);
@@ -86,6 +87,9 @@ function RegisterAcademy() {
 
     // console.log(submitData);
     registerAcademyMutation.mutate(submitData, {
+      onSuccess: () => {
+        setStatus(3);
+      },
       onError: (error) => {
         setIsError(true);
         if (error.errorCode === 409) {
@@ -124,7 +128,7 @@ function RegisterAcademy() {
   );
 }
 
-function RegisterTeacher() {
+function RegisterTeacher({ setStatus }) {
   const { user } = useUserAuthStore();
   const registerTeacherMutation = useRegisterTeacher();
 
@@ -142,6 +146,9 @@ function RegisterTeacher() {
 
     // console.log(submitData);
     registerTeacherMutation.mutate(submitData, {
+      onSuccess: () => {
+        setStatus(3);
+      },
       onError: (error) => {
         setIsError(true);
         if (error.errorCode === 404) {
@@ -170,5 +177,28 @@ function RegisterTeacher() {
         등록 요청하기
       </Button>
     </Box>
+  );
+}
+
+function AfterRegister({ handleSignOut }) {
+  return (
+    <>
+      <Grid container spacing={3} sx={{ mt: 3 }}>
+        <Grid item xs={12}>
+          <Typography variant="h5" align="center">
+            등록 요청 성공!
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="body1" align="center">
+            등록 요청이 완료되었습니다. <br />
+            승인될 때까지 대기해주세요.
+          </Typography>
+        </Grid>
+      </Grid>
+      <Button size="large" onClick={handleSignOut} sx={{ mt: 10 }}>
+        로그아웃
+      </Button>
+    </>
   );
 }
