@@ -121,6 +121,7 @@ function RegisterTeacher() {
     const submitData = {
       user_id: user.user_id,
       academy_key: data.get('academykey'),
+      role: 'TEACHER',
     };
 
     // console.log(submitData);
