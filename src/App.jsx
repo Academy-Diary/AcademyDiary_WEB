@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, BrowserRouter, Outlet } from 'react-router-dom';
-import { Container, Box, Typography, Button } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import { Director, Teacher } from './components';
 import {
   StartPage,
@@ -33,8 +33,7 @@ import { useUserAuthStore } from './store';
 import ResetPassword from './pages/login/resetPassword';
 
 function App() {
-  const { isLoggedIn, user } = useUserAuthStore();
-  const hasRegistered = user.academy_id !== null && user.academy_id !== undefined;
+  const { user } = useUserAuthStore();
 
   return (
     <div className="App">
@@ -48,15 +47,17 @@ function App() {
               <Route path={PATH.LOGIN.FIND_ID} element={<FindId />} />
               <Route path={PATH.LOGIN.RESET_PW} element={<ResetPassword />} />
             </Route>
+            <Route path={PATH.REGISTER_ACADEMY} element={<Register name={user.user_name} position="director" />} />
+            <Route path={PATH.REGISTER_TEACHER} element={<Register name={user.user_name} position="teacher" />} />
           </Route>
 
           <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
-            <Route path="" element={hasRegistered ? <TeacherHome /> : <Register name={user.user_name} position="teacher" />} />
+            <Route path="" element={<TeacherHome />} />
             <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />
           </Route>
 
           <Route path={PATH.DIRECTOR.ROOT} element={<Director />}>
-            <Route path="" element={hasRegistered ? <DirectorHome /> : <Register name={user.user_name} position="director" />} />
+            <Route path="" element={<DirectorHome />} />
             <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.ROOT} element={<Outlet />}>
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.REQUESTLIST} element={<RequestList />} />
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.TEACHERS} element={<ManageTeachers />} />

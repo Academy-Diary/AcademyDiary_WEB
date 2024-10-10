@@ -6,6 +6,8 @@ export const PATH = {
     FIND_ID: 'find-id',
     RESET_PW: 'reset-pw',
   },
+  REGISTER_ACADEMY: '/register-academy',
+  REGISTER_TEACHER: '/register-teacher',
   TEACHER: {
     ROOT: '/teacher',
     CLASS: 'class', // 강의목록
