@@ -10,6 +10,13 @@ import {
   NotFound,
   DirectorHome,
   TeacherHome,
+  ClassHome,
+  ClassPage,
+  CourseNotice,
+  TeacherAddNotice,
+  TeacherUpdateNotice,
+  TeacherNotice,
+  TeacherNoticeDetails,
   RequestList,
   ManageTeachers,
   ManageStudents,
@@ -34,7 +41,7 @@ import ResetPassword from './pages/login/resetPassword';
 
 function App() {
   const { isLoggedIn, user } = useUserAuthStore();
-  const hasRegistered = user.academy_id !== null && user.academy_id !== undefined;
+  const hasRegistered = user && user.academy_id !== null;
 
   return (
     <div className="App">
@@ -52,9 +59,24 @@ function App() {
 
           <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
             <Route path="" element={hasRegistered ? <TeacherHome /> : <Register name={user.user_name} position="teacher" />} />
+            <Route path={PATH.TEACHER.CLASS.ROOT} element={<Outlet />}>
+              <Route path="" element={<ClassHome />} />
+              <Route path={PATH.TEACHER.CLASS.DETAIL.ROOT} element={<Outlet />}>
+                <Route path="" element={<ClassPage />} />
+                <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ROOT} element={<Outlet />}>
+                  <Route path="" element={<CourseNotice />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ADD} element={<TeacherAddNotice />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.UPDATE} element={<TeacherUpdateNotice />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.DETAIL} element={<TeacherNoticeDetails />} />
+                </Route>
+              </Route>
+            </Route>
+            <Route path={PATH.TEACHER.NOTICE.ROOT} element={<Outlet />}>
+              <Route path="" element={<TeacherNotice />} />
+              <Route path={PATH.TEACHER.NOTICE.DETAILS} element={<TeacherNoticeDetails />} />
+            </Route>
             <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />
           </Route>
-
           <Route path={PATH.DIRECTOR.ROOT} element={<Director />}>
             <Route path="" element={hasRegistered ? <DirectorHome /> : <Register name={user.user_name} position="director" />} />
             <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.ROOT} element={<Outlet />}>

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Button, Menu, MenuItem, Dialog, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
+import { useUserAuthStore } from '../../store';
 
 /**
  * 공지사항 컴포넌트
@@ -47,6 +48,10 @@ function Notice({
     handleCloseDialog();
   };
 
+  const { isLoggedIn, user } = useUserAuthStore();
+  const role = user.role === 'TEACHER' ? 'teacher' : 'director';
+  const { courseid, id } = useParams(); // courseid: 강의id, id:공지사항id
+
   return (
     <>
       <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '60vh', width: '70vw' }}>
@@ -63,7 +68,11 @@ function Notice({
             {notices.map((notice) => (
               <TableRow key={`${notice.title}_${notice.date}`}>
                 <TableCell>
-                  <Link to={`/director/notice/${notice.id}`}>{notice.title}</Link>
+                  {role === 'teacher' && courseid !== undefined ? (
+                    <Link to={`/${role}/class/${courseid}/notice/${notice.id}`}>{notice.title}</Link>
+                  ) : (
+                    <Link to={`/${role}/notice/${notice.id}`}>{notice.title}</Link>
+                  )}
                 </TableCell>
                 <TableCell align="right">{notice.date}</TableCell>
                 <TableCell align="right">{notice.view}</TableCell>

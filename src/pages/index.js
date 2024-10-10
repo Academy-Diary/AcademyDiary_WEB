@@ -4,7 +4,15 @@ export { default as SignUp } from './signup/signup';
 export { default as Login } from './login/login';
 export { default as FindId } from './login/findId';
 
+// 강사 페이지
 export { default as TeacherHome } from './home/teacherHome';
+export { default as ClassHome } from './teacher/class/classHome';
+export { default as ClassPage } from './teacher/class/classPage';
+export { default as CourseNotice } from './teacher/notice/courseNotice';
+export { default as TeacherAddNotice } from './teacher/notice/addNotice';
+export { default as TeacherUpdateNotice } from './teacher/notice/updateNotice';
+export { default as TeacherNotice } from './teacher/notice/teacherNotice';
+export { default as TeacherNoticeDetails } from './teacher/notice/noticeDetails';
 export { default as Register } from './register/register';
 
 // 원장 페이지
