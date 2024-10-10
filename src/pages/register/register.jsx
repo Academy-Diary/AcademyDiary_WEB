@@ -34,8 +34,8 @@ export default function Register({ name, position }) {
           Academy Pro
         </Typography>
         {status === 0 && <BeforeRegister name={name} position={position} handleClick={handleClick} handleSignOut={handleSignOut} />}
-        {status === 1 && <RegisterAcademy setStatus={setStatus} />}
-        {status === 2 && <RegisterTeacher setStatus={setStatus} />}
+        {status === 1 && <RegisterAcademy setStatus={setStatus} handleSignOut={handleSignOut} />}
+        {status === 2 && <RegisterTeacher setStatus={setStatus} handleSignOut={handleSignOut} />}
         {status === 3 && <AfterRegister handleSignOut={handleSignOut} />}
       </Box>
     </Container>
@@ -69,7 +69,7 @@ function BeforeRegister({ name, position, handleClick, handleSignOut }) {
   );
 }
 
-function RegisterAcademy({ setStatus }) {
+function RegisterAcademy({ setStatus, handleSignOut }) {
   const registerAcademyMutation = useRegisterAcademy();
 
   const [isError, setIsError] = useState(false);
@@ -124,11 +124,14 @@ function RegisterAcademy({ setStatus }) {
       <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 2 }}>
         등록 요청하기
       </Button>
+      <Button size="large" fullWidth onClick={handleSignOut}>
+        로그아웃
+      </Button>
     </Box>
   );
 }
 
-function RegisterTeacher({ setStatus }) {
+function RegisterTeacher({ setStatus, handleSignOut }) {
   const { user } = useUserAuthStore();
   const registerTeacherMutation = useRegisterTeacher();
 
@@ -175,6 +178,9 @@ function RegisterTeacher({ setStatus }) {
       )}
       <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 2 }}>
         등록 요청하기
+      </Button>
+      <Button size="large" fullWidth onClick={handleSignOut}>
+        로그아웃
       </Button>
     </Box>
   );
