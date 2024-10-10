@@ -34,6 +34,7 @@ import {
   DirectorProfile,
   DirectorProfileUpdate,
   FindId,
+  TeacherProfile,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -60,6 +61,9 @@ function App() {
 
           <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
             <Route path="" element={<TeacherHome />} />
+            <Route path={PATH.TEACHER.PROFILE.ROOT} element={<Outlet />}>
+              <Route path="" element={<TeacherProfile />} />
+            </Route>
             <Route path={PATH.TEACHER.CLASS.ROOT} element={<Outlet />}>
               <Route path="" element={<ClassHome />} />
               <Route path={PATH.TEACHER.CLASS.DETAIL.ROOT} element={<Outlet />}>
