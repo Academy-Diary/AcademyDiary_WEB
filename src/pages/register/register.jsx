@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Box, Container, Typography, Button, TextField, Grid, Alert } from '@mui/material';
 import useLogout from '../../api/queries/user/useLogout';
 import { useUserAuthStore } from '../../store';
-import { useRegisterTeacher } from '../../api/queries/register/useRegister';
+import { useRegisterAcademy, useRegisterTeacher } from '../../api/queries/register/useRegister';
 
 export default function Register({ name, position }) {
   // 0: 요청 버튼, 1: 학원 등록, 2: 강사 등록
@@ -69,17 +69,32 @@ function BeforeRegister({ name, position, handleClick, handleSignOut }) {
 }
 
 function RegisterAcademy() {
+  const registerAcademyMutation = useRegisterAcademy();
+
+  const [isError, setIsError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const submitData = {
-      academyname: data.get('academyname'),
-      academyemail: data.get('academyemail'),
-      academyphone: data.get('academyphone'),
-      academyaddress: data.get('academyaddress'),
+      academy_name: data.get('academyname'),
+      academy_email: data.get('academyemail'),
+      phone_number: data.get('academyphone'),
+      address: data.get('academyaddress'),
     };
 
-    console.log(submitData);
+    // console.log(submitData);
+    registerAcademyMutation.mutate(submitData, {
+      onError: (error) => {
+        setIsError(true);
+        if (error.errorCode === 409) {
+          setErrorMsg('이미 등록 요청된 상태입니다.');
+        } else if (error.errorCode === 500) {
+          setErrorMsg('등록 요청 중 오류가 발생했습니다.');
+        }
+      },
+    });
   };
 
   return (
@@ -101,7 +116,8 @@ function RegisterAcademy() {
           <TextField name="academyaddress" id="academyaddress" label="학원 주소" required fullWidth />
         </Grid>
       </Grid>
-      <Button type="submit" variant="contained" size="large" fullWidth>
+      {isError && <Alert severity="error">{errorMsg}</Alert>}
+      <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 2 }}>
         등록 요청하기
       </Button>
     </Box>

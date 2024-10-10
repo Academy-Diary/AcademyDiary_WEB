@@ -9,3 +9,11 @@ export const useRegisterTeacher = () =>
       return response.data;
     },
   });
+
+export const useRegisterAcademy = () =>
+  useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.post(PATH_API.REGISTER_ACADEMY, data);
+      return response.data;
+    },
+  });
