@@ -43,43 +43,43 @@ function CheckPasswd({ setPassed }) {
 }
 
 function UpdateProfileForm({ currentInfo }) {
-    const navigate = useNavigate();
-    const [date, setDate] = useState(dayjs(currentInfo.birth_date.split("T")[0]));
+  const navigate = useNavigate();
+  const [date, setDate] = useState(dayjs(currentInfo.birth_date.split('T')[0]));
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        // TODO: 프로필 수정 요청
+    // TODO: 프로필 수정 요청
 
-        navigate('/teacher/profile');
-    };
+    navigate('/teacher/profile');
+  };
 
-    return(
-        <Box component='form' onSubmit={handleSubmit}>
-            <Grid container spacing={5}>
-                <Grid item xs={12}>
-                    <Typography variant='h6'>프로필 수정</Typography>
-                </Grid>
-                <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-                    <Avatar sx={{ width: 100, height: 100 }} />
-                </Grid>
-                <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
-                    <TextField label="이름" defaultValue={currentInfo.user_name} required />
-                </Grid>
-                <Grid item xs={12}>
-                    <Typography variant='h6' sx={{ mb: 2 }}>
-                        개인 정보
-                    </Typography>
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoContainer components={['DatePicker']} sx={{ mb: 2 }}>
-                            <DatePicker label="생년월일" maxDate={dayjs()} value={date} onChange={(newValue) => setDate(newValue)} />
-                        </DemoContainer>
-                    </LocalizationProvider>
-                    <TextField label="전화번호" defaultValue={currentInfo.phone_number} required fullWidth sx={{ mb: 2 }} />
-                    <TextField label="이메일" defaultValue={currentInfo.email} required fullWidth sx={{ mb: 2 }} />
-                </Grid>
-            </Grid>
-            <SubmitButtons submitTitle="수정 완료" />
-        </Box>
-    );
+  return (
+    <Box component="form" onSubmit={handleSubmit}>
+      <Grid container spacing={5}>
+        <Grid item xs={12}>
+          <Typography variant="h6">프로필 수정</Typography>
+        </Grid>
+        <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Avatar sx={{ width: 100, height: 100 }} />
+        </Grid>
+        <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
+          <TextField label="이름" defaultValue={currentInfo.user_name} required />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant="h6" sx={{ mb: 2 }}>
+            개인 정보
+          </Typography>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={['DatePicker']} sx={{ mb: 2 }}>
+              <DatePicker label="생년월일" maxDate={dayjs()} value={date} onChange={(newValue) => setDate(newValue)} />
+            </DemoContainer>
+          </LocalizationProvider>
+          <TextField label="전화번호" defaultValue={currentInfo.phone_number} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="이메일" defaultValue={currentInfo.email} required fullWidth sx={{ mb: 2 }} />
+        </Grid>
+      </Grid>
+      <SubmitButtons submitTitle="수정 완료" />
+    </Box>
+  );
 }
