@@ -1,11 +1,13 @@
 import { Avatar, Box, Container, Grid, IconButton, Typography } from '@mui/material';
 import { Edit } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { useUserAuthStore } from '../../../store';
 import { TitleMedium } from '../../../components';
 
 export default function TeacherProfile() {
   const { user } = useUserAuthStore();
+  const navigate = useNavigate();
   return (
     <Container sx={{ width: '50vw', padding: 5 }}>
       <TitleMedium title="My Profile" />
@@ -18,7 +20,7 @@ export default function TeacherProfile() {
           <IconButton
             sx={{ m: 2 }}
             onClick={() => {
-              console.log('편집 클릭');
+              navigate('/teacher/profile/update');
             }}
           >
             <Edit />

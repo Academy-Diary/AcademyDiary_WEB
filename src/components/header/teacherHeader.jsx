@@ -33,9 +33,14 @@ export default function TeacherHeader() {
           <Typography>강사: {user?.user_name}</Typography>
           <Avatar onClick={handleClick} />
           <Menu anchorEl={isMouseOver} open={Boolean(isMouseOver)} onClose={handleClose}>
-            <Box sx={{ paddingX : 2}}>
-              <Typography variant='subtitle1'>{user?.user_name}<br/></Typography>
-              <Typography variant='subtitle2' sx={{color: 'grey'}}>{user?.email}</Typography>
+            <Box sx={{ paddingX: 2 }}>
+              <Typography variant="subtitle1">
+                {user?.user_name}
+                <br />
+              </Typography>
+              <Typography variant="subtitle2" sx={{ color: 'grey' }}>
+                {user?.email}
+              </Typography>
             </Box>
             <Divider />
             <MenuItem
