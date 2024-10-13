@@ -73,7 +73,6 @@ function App() {
                 </Route>
                 <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.ROOT} element={<Outlet />}>
                   <Route path="" element={<TestList />} />
-
                 </Route>
               </Route>
             </Route>
