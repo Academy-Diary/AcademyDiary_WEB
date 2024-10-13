@@ -20,6 +20,14 @@ export const PATH = {
           UPDATE: 'update',
           DETAIL: ':id',
         },
+        TEST:{
+          ROOT: 'test', // 시험리스트
+          DETAILS: {
+            ROOT: ':testid', // 해당 시험에 대한 성적 리스트
+            EDIT: 'edit',
+          },
+          ADD: 'add' // 시험 추가
+        }, // 시험 관련
       },
     },
     COUNSELING: 'counseling', // 학생상담

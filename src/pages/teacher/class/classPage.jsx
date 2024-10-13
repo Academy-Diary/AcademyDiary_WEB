@@ -17,6 +17,9 @@ export default function ClassPage() {
   const classID = Number(params.courseid);
   const course = courses.filter((n) => n.id === classID)[0];
 
+  const handleGradeClick = () => {
+    navigate(`/teacher/class/${course.id}/test`);
+  };
   const handleNoticeClick = () => {
     navigate(`/teacher/class/${course.id}/notice`);
   };
@@ -48,7 +51,7 @@ export default function ClassPage() {
           </Container>
         </Grid>
         <Grid item xs={6}>
-          <Container maxWidth="md" sx={{ height: 200 }}>
+          <Container maxWidth="md" sx={{ height: 200 }} onClick={handleGradeClick}>
             <Typography>성적관리</Typography>
           </Container>
         </Grid>
