@@ -12,6 +12,7 @@ import {
   TeacherHome,
   ClassHome,
   ClassPage,
+  TestList,
   CourseNotice,
   TeacherAddNotice,
   TeacherUpdateNotice,
@@ -34,11 +35,11 @@ import {
   DirectorProfile,
   DirectorProfileUpdate,
   FindId,
+  AddTest,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
 import ResetPassword from './pages/login/resetPassword';
-import TestList from './pages/teacher/test/testList';
 
 function App() {
   const { user } = useUserAuthStore();
@@ -73,6 +74,7 @@ function App() {
                 </Route>
                 <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.ROOT} element={<Outlet />}>
                   <Route path="" element={<TestList />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.ADD} element={<AddTest />} />
                 </Route>
               </Route>
             </Route>
