@@ -3,7 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 import { Avatar, Box, Container, Grid, IconButton, Typography } from '@mui/material';
 import { Edit } from '@mui/icons-material';
+
 import { useUserAuthStore } from '../../../store';
+import { CustomLink } from '../../../components';
+import { PATH } from '../../../route/path';
 
 // 회원 basic info
 // {
@@ -54,6 +57,9 @@ export default function DirectorProfile() {
             <Typography variant="body1">주소: 서울특별시 서초구 서초1동 ...</Typography>
             <Typography variant="body1">이메일: tteokip@gmail.com</Typography>
           </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <CustomLink to={PATH.DIRECTOR.PROFILE.RESET_PW} text="비밀번호 변경" />
         </Grid>
       </Grid>
     </Container>

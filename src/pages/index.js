@@ -38,3 +38,4 @@ export { default as NoticeDetails } from './director/notice/noticeDetails';
 
 export { default as DirectorProfile } from './director/profile/directorProfile';
 export { default as DirectorProfileUpdate } from './director/profile/updateProfile';
+export { default as DirectorResetPassword } from './director/profile/resetPassword';
