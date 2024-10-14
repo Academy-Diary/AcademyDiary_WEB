@@ -8,12 +8,6 @@ export const useProfileBasic = (userId) =>
     queryKey: [QUERY_KEY.PROFILE_BASIC(userId)],
     queryFn: async () => {
       const response = await axiosInstance.get(PATH_API.PROFILE_BASIC(userId));
-      return response.data;
-    },
-    onSuccess: (data) => {
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log('Error occured at useProfile:', error);
+      return response.data.data;
     },
   });
