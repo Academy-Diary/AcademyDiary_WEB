@@ -6,6 +6,8 @@ export { default as FindId } from './login/findId';
 
 // 강사 페이지
 export { default as TeacherHome } from './home/teacherHome';
+export { default as TeacherProfile } from './teacher/profile/teacherProfile';
+export { default as TeacherUpdateProfile } from './teacher/profile/teacherUpdateProfile';
 export { default as ClassHome } from './teacher/class/classHome';
 export { default as ClassPage } from './teacher/class/classPage';
 export { default as CourseNotice } from './teacher/notice/courseNotice';
