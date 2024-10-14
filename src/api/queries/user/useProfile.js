@@ -36,3 +36,21 @@ export const useUpdateProfile = (userId) => {
     },
   });
 };
+
+export const useResetPassword = (userId) => {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: async (password) => {
+      const response = await axiosInstance.put(PATH_API.PROFILE_BASIC(userId), { password });
+      return response.data;
+    },
+    onSuccess: () => {
+      alert('비밀번호가 성공적으로 변경되었습니다!');
+      navigate('/director/profile');
+    },
+    onError: (error) => {
+      console.log('Error occured at useResetPassword: ', error);
+    },
+  });
+};
