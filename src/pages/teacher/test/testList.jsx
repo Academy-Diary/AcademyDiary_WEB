@@ -146,7 +146,7 @@ export default function TestList() {
           </TableBody>
         </Table>
       </TableContainer>
-      <AddButton title="시험생성" />
+      <AddButton title="시험생성" onClick={() => navigate(`/teacher/class/${course.id}/test/add`)} />
     </>
   );
 }
