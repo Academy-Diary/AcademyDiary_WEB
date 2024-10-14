@@ -71,6 +71,7 @@ function UpdateProfileForm({ currentInfo }) {
       user_name: data.get('user_name'),
       phone_number: data.get('phone_number'),
       email: data.get('email'),
+      birth_date: date.toISOString(),
     };
 
     // console.log(submitData);
