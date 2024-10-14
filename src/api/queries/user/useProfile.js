@@ -37,7 +37,7 @@ export const useUpdateProfile = (userId) => {
   });
 };
 
-export const useResetPassword = (userId) => {
+export const useUpdatePassword = (userId) => {
   const navigate = useNavigate();
 
   return useMutation({
@@ -50,7 +50,7 @@ export const useResetPassword = (userId) => {
       navigate('/director/profile');
     },
     onError: (error) => {
-      console.log('Error occured at useResetPassword: ', error);
+      console.log('Error occured at useUpdatePassword: ', error);
     },
   });
 };

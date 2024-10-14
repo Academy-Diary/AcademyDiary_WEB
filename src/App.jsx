@@ -34,7 +34,7 @@ import {
   DirectorProfile,
   DirectorProfileUpdate,
   FindId,
-  DirectorResetPassword,
+  DirectorUpdatePassword,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -106,7 +106,7 @@ function App() {
             <Route path={PATH.DIRECTOR.PROFILE.ROOT} element={<Outlet />}>
               <Route path="" element={<DirectorProfile />} />
               <Route path={PATH.DIRECTOR.PROFILE.UPDATE} element={<DirectorProfileUpdate />} />
-              <Route path={PATH.DIRECTOR.PROFILE.RESET_PW} element={<DirectorResetPassword />} />
+              <Route path={PATH.DIRECTOR.PROFILE.UPDATE_PW} element={<DirectorUpdatePassword />} />
             </Route>
             <Route path="*" element={<NotFound path={PATH.DIRECTOR.ROOT} />} />
           </Route>

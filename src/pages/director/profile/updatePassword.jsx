@@ -4,16 +4,16 @@ import { Container, Box, TextField, InputAdornment, IconButton, Button, Alert } 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { TitleMedium } from '../../../components';
-import { useResetPassword } from '../../../api/queries/user/useProfile';
+import { useUpdatePassword } from '../../../api/queries/user/useProfile';
 import { useUserAuthStore } from '../../../store';
 
-export default function ResetPassword() {
+export default function UpdatePassword() {
   const { user } = useUserAuthStore();
   const [showPassword, setShowPassword] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  const resetPwMutation = useResetPassword(user.user_id);
+  const updatePwMutation = useUpdatePassword(user.user_id);
 
   const handleClick = () => {
     setShowPassword(!showPassword);
@@ -30,7 +30,7 @@ export default function ResetPassword() {
       setIsError(true);
       setErrorMsg('입력하신 두 비밀번호가 일치하지 않습니다.');
     } else
-      resetPwMutation.mutate(password, {
+      updatePwMutation.mutate(password, {
         onError: () => {
           setIsError(true);
           setErrorMsg('서버 오류로 비밀번호 변경에 실패하였습니다. \n나중에 다시 시도해주세요.');

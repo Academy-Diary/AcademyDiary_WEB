@@ -59,7 +59,7 @@ export default function DirectorProfile() {
           </Box>
         </Grid>
         <Grid item xs={6}>
-          <CustomLink to={PATH.DIRECTOR.PROFILE.RESET_PW} text="비밀번호 변경" />
+          <CustomLink to={PATH.DIRECTOR.PROFILE.UPDATE_PW} text="비밀번호 변경" />
         </Grid>
       </Grid>
     </Container>
