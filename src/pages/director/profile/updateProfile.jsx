@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, Container, TextField, Typography, Grid, Avatar } from '@mui/material';
 import dayjs from 'dayjs';
@@ -9,6 +8,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SubmitButtons } from '../../../components';
+import { useUpdateProfile } from '../../../api/queries/user/useProfile';
+import { useUserAuthStore } from '../../../store';
 
 const directorProfile = {
   personal: {
@@ -57,15 +58,23 @@ function CheckPasswd({ setPassed }) {
 }
 
 function UpdateProfileForm({ currentInfo }) {
-  const navigate = useNavigate();
-  const [date, setDate] = useState(dayjs(currentInfo.personal.birthdate));
+  const { user } = useUserAuthStore();
+  const [date, setDate] = useState(dayjs(user.birth_date));
+
+  const updateProfileMutation = useUpdateProfile(user.user_id);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 프로필 수정 요청
+    const data = new FormData(e.currentTarget);
+    const submitData = {
+      user_name: data.get('user_name'),
+      phone_number: data.get('phone_number'),
+      email: data.get('email'),
+    };
 
-    navigate('/director/profile');
+    // console.log(submitData);
+    updateProfileMutation.mutate(submitData);
   };
 
   return (
@@ -78,7 +87,7 @@ function UpdateProfileForm({ currentInfo }) {
           <Avatar sx={{ width: 100, height: 100 }} />
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
-          <TextField label="이름" defaultValue={currentInfo.personal.name} required />
+          <TextField label="이름" name="user_name" defaultValue={user.user_name} required />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6" sx={{ mb: 2 }}>
@@ -89,8 +98,8 @@ function UpdateProfileForm({ currentInfo }) {
               <DatePicker label="생년월일" maxDate={dayjs()} value={date} onChange={(newValue) => setDate(newValue)} />
             </DemoContainer>
           </LocalizationProvider>
-          <TextField label="전화번호" defaultValue={currentInfo.personal.phone} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="이메일" defaultValue={currentInfo.personal.email} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="전화번호" name="phone_number" defaultValue={user.phone_number} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="이메일" name="email" defaultValue={user.email} required fullWidth sx={{ mb: 2 }} />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6" sx={{ mb: 2 }}>
