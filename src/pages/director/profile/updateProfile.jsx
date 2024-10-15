@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import { Box, Button, Container, TextField, Typography, Grid, Avatar, Dialog, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Grid, Avatar, Dialog, DialogContent, DialogContentText, DialogActions, Snackbar, IconButton, Icon } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -61,18 +62,30 @@ function CheckPasswd({ setPassed }) {
 function UpdateProfileForm({ currentInfo }) {
   const { user } = useUserAuthStore();
   const [date, setDate] = useState(dayjs(user.birth_date));
-  const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const updateProfileMutation = useUpdateProfile(user.user_id);
   const cancelAccountMutation = useCancelAccount(user.user_id);
 
   const handleOpenDialog = () => {
-    setOpen(true);
+    setOpenDialog(true);
   };
   const handleCloseDialog = () => {
-    setOpen(false);
+    setOpenDialog(false);
+  };
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  };
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
   };
 
+  // 프로필 수정
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -91,7 +104,14 @@ function UpdateProfileForm({ currentInfo }) {
   // 회원 탈퇴
   const handleCancelAccount = () => {
     handleCloseDialog();
-    cancelAccountMutation.mutate();
+
+    cancelAccountMutation.mutate('', {
+      onError: (error) => {
+        handleOpenSnackbar();
+        if (error.errorCode === 403) setErrorMsg('학원에 소속된 사용자는 탈퇴할 수 없습니다.');
+        else setErrorMsg('탈퇴 실패. 나중에 다시 시도해주세요.');
+      },
+    });
   };
 
   return (
@@ -131,7 +151,7 @@ function UpdateProfileForm({ currentInfo }) {
       <Button sx={{ mt: 3 }} onClick={handleOpenDialog}>
         회원 탈퇴
       </Button>
-      <Dialog open={open} onClose={handleCloseDialog}>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogContent>
           <DialogContentText color="black">정말로 탈퇴하시겠습니까?</DialogContentText>
         </DialogContent>
@@ -140,6 +160,18 @@ function UpdateProfileForm({ currentInfo }) {
           <Button onClick={handleCancelAccount}>탈퇴</Button>
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        message={errorMsg}
+        action={
+          <IconButton onClick={handleCloseSnackbar} color="inherit" size="small">
+            <Close fontSize="small" />
+          </IconButton>
+        }
+      />
       <SubmitButtons submitTitle="수정 완료" />
     </Box>
   );
