@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Button, Container, TextField, Typography, Grid, Avatar } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Grid, Avatar, Dialog, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -10,6 +10,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { SubmitButtons } from '../../../components';
 import { useUpdateProfile } from '../../../api/queries/user/useProfile';
 import { useUserAuthStore } from '../../../store';
+import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 
 const directorProfile = {
   personal: {
@@ -60,8 +61,17 @@ function CheckPasswd({ setPassed }) {
 function UpdateProfileForm({ currentInfo }) {
   const { user } = useUserAuthStore();
   const [date, setDate] = useState(dayjs(user.birth_date));
+  const [open, setOpen] = useState(false);
 
   const updateProfileMutation = useUpdateProfile(user.user_id);
+  const cancelAccountMutation = useCancelAccount(user.user_id);
+
+  const handleOpenDialog = () => {
+    setOpen(true);
+  };
+  const handleCloseDialog = () => {
+    setOpen(false);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -76,6 +86,12 @@ function UpdateProfileForm({ currentInfo }) {
 
     // console.log(submitData);
     updateProfileMutation.mutate(submitData);
+  };
+
+  // 회원 탈퇴
+  const handleCancelAccount = () => {
+    handleCloseDialog();
+    cancelAccountMutation.mutate();
   };
 
   return (
@@ -112,6 +128,18 @@ function UpdateProfileForm({ currentInfo }) {
           <TextField label="이메일" defaultValue={currentInfo.academy.email} required fullWidth sx={{ mb: 2 }} />
         </Grid>
       </Grid>
+      <Button sx={{ mt: 3 }} onClick={handleOpenDialog}>
+        회원 탈퇴
+      </Button>
+      <Dialog open={open} onClose={handleCloseDialog}>
+        <DialogContent>
+          <DialogContentText color="black">정말로 탈퇴하시겠습니까?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>취소</Button>
+          <Button onClick={handleCancelAccount}>탈퇴</Button>
+        </DialogActions>
+      </Dialog>
       <SubmitButtons submitTitle="수정 완료" />
     </Box>
   );
