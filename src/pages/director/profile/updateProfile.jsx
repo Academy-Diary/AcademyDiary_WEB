@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Button, Container, TextField, Typography, Grid, Avatar, Dialog, DialogContent, DialogContentText, DialogActions, Snackbar, IconButton, Icon } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -8,7 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { SubmitButtons } from '../../../components';
+import { SimpleDialog, SubmitButtons } from '../../../components';
 import { useUpdateProfile } from '../../../api/queries/user/useProfile';
 import { useUserAuthStore } from '../../../store';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
@@ -151,15 +151,7 @@ function UpdateProfileForm({ currentInfo }) {
       <Button sx={{ mt: 3 }} onClick={handleOpenDialog}>
         회원 탈퇴
       </Button>
-      <Dialog open={openDialog} onClose={handleCloseDialog}>
-        <DialogContent>
-          <DialogContentText color="black">정말로 탈퇴하시겠습니까?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>취소</Button>
-          <Button onClick={handleCancelAccount}>탈퇴</Button>
-        </DialogActions>
-      </Dialog>
+      <SimpleDialog openDialog={openDialog} handleClose={handleCloseDialog} text="정말로 탈퇴하시겠습니까?" second="탈퇴" handleClickSecond={handleCancelAccount} />
       <Snackbar
         open={openSnackbar}
         autoHideDuration={5000}
