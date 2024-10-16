@@ -33,7 +33,7 @@ export default function TestList() {
   ];
 
   const handleRowClick = (id) => {
-    navigate(`teacher/class/${course.id}/test/${id}`);
+    navigate(`/teacher/class/${course.id}/test/${id}`);
   };
 
   const handleFilterClick = (e) => {
