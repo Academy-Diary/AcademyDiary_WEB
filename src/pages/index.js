@@ -9,6 +9,7 @@ export { default as TeacherHome } from './home/teacherHome';
 export { default as TestList } from './teacher/test/testList';
 export { default as AddTest } from './teacher/test/addTest';
 export { default as ScoreList } from './teacher/test/scoreList';
+export { default as AddScore } from './teacher/test/addScore';
 export { default as ClassHome } from './teacher/class/classHome';
 export { default as ClassPage } from './teacher/class/classPage';
 export { default as CourseNotice } from './teacher/notice/courseNotice';

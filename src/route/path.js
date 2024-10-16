@@ -24,7 +24,7 @@ export const PATH = {
           ROOT: 'test', // 시험리스트
           DETAILS: {
             ROOT: ':testid', // 해당 시험에 대한 성적 리스트
-            EDIT: 'edit',
+            ADD: 'add-score', // 전체 성적 추가
           },
           ADD: 'add', // 시험 추가
         }, // 시험 관련
