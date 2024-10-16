@@ -119,7 +119,13 @@ export default function ScoreList() {
             </Box>
           </Grid>
           <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-            <Button size="large" variant="contained">
+            <Button
+              size="large"
+              variant="contained"
+              onClick={() => {
+                navigate('add-score');
+              }}
+            >
               전체성적입력
             </Button>
           </Box>
