@@ -37,6 +37,7 @@ export const PATH = {
     PROFILE: {
       ROOT: 'profile',
       UPDATE: 'update',
+      UPDATE_PW: 'update-password',
     },
     MANAGE_MEMBERS: {
       ROOT: 'manage-members',

@@ -34,16 +34,14 @@ import {
   DirectorProfile,
   DirectorProfileUpdate,
   FindId,
+  DirectorUpdatePassword,
   TeacherProfile,
   TeacherUpdateProfile,
 } from './pages';
 import { PATH } from './route/path';
-import { useUserAuthStore } from './store';
 import ResetPassword from './pages/login/resetPassword';
 
 function App() {
-  const { user } = useUserAuthStore();
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -56,8 +54,8 @@ function App() {
               <Route path={PATH.LOGIN.FIND_ID} element={<FindId />} />
               <Route path={PATH.LOGIN.RESET_PW} element={<ResetPassword />} />
             </Route>
-            <Route path={PATH.REGISTER_ACADEMY} element={<Register name={user.user_name} position="director" />} />
-            <Route path={PATH.REGISTER_TEACHER} element={<Register name={user.user_name} position="teacher" />} />
+            <Route path={PATH.REGISTER_ACADEMY} element={<Register position="director" />} />
+            <Route path={PATH.REGISTER_TEACHER} element={<Register position="teacher" />} />
           </Route>
 
           <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
@@ -111,6 +109,7 @@ function App() {
             <Route path={PATH.DIRECTOR.PROFILE.ROOT} element={<Outlet />}>
               <Route path="" element={<DirectorProfile />} />
               <Route path={PATH.DIRECTOR.PROFILE.UPDATE} element={<DirectorProfileUpdate />} />
+              <Route path={PATH.DIRECTOR.PROFILE.UPDATE_PW} element={<DirectorUpdatePassword />} />
             </Route>
             <Route path="*" element={<NotFound path={PATH.DIRECTOR.ROOT} />} />
           </Route>
