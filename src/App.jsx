@@ -37,12 +37,9 @@ import {
   DirectorUpdatePassword,
 } from './pages';
 import { PATH } from './route/path';
-import { useUserAuthStore } from './store';
 import ResetPassword from './pages/login/resetPassword';
 
 function App() {
-  const { user } = useUserAuthStore();
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -55,8 +52,8 @@ function App() {
               <Route path={PATH.LOGIN.FIND_ID} element={<FindId />} />
               <Route path={PATH.LOGIN.RESET_PW} element={<ResetPassword />} />
             </Route>
-            <Route path={PATH.REGISTER_ACADEMY} element={<Register name={user.user_name} position="director" />} />
-            <Route path={PATH.REGISTER_TEACHER} element={<Register name={user.user_name} position="teacher" />} />
+            <Route path={PATH.REGISTER_ACADEMY} element={<Register position="director" />} />
+            <Route path={PATH.REGISTER_TEACHER} element={<Register position="teacher" />} />
           </Route>
 
           <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>

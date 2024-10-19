@@ -5,7 +5,7 @@ import useLogout from '../../api/queries/user/useLogout';
 import { useUserAuthStore } from '../../store';
 import { useRegisterAcademy, useRegisterTeacher } from '../../api/queries/register/useRegister';
 
-export default function Register({ name, position }) {
+export default function Register({ position }) {
   // 0: 요청 버튼, 1: 학원 등록, 2: 강사 등록, 3: 등록요청 완료
   const [status, setStatus] = useState(0);
 
@@ -33,7 +33,7 @@ export default function Register({ name, position }) {
         <Typography variant="h4" align="center">
           Academy Pro
         </Typography>
-        {status === 0 && <BeforeRegister name={name} position={position} handleClick={handleClick} handleSignOut={handleSignOut} />}
+        {status === 0 && <BeforeRegister position={position} handleClick={handleClick} handleSignOut={handleSignOut} />}
         {status === 1 && <RegisterAcademy setStatus={setStatus} handleSignOut={handleSignOut} />}
         {status === 2 && <RegisterTeacher setStatus={setStatus} handleSignOut={handleSignOut} />}
         {status === 3 && <AfterRegister handleSignOut={handleSignOut} />}
@@ -42,19 +42,21 @@ export default function Register({ name, position }) {
   );
 }
 
-function BeforeRegister({ name, position, handleClick, handleSignOut }) {
+function BeforeRegister({ position, handleClick, handleSignOut }) {
+  const { user } = useUserAuthStore();
+
   return (
     <Box mt={10} sx={{ width: '100%' }}>
       {position === 'director' && (
         <Typography variant="h5" align="center" mb={20}>
-          {name}(원장)님,
+          {user.user_name}(원장)님,
           <br />
           학원을 등록해주세요.
         </Typography>
       )}
       {position === 'teacher' && (
         <Typography variant="h5" align="center" mb={20}>
-          {name}(강사)님,
+          {user.user_name}(강사)님,
           <br />
           근무하고 계신 학원에 강사 등록을 요청하세요.
         </Typography>
