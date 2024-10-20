@@ -1,14 +1,22 @@
 import React from 'react';
 import { Routes, Route, BrowserRouter, Outlet } from 'react-router-dom';
-import { Container, Box, Typography, Button } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import { Director, Teacher } from './components';
 import {
+  StartPage,
   Login,
   SignUp,
   Register,
   NotFound,
   DirectorHome,
   TeacherHome,
+  ClassHome,
+  ClassPage,
+  CourseNotice,
+  TeacherAddNotice,
+  TeacherUpdateNotice,
+  TeacherNotice,
+  TeacherNoticeDetails,
   RequestList,
   ManageTeachers,
   ManageStudents,
@@ -25,29 +33,57 @@ import {
   NoticeDetails,
   DirectorProfile,
   DirectorProfileUpdate,
+  FindId,
+  DirectorUpdatePassword,
+  TeacherProfile,
+  TeacherUpdateProfile,
 } from './pages';
 import { PATH } from './route/path';
-import { useUserAuthStore } from './store';
+import ResetPassword from './pages/login/resetPassword';
 
 function App() {
-  const { isLoggedIn, user } = useUserAuthStore();
-  const hasRegistered = user.academy_id !== null && user.academy_id !== undefined;
-
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path={PATH.root} element={<FirstPage />} />
-          <Route path={PATH.SIGNUP} element={<SignUp />} />
-          <Route path={PATH.LOGIN} element={<Login />} />
-
-          <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
-            <Route path="" element={hasRegistered ? <TeacherHome /> : <Register name={user.user_name} position="teacher" />} />
-            <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />
+          <Route path={PATH.root} element={<StartPage />}>
+            <Route path="" element={<FirstPage />} />
+            <Route path={PATH.SIGNUP} element={<SignUp />} />
+            <Route path={PATH.LOGIN.ROOT} element={<Outlet />}>
+              <Route path="" element={<Login />} />
+              <Route path={PATH.LOGIN.FIND_ID} element={<FindId />} />
+              <Route path={PATH.LOGIN.RESET_PW} element={<ResetPassword />} />
+            </Route>
+            <Route path={PATH.REGISTER_ACADEMY} element={<Register position="director" />} />
+            <Route path={PATH.REGISTER_TEACHER} element={<Register position="teacher" />} />
           </Route>
 
+          <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
+            <Route path="" element={<TeacherHome />} />
+            <Route path={PATH.TEACHER.PROFILE.ROOT} element={<Outlet />}>
+              <Route path="" element={<TeacherProfile />} />
+              <Route path={PATH.TEACHER.PROFILE.UPDATE} element={<TeacherUpdateProfile />} />
+            </Route>
+            <Route path={PATH.TEACHER.CLASS.ROOT} element={<Outlet />}>
+              <Route path="" element={<ClassHome />} />
+              <Route path={PATH.TEACHER.CLASS.DETAIL.ROOT} element={<Outlet />}>
+                <Route path="" element={<ClassPage />} />
+                <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ROOT} element={<Outlet />}>
+                  <Route path="" element={<CourseNotice />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ADD} element={<TeacherAddNotice />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.UPDATE} element={<TeacherUpdateNotice />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.DETAIL} element={<TeacherNoticeDetails />} />
+                </Route>
+              </Route>
+            </Route>
+            <Route path={PATH.TEACHER.NOTICE.ROOT} element={<Outlet />}>
+              <Route path="" element={<TeacherNotice />} />
+              <Route path={PATH.TEACHER.NOTICE.DETAILS} element={<TeacherNoticeDetails />} />
+            </Route>
+            <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />
+          </Route>
           <Route path={PATH.DIRECTOR.ROOT} element={<Director />}>
-            <Route path="" element={hasRegistered ? <DirectorHome /> : <Register name={user.user_name} position="director" />} />
+            <Route path="" element={<DirectorHome />} />
             <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.ROOT} element={<Outlet />}>
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.REQUESTLIST} element={<RequestList />} />
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.TEACHERS} element={<ManageTeachers />} />
@@ -73,6 +109,7 @@ function App() {
             <Route path={PATH.DIRECTOR.PROFILE.ROOT} element={<Outlet />}>
               <Route path="" element={<DirectorProfile />} />
               <Route path={PATH.DIRECTOR.PROFILE.UPDATE} element={<DirectorProfileUpdate />} />
+              <Route path={PATH.DIRECTOR.PROFILE.UPDATE_PW} element={<DirectorUpdatePassword />} />
             </Route>
             <Route path="*" element={<NotFound path={PATH.DIRECTOR.ROOT} />} />
           </Route>
@@ -84,26 +121,17 @@ function App() {
 
 function FirstPage() {
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h4" align="center" sx={{ mt: 5, mb: 30 }}>
-          Academy Pro
-        </Typography>
-        <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/login">
-          로그인
-        </Button>
-        <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/signup">
-          회원가입
-        </Button>
-      </Box>
-    </Container>
+    <>
+      <Typography variant="h4" align="center" sx={{ mt: 5, mb: 30 }}>
+        Academy Pro
+      </Typography>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/login">
+        로그인
+      </Button>
+      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/signup">
+        회원가입
+      </Button>
+    </>
   );
 }
 

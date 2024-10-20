@@ -22,11 +22,19 @@ export const useLogin = (options) => {
       // role 이 STUDENT or PARENT 이면 에러 발생
       if (data.user.role === 'STUDENT' || data.user.role === 'PARENT') throw new Error();
 
-      setSession(data.accessToken);
-      login({ ...data.user, userStatus: data.userStatus });
+      const { user, accessToken } = data;
+      setSession(accessToken);
+      user.birth_date = user.birth_date.substr(0, 10);
+      login({ ...user, userStatus: data.userStatus });
 
-      if (data.user.role === 'CHIEF') navigate(PATH.DIRECTOR.ROOT);
-      else if (data.user.role === 'TEACHER') navigate(PATH.TEACHER.ROOT);
+      const hasRegistered = data.user.academy_id !== null;
+      if (data.user.role === 'CHIEF') {
+        if (!hasRegistered) navigate(PATH.REGISTER_ACADEMY);
+        else navigate(PATH.DIRECTOR.ROOT);
+      } else if (data.user.role === 'TEACHER') {
+        if (!hasRegistered) navigate(PATH.REGISTER_TEACHER);
+        else navigate(PATH.TEACHER.ROOT);
+      }
     },
     onError: (error) => {
       console.log('error occurred at useLogin:', error);
