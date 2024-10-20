@@ -19,3 +19,5 @@ export { default as Director } from './layouts/director';
 export { default as TransferList } from './transferList';
 
 export { default as Notice } from './notice/notice';
+
+export { default as PrivateRoute } from './route/privateRoute';
