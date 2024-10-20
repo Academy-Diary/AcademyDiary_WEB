@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Typography, AppBar, Toolbar, Button, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
-import useLogout from '../../api/queries/user/useLogout';
+import useLogout from '../../../api/queries/user/useLogout';
 
 export default function DirectorHeader() {
   const navigate = useNavigate();

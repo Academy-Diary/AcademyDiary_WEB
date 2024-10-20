@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Avatar, Box, Divider, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from '@mui/material';
 import { AccountBoxRounded, LogoutRounded } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useUserAuthStore } from '../../store';
+import { useUserAuthStore } from '../../../store';
 
 export default function TeacherHeader() {
   const { user } = useUserAuthStore();
