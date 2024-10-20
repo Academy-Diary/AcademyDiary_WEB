@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Typography, AppBar, Toolbar, Button, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
-import useLogout from '../../../api/queries/user/useLogout';
+import { Box, Typography, AppBar, Toolbar, Button, Menu, MenuItem } from '@mui/material';
+import ProfileButton from '../../button/profileButton';
 
 export default function DirectorHeader() {
   const navigate = useNavigate();
 
-  const logoutMutation = useLogout();
-
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorEl2, setAnchorEl2] = useState(null);
-  const [anchorEl3, setAnchorEl3] = useState(null);
 
   const handleMouseOver = (e) => {
     setAnchorEl(e.currentTarget);
@@ -24,17 +21,6 @@ export default function DirectorHeader() {
   };
   const handleClose2 = () => {
     setAnchorEl2(null);
-  };
-  const handleMouseOver3 = (e) => {
-    setAnchorEl3(e.currentTarget);
-  };
-  const handleClose3 = () => {
-    setAnchorEl3(null);
-  };
-
-  const handleLogout = () => {
-    handleClose3();
-    logoutMutation.mutate();
   };
 
   return (
@@ -116,20 +102,7 @@ export default function DirectorHeader() {
             전체 공지
           </Button>
         </Box>
-        <IconButton onMouseOver={handleMouseOver3}>
-          <Avatar />
-        </IconButton>
-        <Menu anchorEl={anchorEl3} open={Boolean(anchorEl3)} onClose={handleClose3}>
-          <MenuItem
-            onClick={() => {
-              handleClose3();
-              navigate('/director/profile');
-            }}
-          >
-            프로필 보기
-          </MenuItem>
-          <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
-        </Menu>
+        <ProfileButton position="director" />
       </Toolbar>
     </AppBar>
   );
