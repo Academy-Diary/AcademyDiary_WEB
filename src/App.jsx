@@ -45,6 +45,7 @@ import { useUserAuthStore } from './store';
 function App() {
   const { isLoggedIn, user } = useUserAuthStore();
   const rolePath = user?.role === 'CHIEF' ? PATH.DIRECTOR.ROOT : PATH.TEACHER.ROOT;
+  const hasRegistered = user?.academy_id !== null;
 
   return (
     <div className="App">
@@ -58,12 +59,10 @@ function App() {
               <Route path={PATH.LOGIN.FIND_ID} element={<FindId />} />
               <Route path={PATH.LOGIN.RESET_PW} element={<ResetPassword />} />
             </Route>
-            <Route path={PATH.REGISTER_ACADEMY} element={<Register position="director" />} />
-            <Route path={PATH.REGISTER_TEACHER} element={<Register position="teacher" />} />
           </Route>
 
           <Route element={<PrivateRoute />}>
-            <Route path={PATH.TEACHER.ROOT} element={<Teacher />}>
+            <Route path={PATH.TEACHER.ROOT} element={hasRegistered ? <Teacher /> : <Register position="teacher" />}>
               <Route path="" element={<TeacherHome />} />
               <Route path={PATH.TEACHER.PROFILE.ROOT} element={<Outlet />}>
                 <Route path="" element={<TeacherProfile />} />
@@ -87,7 +86,7 @@ function App() {
               </Route>
               <Route path="*" element={<NotFound path={PATH.TEACHER.ROOT} />} />
             </Route>
-            <Route path={PATH.DIRECTOR.ROOT} element={<Director />}>
+            <Route path={PATH.DIRECTOR.ROOT} element={hasRegistered ? <Director /> : <Register position="director" />}>
               <Route path="" element={<DirectorHome />} />
               <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.ROOT} element={<Outlet />}>
                 <Route path={PATH.DIRECTOR.MANAGE_MEMBERS.REQUESTLIST} element={<RequestList />} />
