@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, BrowserRouter, Outlet } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, Outlet, Navigate } from 'react-router-dom';
 import { Typography, Button } from '@mui/material';
 import { PrivateRoute, Director, Teacher } from './components';
 import {
@@ -40,13 +40,17 @@ import {
   TeacherUpdateProfile,
 } from './pages';
 import { PATH } from './route/path';
+import { useUserAuthStore } from './store';
 
 function App() {
+  const { isLoggedIn, user } = useUserAuthStore();
+  const rolePath = user?.role === 'CHIEF' ? PATH.DIRECTOR.ROOT : PATH.TEACHER.ROOT;
+
   return (
     <div className="App">
       <BrowserRouter>
         <Routes>
-          <Route path={PATH.root} element={<StartPage />}>
+          <Route path={PATH.root} element={isLoggedIn ? <Navigate to={rolePath} /> : <StartPage />}>
             <Route path="" element={<FirstPage />} />
             <Route path={PATH.SIGNUP} element={<SignUp />} />
             <Route path={PATH.LOGIN.ROOT} element={<Outlet />}>
