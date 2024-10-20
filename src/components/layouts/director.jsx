@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 import { Box } from '@mui/material';
 
-import DirectorHeader from '../header/directorHeader';
+import DirectorHeader from './header/directorHeader';
 
 /**
  *@description 원장화면 헤더 있는 레이아웃
