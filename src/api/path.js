@@ -7,6 +7,12 @@ export const PATH_API = {
   SIGN_UP: '/user/signup',
   CHECK_DUP: '/user/check-id',
   SIGN_OUT: '/user/logout',
+  REISSUE_TOKEN: '/user/refresh-token',
+  PROFILE_BASIC: (userId) => `/user/${userId}/basic-info`,
+  CANCEL_ACCOUNT: (userId) => `/user/${userId}`,
+  // register
+  REGISTER_ACADEMY: '/registeration/request/academy',
+  REGISTER_TEACHER: '/registeration/request/user',
 };
 
 export default PATH_API;

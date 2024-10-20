@@ -2,6 +2,7 @@
 import dayjs from 'dayjs';
 import { axiosInstance } from './axios';
 import { PATH_API } from './path';
+import { useUserAuthStore } from '../store';
 
 // utils
 
@@ -41,35 +42,32 @@ export const isValidToken = (accessToken) => {
 /**
  * refreshToken으로 토큰 재발급
  */
-const tokenRefresh = async () => {
-  const refreshToken = localStorage.getItem('refreshToken');
-  if (refreshToken) {
-    try {
-      const response = await axiosInstance.post(PATH_API.TOKEN_REISSUE, {
-        refreshToken,
-      });
+const useTokenRefresh = async () => {
+  const { logout } = useUserAuthStore();
 
-      const newAccessToken = response.data.accessToken;
-      localStorage.setItem('accessToken', newAccessToken);
+  try {
+    const response = await axiosInstance.post(PATH_API.REISSUE_TOKEN);
 
-      axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+    const newAccessToken = response.data.accessToken;
+    localStorage.setItem('accessToken', newAccessToken);
 
-      const { exp } = jwtDecode(newAccessToken);
-      // eslint-disable-next-line no-use-before-define
-      tokenExpired(exp);
+    axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
 
-      return newAccessToken;
-    } catch {
-      // handleAlert('로그인이 만료되었습니다.');
-      alert('로그인이 만료되었습니다.');
+    const { exp } = jwtDecode(newAccessToken);
+    // eslint-disable-next-line no-use-before-define
+    tokenExpired(exp);
 
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+    return newAccessToken;
+  } catch {
+    // handleAlert('로그인이 만료되었습니다.');
+    alert('로그인이 만료되었습니다.');
 
-      window.location.reload();
-    }
+    localStorage.removeItem('accessToken');
+    logout();
+
+    window.location.reload();
+    return '';
   }
-  return '';
 };
 
 /**
@@ -92,7 +90,7 @@ export const tokenExpired = (exp) => {
   }
 
   expiredTimer = setTimeout(() => {
-    tokenRefresh();
+    useTokenRefresh();
   }, timeLeft);
 };
 
@@ -107,9 +105,9 @@ export const setSession = (accessToken) => {
 
     axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-    // TODO: refresh 도입
-    // const { exp } = jwtDecode(accessToken);
-    // tokenExpired(exp);
+    // refresh 도입
+    const { exp } = jwtDecode(accessToken);
+    tokenExpired(exp);
   } else {
     localStorage.removeItem('accessToken');
 
