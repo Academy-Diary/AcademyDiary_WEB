@@ -34,12 +34,12 @@ import {
   DirectorProfile,
   DirectorProfileUpdate,
   FindId,
+  ResetPassword,
   DirectorUpdatePassword,
   TeacherProfile,
   TeacherUpdateProfile,
 } from './pages';
 import { PATH } from './route/path';
-import ResetPassword from './pages/login/resetPassword';
 
 function App() {
   return (
