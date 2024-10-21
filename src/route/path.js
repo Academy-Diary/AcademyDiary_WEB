@@ -1,18 +1,43 @@
 export const PATH = {
   root: '/',
-  SIGNUP: 'signup',
-  LOGIN: 'login',
+  SIGNUP: '/signup',
+  LOGIN: {
+    ROOT: '/login',
+    FIND_ID: 'find-id',
+    RESET_PW: 'reset-pw',
+  },
+  REGISTER_ACADEMY: '/register-academy',
+  REGISTER_TEACHER: '/register-teacher',
   TEACHER: {
     ROOT: '/teacher',
-    CLASS: 'class', // 강의목록
+    PROFILE: {
+      ROOT: 'profile',
+      UPDATE: 'update',
+    },
+    CLASS: {
+      ROOT: 'class', // 강의목록
+      DETAIL: {
+        ROOT: ':courseid', // 각 강의 페이지
+        LECTURENOTICE: {
+          ROOT: 'notice', // 각 강의별 공지사항
+          ADD: 'add',
+          UPDATE: 'update',
+          DETAIL: ':id',
+        },
+      },
+    },
     COUNSELING: 'counseling', // 학생상담
-    NOTICE: 'notice', // 전체공지
+    NOTICE: {
+      ROOT: 'notice',
+      DETAILS: ':id',
+    }, // 전체공지
   },
   DIRECTOR: {
     ROOT: '/director',
     PROFILE: {
       ROOT: 'profile',
       UPDATE: 'update',
+      UPDATE_PW: 'update-password',
     },
     MANAGE_MEMBERS: {
       ROOT: 'manage-members',

@@ -1,6 +1,11 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryCache } from '@tanstack/react-query';
 
 export const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error) => {
+      console.log('Error occured at useQuery:', error);
+    },
+  }),
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false, // 브라우저에 포커스가 들어온 경우

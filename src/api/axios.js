@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { PATH_API } from './path';
-import { PATH } from '../route/path';
 
 const TIMEOUT_TIME = 10_000;
 
@@ -47,37 +46,23 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     // invalid token
-    const originalRequest = error.config;
-    /* eslint-disable no-underscore-dangle */
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+    // const originalRequest = error.config;
+    // /* eslint-disable no-underscore-dangle */
+    // if (error.response.status === 401 && !originalRequest._retry) {
+    //   originalRequest._retry = true;
 
-      //   const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY!);
+    //   // 리프레시 토큰도 만료된 경우 로그아웃 처리
+    //   alert('system.axios-401-error');
+    //   localStorage.removeItem('accessToken');
+    //   delete originalRequest.Authorization;
 
-      // if (refreshToken) {
-      //   try {
-      //     const response = await axiosInstance.post(PATH_API.TOKEN_REISSUE, {
-      //       refreshToken,
-      //     });
-      //     const newAccessToken = response.data.accessToken;
-      //     localStorage.setItem(ACCESS_TOKEN_KEY!, newAccessToken);
-
-      //     // axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-      //     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-      //     return await axiosInstance(originalRequest);
-      //   } catch {
-      // 리프레시 토큰도 만료된 경우 로그아웃 처리
-      alert('system.axios-401-error');
-      localStorage.removeItem('accessToken');
-      delete originalRequest.Authorization;
-
-      // window.location.reload();
-      window.location.href = PATH.root;
-      // Promise.resolve('Error! failed token refresh');
-      // }
-      // }
-    }
-    /* eslint-enable no-underscore-dangle */
+    //   // window.location.reload();
+    //   window.location.href = PATH.root;
+    //   // Promise.resolve('Error! failed token refresh');
+    //   // }
+    //   // }
+    // }
+    // /* eslint-enable no-underscore-dangle */
 
     // timeout
     if (axios.isCancel(error)) {

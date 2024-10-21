@@ -19,9 +19,20 @@ export const useLogin = (options) => {
       return response.data;
     },
     onSuccess: (data) => {
-      setSession(data.accessToken);
-      login({ ...data.user, userStatus: data.userStatus });
-      navigate(PATH.root);
+      // role 이 STUDENT or PARENT 이면 에러 발생
+      if (data.user.role === 'STUDENT' || data.user.role === 'PARENT') throw new Error();
+
+      const { user, accessToken } = data;
+      setSession(accessToken);
+      user.birth_date = user.birth_date.substr(0, 10);
+      login({ ...user, userStatus: data.userStatus });
+
+      const hasRegistered = data.user.academy_id !== null;
+      if (data.user.role === 'CHIEF') {
+        navigate(PATH.DIRECTOR.ROOT);
+      } else if (data.user.role === 'TEACHER') {
+        navigate(PATH.TEACHER.ROOT);
+      }
     },
     onError: (error) => {
       console.log('error occurred at useLogin:', error);

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Avatar, Box, Typography } from '@mui/material';
+import React from 'react';
+import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useUserAuthStore } from '../../../store';
+import ProfileButton from '../../button/profileButton';
 
 export default function TeacherHeader() {
-  const [name, setname] = useState('확통고수'); // FIXME: 전역변수로 유저정보 저장
+  const { user } = useUserAuthStore();
   const navigate = useNavigate();
 
   return (
@@ -19,8 +21,8 @@ export default function TeacherHeader() {
           AcademyPro
         </Typography>
         <Box display="flex" alignItems="center" gap={1}>
-          <Typography>강사: {name}</Typography>
-          <Avatar />
+          <Typography>강사: {user?.user_name}</Typography>
+          <ProfileButton position="teacher" />
         </Box>
       </Box>
     </Box>
