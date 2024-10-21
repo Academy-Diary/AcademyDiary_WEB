@@ -10,6 +10,7 @@ export { default as BottomTwoButtons } from './button/bottomTwoButtons';
 export { default as SubmitButtons } from './button/submitButtons';
 export { default as AddButton } from './button/addButton';
 export { default as CustomLink } from './button/customLink';
+export { default as ProfileButton } from './button/profileButton';
 
 export { default as SimpleDialog } from './dialog/simpleDialog';
 
