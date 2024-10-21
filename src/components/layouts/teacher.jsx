@@ -1,8 +1,8 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
-import TeacherHeader from '../header/teacherHeader';
-import TeacherSideBar from '../sidebar/teacherSidebar';
+import TeacherHeader from './header/teacherHeader';
+import TeacherSideBar from './sidebar/teacherSidebar';
 
 /**
  *@description 강사화면 헤더, 사이드바 있는 레이아웃

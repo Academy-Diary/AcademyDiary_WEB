@@ -3,6 +3,7 @@ export { default as StartPage } from './start/startPage';
 export { default as SignUp } from './signup/signup';
 export { default as Login } from './login/login';
 export { default as FindId } from './login/findId';
+export { default as ResetPassword } from './login/resetPassword';
 
 // 강사 페이지
 export { default as TeacherHome } from './home/teacherHome';
