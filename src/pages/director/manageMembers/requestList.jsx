@@ -4,19 +4,31 @@ import { Typography, List, ListItem, ListItemText, Button, Grid } from '@mui/mat
 import { SimpleDialog, TitleMedium } from '../../../components';
 import useRequestList from '../../../api/queries/members/useRequestList';
 
-// const teachers = [
-//   { name: '나미리', lectures: ['화법과 작문', '비문학'] },
-//   { name: '이하람', lectures: ['미적분 2'] },
-//   { name: '권해담', lectures: ['물리 1'] },
-//   { name: '김대성', lectures: ['확률과 통계'] },
-// ];
+// Teacher Data
+// {
+//   "user_id" : string,
+//   "user_name" : string,
+//   "email" : string,
+//   "phone_number" : string,
+//   "lectures" : [
+//     {
+//       "lecture_id" : int,
+//       "lecture_name": string
+//     }
+//   ]
+// }
 
-// const students = [
-//   { name: '신짱구', parentName: '봉미선' },
-//   { name: '신짱아', parentName: '봉미선' },
-//   { name: '김철수', parentName: '김미영' },
-//   { name: '이훈이', parentName: '토마토' },
-// ];
+// Student Data
+// {
+//   "user_id": string,
+//   "user_name": string,
+//   "email": string,
+//   "phone_number": string,
+//   "parent": {
+//       "user_id": string,
+//       "user_name": string
+//   }
+// }
 
 export default function RequestList() {
   const [openApprove, setOpenApprove] = useState(false);
@@ -68,7 +80,7 @@ export default function RequestList() {
                   <StudentReqItem
                     key={studentInfo.user_id}
                     name={studentInfo.user_name}
-                    parentName={studentInfo.parent_name}
+                    parentName={studentInfo.parent.user_name}
                     handleOpenApprove={handleOpenApprove}
                     handleOpenDecline={handleOpenDecline}
                   />
@@ -85,9 +97,11 @@ export default function RequestList() {
 }
 
 function TeacherReqItem({ name, lectures, handleOpenApprove, handleOpenDecline }) {
+  const lecturesName = lectures.map((obj) => obj.lecture_name);
+
   return (
     <ListItem key={name}>
-      <ListItemText primary={name} secondary={`과목: ${lectures}`} />
+      <ListItemText primary={name} secondary={`과목: ${lecturesName.join(', ')}`} />
       <Button variant="outlined" sx={{ mr: 1 }} onClick={handleOpenApprove}>
         승인
       </Button>
