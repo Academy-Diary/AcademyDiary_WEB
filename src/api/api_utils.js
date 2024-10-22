@@ -35,7 +35,7 @@ export const isValidToken = (accessToken) => {
 
   const decoded = jwtDecode(accessToken);
 
-  return dayjs().isBefore(dayjs(decoded.exp));
+  return dayjs().isBefore(dayjs.unix(decoded.exp));
 };
 
 // ----------------------------------------------------------------------
