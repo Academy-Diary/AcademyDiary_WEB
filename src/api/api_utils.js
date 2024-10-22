@@ -2,7 +2,6 @@
 import dayjs from 'dayjs';
 import { axiosInstance } from './axios';
 import { PATH_API } from './path';
-import { useUserAuthStore } from '../store';
 
 // utils
 
@@ -42,9 +41,7 @@ export const isValidToken = (accessToken) => {
 /**
  * refreshToken으로 토큰 재발급
  */
-const useTokenRefresh = async () => {
-  const { logout } = useUserAuthStore();
-
+const tokenRefresh = async () => {
   try {
     const response = await axiosInstance.post(PATH_API.REISSUE_TOKEN);
 
@@ -63,7 +60,6 @@ const useTokenRefresh = async () => {
     alert('로그인이 만료되었습니다.');
 
     localStorage.removeItem('accessToken');
-    logout();
 
     window.location.reload();
     return '';
@@ -89,7 +85,7 @@ export const tokenExpired = (exp) => {
   }
 
   expiredTimer = setTimeout(() => {
-    useTokenRefresh();
+    tokenRefresh();
   }, timeLeft);
 };
 
