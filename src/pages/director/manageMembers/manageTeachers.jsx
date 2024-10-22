@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions, DialogContentText, Box, DialogTitle } from '@mui/material';
 import { TitleMedium } from '../../../components';
 import useTeacherList from '../../../api/queries/members/useTeacherList';
+import { useDeleteTeacher } from '../../../api/queries/members/useDeleteTeacher';
 
 // Teacher List
 //
@@ -28,6 +29,7 @@ export default function ManageTeachers() {
   const [selected, setSelected] = useState({ user_name: '', lectures: [], phone_number: '', email: '' });
 
   const { data: teachers } = useTeacherList('test_academy');
+  const deleteTeacherMutation = useDeleteTeacher();
 
   const handleCloseDialog = () => {
     setOpen(false);
@@ -35,6 +37,12 @@ export default function ManageTeachers() {
   const handleClickDelete = (selectedTeacher) => {
     setOpen(true);
     setSelected(selectedTeacher);
+  };
+
+  const handleDelete = () => {
+    handleCloseDialog();
+    // deleteTeacherMutation.mutate(selected.user_id);
+    deleteTeacherMutation.mutate('test_teacher_2');
   };
 
   return (
@@ -98,7 +106,7 @@ export default function ManageTeachers() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>취소</Button>
-          <Button onClick={handleCloseDialog}>삭제</Button>
+          <Button onClick={handleDelete}>삭제</Button>
         </DialogActions>
       </Dialog>
     </>
