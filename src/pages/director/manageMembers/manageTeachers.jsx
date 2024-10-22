@@ -4,20 +4,30 @@ import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRo
 import { TitleMedium } from '../../../components';
 import useTeacherList from '../../../api/queries/members/useTeacherList';
 
-// function createData(name, lectures, phone, email) {
-//   return { name, lectures, phone, email };
-// }
-
-// const teachers = [
-//   createData('미나리', ['화법과 작문', '비문학'], '010-1234-5678', 'minary@gmail.com'),
-//   createData('이하람', ['미적분 1'], '010-0000-0000', 'haram99@naver.com'),
-//   createData('권해담', ['물리 1'], '010-1004-1004', 'godeka@naver.com'),
-//   createData('김대성', ['확률과 통계'], '010-1111-1111', 'bigcastle@gmail.com'),
-// ];
+// Teacher List
+//
+// {
+//   academy_id: 'test_academy',
+//   role: 'TEACHER',
+//   status: 'APPROVED',
+//   user: {
+//     email: 'string',
+//     phone_number: 'string',
+//     lectures: [
+//       {
+//         lecture_id: 0,
+//         lecture_name: 'string',
+//       },
+//     ],
+//   },
+//   user_id: 'test_teacher_2',
+// };
 
 export default function ManageTeachers() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState({ name: '', lectures: [], phone: '', email: '' });
+
+  const { data: teachers } = useTeacherList('test_academy');
 
   const handleCloseDialog = () => {
     setOpen(false);
@@ -26,8 +36,6 @@ export default function ManageTeachers() {
     setOpen(true);
     setSelected(selectedTeacher);
   };
-
-  const { data: teachers } = useTeacherList('test_academy');
 
   return (
     <>
@@ -45,26 +53,30 @@ export default function ManageTeachers() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {teachers?.map((teacher) => (
-              <TableRow key={teacher.user_name}>
-                <TableCell component="th" scope="row">
-                  {teacher.name}
-                </TableCell>
-                <TableCell>
-                  {teacher.lectures.map((lecture, idx) => {
-                    if (idx < teacher.lectures.length - 1) return `${lecture}, `;
-                    return lecture;
-                  })}
-                </TableCell>
-                <TableCell>{teacher.phone_number}</TableCell>
-                <TableCell>{teacher.email}</TableCell>
-                <TableCell align="right">
-                  <Button variant="outlined" onClick={() => handleClickDelete(teacher)}>
-                    삭제
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {teachers?.map((teacher) => {
+              const teacherInfo = teacher.user;
+
+              return (
+                <TableRow key={teacher.user_id}>
+                  <TableCell component="th" scope="row">
+                    {teacherInfo.user_name}
+                  </TableCell>
+                  <TableCell>
+                    {teacherInfo.lectures.map((lecture, idx) => {
+                      if (idx < teacherInfo.lectures.length - 1) return `${lecture.lecture_name}, `;
+                      return lecture.lecture_name;
+                    })}
+                  </TableCell>
+                  <TableCell>{teacherInfo.phone_number}</TableCell>
+                  <TableCell>{teacherInfo.email}</TableCell>
+                  <TableCell align="right">
+                    <Button variant="outlined" onClick={() => handleClickDelete(teacherInfo)}>
+                      삭제
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>

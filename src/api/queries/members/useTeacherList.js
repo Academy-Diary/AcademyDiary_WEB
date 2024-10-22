@@ -14,7 +14,7 @@ const useTeacherList = (academyId) =>
     queryFn: async () => {
       const response = await axiosInstance.get(PATH_API.TEACHERLIST(academyId));
       // console.log(response);
-      if (response.state === 200) return response.data.data;
+      if (response.status === 200) return response.data.data;
       return [];
     },
   });
