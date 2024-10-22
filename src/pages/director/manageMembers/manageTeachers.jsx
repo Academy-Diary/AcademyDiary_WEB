@@ -25,7 +25,7 @@ import useTeacherList from '../../../api/queries/members/useTeacherList';
 
 export default function ManageTeachers() {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState({ name: '', lectures: [], phone: '', email: '' });
+  const [selected, setSelected] = useState({ user_name: '', lectures: [], phone_number: '', email: '' });
 
   const { data: teachers } = useTeacherList('test_academy');
 
@@ -81,18 +81,18 @@ export default function ManageTeachers() {
         </Table>
       </TableContainer>
       <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>{selected.name} 강사님을 강사 목록에서 삭제하시겠습니까?</DialogTitle>
+        <DialogTitle>{selected.user_name} 강사님을 강사 목록에서 삭제하시겠습니까?</DialogTitle>
         <DialogContent>
           <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
-            <DialogContentText>강사 이름: {selected.name}</DialogContentText>
+            <DialogContentText>강사 이름: {selected.user_name}</DialogContentText>
             <DialogContentText>
               담당 과목:{' '}
               {selected.lectures.map((lecture, idx) => {
-                if (idx < selected.lectures.length - 1) return `${lecture}, `;
-                return lecture;
-              })}{' '}
+                if (idx < selected.lectures.length - 1) return `${lecture.lecture_name}, `;
+                return lecture.lecture_name;
+              })}
             </DialogContentText>
-            <DialogContentText>연락처: {selected.phone}</DialogContentText>
+            <DialogContentText>연락처: {selected.phone_number}</DialogContentText>
             <DialogContentText>이메일: {selected.email}</DialogContentText>
           </Box>
         </DialogContent>
