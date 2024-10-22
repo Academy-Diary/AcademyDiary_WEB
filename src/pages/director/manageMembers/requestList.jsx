@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Typography, List, ListItem, ListItemText, Button, Grid } from '@mui/material';
 import { SimpleDialog, TitleMedium } from '../../../components';
 import useRequestList from '../../../api/queries/members/useRequestList';
+import { useUserAuthStore } from '../../../store';
 
 // Teacher Data
 // {
@@ -31,11 +32,12 @@ import useRequestList from '../../../api/queries/members/useRequestList';
 // }
 
 export default function RequestList() {
+  const { user } = useUserAuthStore();
   const [openApprove, setOpenApprove] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
 
-  const { data: teacherData } = useRequestList('TEACHER', 'test_academy');
-  const { data: studentData } = useRequestList('STUDENT', 'test_academy');
+  const { data: teacherData } = useRequestList('TEACHER', user.academy_id);
+  const { data: studentData } = useRequestList('STUDENT', user.academy_id);
 
   const handleOpenApprove = () => {
     setOpenApprove(true);
