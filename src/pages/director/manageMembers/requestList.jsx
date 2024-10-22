@@ -78,15 +78,8 @@ export default function RequestList() {
             {studentData?.length > 0 &&
               studentData?.map((student) => {
                 const studentInfo = student.user;
-                return (
-                  <StudentReqItem
-                    key={studentInfo.user_id}
-                    name={studentInfo.user_name}
-                    parentName={studentInfo.parent.user_name}
-                    handleOpenApprove={handleOpenApprove}
-                    handleOpenDecline={handleOpenDecline}
-                  />
-                );
+                const parentName = studentInfo.parent ? studentInfo.parent.user_name : '';
+                return <StudentReqItem key={studentInfo.user_id} name={studentInfo.user_name} parentName={parentName} handleOpenApprove={handleOpenApprove} handleOpenDecline={handleOpenDecline} />;
               })}
           </List>
         </Grid>
