@@ -4,6 +4,7 @@ import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRo
 import { TitleMedium } from '../../../components';
 import { useStudentList } from '../../../api/queries/members/useStudentList';
 import { useUserAuthStore } from '../../../store';
+import { useDeleteStudent } from '../../../api/queries/members/useDeleteStudent';
 
 export default function ManageStudents() {
   const [open, setOpen] = useState(false);
@@ -11,13 +12,20 @@ export default function ManageStudents() {
 
   const { user } = useUserAuthStore();
   const { data: students } = useStudentList(user.academy_id);
+  const deleteStudentMutation = useDeleteStudent();
 
   const handleCloseDialog = () => {
     setOpen(false);
   };
+
   const handleClickDelete = (selectedStudent) => {
     setOpen(true);
     setSelected(selectedStudent);
+  };
+  const handleDelete = () => {
+    deleteStudentMutation.mutate(selected.user_id, {
+      onSuccess: handleCloseDialog,
+    });
   };
 
   return (
@@ -66,7 +74,7 @@ export default function ManageStudents() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>취소</Button>
-          <Button onClick={handleCloseDialog}>삭제</Button>
+          <Button onClick={handleDelete}>삭제</Button>
         </DialogActions>
       </Dialog>
     </>
