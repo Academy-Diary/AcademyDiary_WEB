@@ -12,6 +12,7 @@ export { default as ScoreList } from './teacher/test/scoreList';
 export { default as AddScore } from './teacher/test/addScore';
 export { default as ClassHome } from './teacher/class/classHome';
 export { default as ClassPage } from './teacher/class/classPage';
+export { default as ScoreGraph } from './teacher/class/scoreGraph';
 export { default as CourseNotice } from './teacher/notice/courseNotice';
 export { default as TeacherAddNotice } from './teacher/notice/addNotice';
 export { default as TeacherUpdateNotice } from './teacher/notice/updateNotice';

@@ -23,6 +23,9 @@ export default function ClassPage() {
   const handleNoticeClick = () => {
     navigate(`/teacher/class/${course.id}/notice`);
   };
+  const handleGraphClick = () => {
+    navigate(`all`);
+  };
 
   return (
     <>
@@ -30,14 +33,8 @@ export default function ClassPage() {
       <Typography align="left">{`수강생 ${course.students}명`}</Typography>
       <Grid container spacing={2} sx={{ mt: 3, width: '80vw' }}>
         <Grid item xs={6}>
-          <Container
-            maxWidth="md"
-            sx={{ height: 200, bgcolor: 'grey' }}
-            onClick={() => {
-              console.log('isClicked');
-            }}
-          >
-            <Typography>출결관리</Typography>
+          <Container maxWidth="md" sx={{ height: 200 }} onClick={handleGraphClick}>
+            <Typography>전체성적</Typography>
           </Container>
         </Grid>
         <Grid item xs={6}>

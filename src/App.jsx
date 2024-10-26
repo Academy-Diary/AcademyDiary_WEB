@@ -38,6 +38,7 @@ import {
   AddTest,
   ScoreList,
   AddScore,
+  ScoreGraph,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -68,6 +69,7 @@ function App() {
               <Route path="" element={<ClassHome />} />
               <Route path={PATH.TEACHER.CLASS.DETAIL.ROOT} element={<Outlet />}>
                 <Route path="" element={<ClassPage />} />
+                <Route path={PATH.TEACHER.CLASS.DETAIL.ALL} element={<ScoreGraph />} />
                 <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ROOT} element={<Outlet />}>
                   <Route path="" element={<CourseNotice />} />
                   <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ADD} element={<TeacherAddNotice />} />

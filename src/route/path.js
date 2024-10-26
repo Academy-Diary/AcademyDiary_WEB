@@ -28,6 +28,7 @@ export const PATH = {
           },
           ADD: 'add', // 시험 추가
         }, // 시험 관련
+        ALL: 'all', // 전체성적 그래프
       },
     },
     COUNSELING: 'counseling', // 학생상담
