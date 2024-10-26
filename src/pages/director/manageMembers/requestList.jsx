@@ -58,13 +58,13 @@ export default function RequestList() {
     setOpenDecline(false);
   };
 
-  const handleClickApprove = (selectedUser) => {
+  const handleClickApprove = (selectedUser, role) => {
     handleOpenApprove();
-    setSelected(selectedUser);
+    setSelected({ ...selectedUser, role });
   };
-  const handleClickDecline = (selectedUser) => {
+  const handleClickDecline = (selectedUser, role) => {
     handleOpenDecline();
-    setSelected(selectedUser);
+    setSelected({ ...selectedUser, role });
   };
   const handleApprove = () => {
     approveRegisterMutation.mutate(selected.user_id, {
@@ -100,10 +100,10 @@ export default function RequestList() {
                 return (
                   <ListItem key={teacherInfo.user_id}>
                     <ListItemText primary={teacherInfo.user_name} secondary={`과목: ${lecturesName.join(', ')}`} />
-                    <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove(teacherInfo)}>
+                    <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove(teacherInfo, '강사')}>
                       승인
                     </Button>
-                    <Button variant="contained" onClick={() => handleClickDecline(teacherInfo)}>
+                    <Button variant="contained" onClick={() => handleClickDecline(teacherInfo, '강사')}>
                       거절
                     </Button>
                   </ListItem>
@@ -124,10 +124,10 @@ export default function RequestList() {
                 return (
                   <ListItem key={studentInfo.user_id}>
                     <ListItemText primary={studentInfo.user_name} secondary={`학부모: ${parentName}`} />
-                    <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove(studentInfo)}>
+                    <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove(studentInfo, '학생')}>
                       승인
                     </Button>
-                    <Button variant="contained" onClick={() => handleClickDecline(studentInfo)}>
+                    <Button variant="contained" onClick={() => handleClickDecline(studentInfo, '학생')}>
                       거절
                     </Button>
                   </ListItem>
@@ -137,8 +137,20 @@ export default function RequestList() {
         </Grid>
       </Grid>
 
-      <SimpleDialog openDialog={openApprove} handleClose={handleCloseApprove} text={`${selected?.user_name}님의 등록 요청을 승인하시겠습니까?`} second="승인" handleClickSecond={handleApprove} />
-      <SimpleDialog openDialog={openDecline} handleClose={handleCloseDecline} text={`${selected?.user_name}님의 등록 요청을 거절하시겠습니까?`} second="거절" handleClickSecond={handleDecline} />
+      <SimpleDialog
+        openDialog={openApprove}
+        handleClose={handleCloseApprove}
+        text={`${selected?.user_name} ${selected?.role}의 등록 요청을 승인하시겠습니까?`}
+        second="승인"
+        handleClickSecond={handleApprove}
+      />
+      <SimpleDialog
+        openDialog={openDecline}
+        handleClose={handleCloseDecline}
+        text={`${selected?.user_name} ${selected?.role}의 등록 요청을 거절하시겠습니까?`}
+        second="거절"
+        handleClickSecond={handleDecline}
+      />
     </>
   );
 }
