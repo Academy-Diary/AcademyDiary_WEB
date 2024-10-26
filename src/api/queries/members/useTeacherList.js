@@ -10,11 +10,11 @@ import { PATH_API } from '../../path';
  */
 const useTeacherList = (academyId) =>
   useQuery({
-    queryKey: [QUERY_KEY.TEACHER],
+    queryKey: [QUERY_KEY.TEACHERLIST(academyId)],
     queryFn: async () => {
       const response = await axiosInstance.get(PATH_API.TEACHERLIST(academyId));
       // console.log(response);
-      if (response.status === 200) return response.data.data;
+      if (response.status === 200) return response.data.data.user;
       return [];
     },
   });

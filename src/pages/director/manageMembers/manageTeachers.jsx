@@ -7,11 +7,10 @@ import { useDeleteTeacher } from '../../../api/queries/members/useDeleteTeacher'
 
 // Teacher List
 //
-// {
-//   academy_id: 'test_academy',
-//   role: 'TEACHER',
-//   status: 'APPROVED',
-//   user: {
+// [
+//   {
+//     user_id: 'test_id',
+//     user_name: 'test_name',
 //     email: 'string',
 //     phone_number: 'string',
 //     lectures: [
@@ -21,12 +20,11 @@ import { useDeleteTeacher } from '../../../api/queries/members/useDeleteTeacher'
 //       },
 //     ],
 //   },
-//   user_id: 'test_teacher_2',
-// };
+// ];
 
 export default function ManageTeachers() {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState({ user_name: '', lectures: [], phone_number: '', email: '' });
+  const [selected, setSelected] = useState({ user_id: '', user_name: '', lectures: [], phone_number: '', email: '' });
 
   const { data: teachers } = useTeacherList('test_academy');
   const deleteTeacherMutation = useDeleteTeacher();
@@ -61,30 +59,26 @@ export default function ManageTeachers() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {teachers?.map((teacher) => {
-              const teacherInfo = teacher.user;
-
-              return (
-                <TableRow key={teacher.user_id}>
-                  <TableCell component="th" scope="row">
-                    {teacherInfo.user_name}
-                  </TableCell>
-                  <TableCell>
-                    {teacherInfo.lectures.map((lecture, idx) => {
-                      if (idx < teacherInfo.lectures.length - 1) return `${lecture.lecture_name}, `;
-                      return lecture.lecture_name;
-                    })}
-                  </TableCell>
-                  <TableCell>{teacherInfo.phone_number}</TableCell>
-                  <TableCell>{teacherInfo.email}</TableCell>
-                  <TableCell align="right">
-                    <Button variant="outlined" onClick={() => handleClickDelete(teacherInfo)}>
-                      삭제
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {teachers?.map((teacher) => (
+              <TableRow key={teacher.user_id}>
+                <TableCell component="th" scope="row">
+                  {teacher.user_name}
+                </TableCell>
+                <TableCell>
+                  {teacher.lectures.map((lecture, idx) => {
+                    if (idx < teacher.lectures.length - 1) return `${lecture.lecture_name}, `;
+                    return lecture.lecture_name;
+                  })}
+                </TableCell>
+                <TableCell>{teacher.phone_number}</TableCell>
+                <TableCell>{teacher.email}</TableCell>
+                <TableCell align="right">
+                  <Button variant="outlined" onClick={() => handleClickDelete(teacher)}>
+                    삭제
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
