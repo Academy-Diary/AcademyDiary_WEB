@@ -4,6 +4,7 @@ import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRo
 import { TitleMedium } from '../../../components';
 import useTeacherList from '../../../api/queries/members/useTeacherList';
 import { useDeleteTeacher } from '../../../api/queries/members/useDeleteTeacher';
+import { useUserAuthStore } from '../../../store';
 
 // Teacher List
 //
@@ -26,7 +27,8 @@ export default function ManageTeachers() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState({ user_id: '', user_name: '', lectures: [], phone_number: '', email: '' });
 
-  const { data: teachers } = useTeacherList('test_academy');
+  const { user } = useUserAuthStore();
+  const { data: teachers } = useTeacherList(user.academy_id);
   const deleteTeacherMutation = useDeleteTeacher();
 
   const handleCloseDialog = () => {
