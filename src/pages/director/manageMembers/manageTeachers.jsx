@@ -32,15 +32,15 @@ export default function ManageTeachers() {
   const handleCloseDialog = () => {
     setOpen(false);
   };
+
   const handleClickDelete = (selectedTeacher) => {
     setOpen(true);
     setSelected(selectedTeacher);
   };
-
   const handleDelete = () => {
-    handleCloseDialog();
-    // deleteTeacherMutation.mutate(selected.user_id);
-    deleteTeacherMutation.mutate('test_teacher_2');
+    deleteTeacherMutation.mutate(selected.user_id, {
+      onSuccess: handleCloseDialog,
+    });
   };
 
   return (
