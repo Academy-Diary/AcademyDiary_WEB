@@ -20,6 +20,7 @@ export const PATH_API = {
   REQUESTLIST: '/registeration/list/user',
   TEACHERLIST: (academyId) => `/teacher/${academyId}`,
   DELETE_TEACHER: (id) => `/teacher/${id}`,
+  STUDENTLIST: (academyId) => `/student/${academyId}`,
 };
 
 export default PATH_API;

@@ -2,21 +2,15 @@ import React, { useState } from 'react';
 
 import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle, Box } from '@mui/material';
 import { TitleMedium } from '../../../components';
-
-function createData(name, parentName, phone, parentPhone) {
-  return { name, parentName, phone, parentPhone };
-}
-
-const students = [
-  createData('신짱구', '봉미선', '010-1234-5678', '010-8282-5959'),
-  createData('신짱아', '봉미선', '010-0000-0000', '010-8282-5959'),
-  createData('김철수', '김미영', '010-1004-1004', '010-9410-1494'),
-  createData('이훈이', '토마토', '010-1111-1111', '010-3948-2839'),
-];
+import { useStudentList } from '../../../api/queries/members/useStudentList';
+import { useUserAuthStore } from '../../../store';
 
 export default function ManageStudents() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState({ name: '', parentName: '', phone: '', parentPhone: '' });
+
+  const { user } = useUserAuthStore();
+  const { data: students } = useStudentList(user.academy_id);
 
   const handleCloseDialog = () => {
     setOpen(false);
@@ -29,7 +23,7 @@ export default function ManageStudents() {
   return (
     <>
       <TitleMedium title="학생 관리" />
-      <Typography mb={2}>학생 인원: {students.length}</Typography>
+      <Typography mb={2}>학생 인원: {students?.length}</Typography>
       <TableContainer component={Paper} sx={{ maxHeight: '65vh', width: '80vw' }}>
         <Table stickyHeader sx={{ minWidth: 650 }}>
           <TableHead>
@@ -42,7 +36,7 @@ export default function ManageStudents() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {students.map((student) => (
+            {students?.map((student) => (
               <TableRow key={student.name}>
                 <TableCell component="th" scope="row">
                   {student.name}
