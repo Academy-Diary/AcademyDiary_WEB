@@ -38,9 +38,8 @@ function CheckPasswd({ setPassed }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const password = e.target.password.value;
-    const password2 = e.target.password2.value;
 
-    if (password !== password2) alert('입력한 두 비밀번호가 일치하지 않습니다.');
+    if (password === '') alert('비밀번호를 입력하세요.');
     // else if 올바르지 않은 비밀번호일 때 처리
     else setPassed(true);
   };
@@ -51,7 +50,6 @@ function CheckPasswd({ setPassed }) {
         비밀번호 확인
       </Typography>
       <TextField name="password" label="비밀번호" required fullWidth sx={{ my: 1 }} />
-      <TextField name="password2" label="비밀번호 재입력" required fullWidth sx={{ my: 1 }} />
       <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
         확인
       </Button>
