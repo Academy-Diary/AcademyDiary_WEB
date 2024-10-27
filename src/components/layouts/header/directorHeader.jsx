@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Typography, AppBar, Toolbar, Button, IconButton, Avatar, Menu, MenuItem } from '@mui/material';
+import { Box, Typography, AppBar, Toolbar, Button, Menu, MenuItem } from '@mui/material';
+import ProfileButton from '../../button/profileButton';
 
 export default function DirectorHeader() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function DirectorHeader() {
   const handleClose2 = () => {
     setAnchorEl2(null);
   };
+
   return (
     <AppBar position="fixed">
       <Toolbar>
@@ -100,9 +102,7 @@ export default function DirectorHeader() {
             전체 공지
           </Button>
         </Box>
-        <IconButton onClick={() => navigate('/director/profile')}>
-          <Avatar />
-        </IconButton>
+        <ProfileButton position="director" />
       </Toolbar>
     </AppBar>
   );

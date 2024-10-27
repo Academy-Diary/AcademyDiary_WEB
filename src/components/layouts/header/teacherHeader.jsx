@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { Avatar, Box, Typography } from '@mui/material';
+import React from 'react';
+import { Box, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useUserAuthStore } from '../../store';
+import { useUserAuthStore } from '../../../store';
+import ProfileButton from '../../button/profileButton';
 
 export default function TeacherHeader() {
   const { user } = useUserAuthStore();
@@ -21,7 +22,7 @@ export default function TeacherHeader() {
         </Typography>
         <Box display="flex" alignItems="center" gap={1}>
           <Typography>강사: {user?.user_name}</Typography>
-          <Avatar />
+          <ProfileButton position="teacher" />
         </Box>
       </Box>
     </Box>

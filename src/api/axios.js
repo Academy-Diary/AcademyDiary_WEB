@@ -46,38 +46,36 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    // invalid token
+    // 액세스 토큰이 만료된 경우
     const originalRequest = error.config;
-    /* eslint-disable no-underscore-dangle */
-    if (error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
 
-      //   const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY!);
+    if (error.response.status === 403) {
+      // originalRequest._retry = true; // 무한 재요청 방지
 
-      // if (refreshToken) {
-      //   try {
-      //     const response = await axiosInstance.post(PATH_API.TOKEN_REISSUE, {
-      //       refreshToken,
-      //     });
-      //     const newAccessToken = response.data.accessToken;
-      //     localStorage.setItem(ACCESS_TOKEN_KEY!, newAccessToken);
+      try {
+        const res = await axiosInstance.post(PATH_API.REISSUE_TOKEN);
+        const newAccessToken = res.data.accessToken;
+        // console.log(newAccessToken);
+        // console.log(isValidToken(newAccessToken));
 
-      //     // axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-      //     originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-      //     return await axiosInstance(originalRequest);
-      //   } catch {
-      // 리프레시 토큰도 만료된 경우 로그아웃 처리
-      alert('system.axios-401-error');
-      localStorage.removeItem('accessToken');
-      delete originalRequest.Authorization;
+        localStorage.setItem('accessToken', newAccessToken);
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-      // window.location.reload();
-      window.location.href = PATH.root;
-      // Promise.resolve('Error! failed token refresh');
-      // }
-      // }
+        // api 재요청
+        return axios(originalRequest);
+      } catch {
+        // TODO: 잘 되는지 확인 필요
+        // 리프레시 토큰도 만료된 경우 로그아웃 처리
+        localStorage.removeItem('accessToken');
+        delete originalRequest.headers.Authorization;
+
+        // window.location.reload();
+        window.location.href = PATH.root;
+        // Promise.resolve('Error! failed token refresh');
+        // }
+        // }
+      }
     }
-    /* eslint-enable no-underscore-dangle */
 
     // timeout
     if (axios.isCancel(error)) {

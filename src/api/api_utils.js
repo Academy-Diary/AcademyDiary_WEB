@@ -34,7 +34,7 @@ export const isValidToken = (accessToken) => {
 
   const decoded = jwtDecode(accessToken);
 
-  return dayjs().isBefore(dayjs(decoded.exp));
+  return dayjs().isBefore(dayjs.unix(decoded.exp));
 };
 
 // ----------------------------------------------------------------------
@@ -42,34 +42,28 @@ export const isValidToken = (accessToken) => {
  * refreshToken으로 토큰 재발급
  */
 const tokenRefresh = async () => {
-  const refreshToken = localStorage.getItem('refreshToken');
-  if (refreshToken) {
-    try {
-      const response = await axiosInstance.post(PATH_API.TOKEN_REISSUE, {
-        refreshToken,
-      });
+  try {
+    const response = await axiosInstance.post(PATH_API.REISSUE_TOKEN);
 
-      const newAccessToken = response.data.accessToken;
-      localStorage.setItem('accessToken', newAccessToken);
+    const newAccessToken = response.data.accessToken;
+    localStorage.setItem('accessToken', newAccessToken);
 
-      axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
+    axiosInstance.defaults.headers.common.Authorization = `Bearer ${newAccessToken}`;
 
-      const { exp } = jwtDecode(newAccessToken);
-      // eslint-disable-next-line no-use-before-define
-      tokenExpired(exp);
+    const { exp } = jwtDecode(newAccessToken);
+    // eslint-disable-next-line no-use-before-define
+    tokenExpired(exp);
 
-      return newAccessToken;
-    } catch {
-      // handleAlert('로그인이 만료되었습니다.');
-      alert('로그인이 만료되었습니다.');
+    return newAccessToken;
+  } catch {
+    // handleAlert('로그인이 만료되었습니다.');
+    alert('로그인이 만료되었습니다.');
 
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
+    localStorage.removeItem('accessToken');
 
-      window.location.reload();
-    }
+    window.location.reload();
+    return '';
   }
-  return '';
 };
 
 /**
@@ -80,8 +74,7 @@ export const tokenExpired = (exp) => {
 
   const currentTime = Date.now();
 
-  // 만료 되기 5분 전에 토큰 갱신
-  // Test token expires after 10s
+  // 만료되기까지 남은 시간
   const timeLeft = exp * 1000 - currentTime;
 
   clearTimeout(expiredTimer);
@@ -107,9 +100,9 @@ export const setSession = (accessToken) => {
 
     axiosInstance.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-    // TODO: refresh 도입
-    // const { exp } = jwtDecode(accessToken);
-    // tokenExpired(exp);
+    // refresh 도입
+    const { exp } = jwtDecode(accessToken);
+    tokenExpired(exp);
   } else {
     localStorage.removeItem('accessToken');
 

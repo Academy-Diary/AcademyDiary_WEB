@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { Typography, List, ListItem, ListItemText, Button, Grid, Dialog, DialogActions, DialogContent } from '@mui/material';
-import { TitleMedium } from '../../../components';
+import { Typography, List, ListItem, ListItemText, Button, Grid } from '@mui/material';
+import { SimpleDialog, TitleMedium } from '../../../components';
 
 const teachers = [
   { name: '나미리', lectures: ['화법과 작문', '비문학'] },
@@ -59,24 +59,9 @@ export default function RequestList() {
           </List>
         </Grid>
       </Grid>
-      <Dialog open={openApprove} onClose={handleCloseApprove}>
-        <DialogContent>나미리님의 등록 요청을 승인하시겠습니까?</DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseApprove}>승인</Button>
-          <Button onClick={handleCloseApprove} autoFocus>
-            취소
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={openDecline} onClose={handleCloseDecline}>
-        <DialogContent>나미리님의 등록 요청을 거절하시겠습니까?</DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDecline}>거절</Button>
-          <Button onClick={handleCloseDecline} autoFocus>
-            취소
-          </Button>
-        </DialogActions>
-      </Dialog>
+
+      <SimpleDialog openDialog={openApprove} handleClose={handleCloseApprove} text="나미리님의 등록 요청을 승인하시겠습니까?" second="승인" handleClickSecond={handleCloseApprove} />
+      <SimpleDialog openDialog={openDecline} handleClose={handleCloseDecline} text="나미리님의 등록 요청을 거절하시겠습니까?" second="거절" handleClickSecond={handleCloseDecline} />
     </>
   );
 }

@@ -3,6 +3,7 @@ export { default as StartPage } from './start/startPage';
 export { default as SignUp } from './signup/signup';
 export { default as Login } from './login/login';
 export { default as FindId } from './login/findId';
+export { default as ResetPassword } from './login/resetPassword';
 
 // 강사 페이지
 export { default as TeacherHome } from './home/teacherHome';
@@ -10,6 +11,8 @@ export { default as TestList } from './teacher/test/testList';
 export { default as AddTest } from './teacher/test/addTest';
 export { default as ScoreList } from './teacher/test/scoreList';
 export { default as AddScore } from './teacher/test/addScore';
+export { default as TeacherProfile } from './teacher/profile/teacherProfile';
+export { default as TeacherUpdateProfile } from './teacher/profile/teacherUpdateProfile';
 export { default as ClassHome } from './teacher/class/classHome';
 export { default as ClassPage } from './teacher/class/classPage';
 export { default as ScoreGraph } from './teacher/class/scoreGraph';
@@ -43,3 +46,4 @@ export { default as NoticeDetails } from './director/notice/noticeDetails';
 
 export { default as DirectorProfile } from './director/profile/directorProfile';
 export { default as DirectorProfileUpdate } from './director/profile/updateProfile';
+export { default as DirectorUpdatePassword } from './director/profile/updatePassword';

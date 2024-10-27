@@ -10,6 +10,10 @@ export const PATH = {
   REGISTER_TEACHER: '/register-teacher',
   TEACHER: {
     ROOT: '/teacher',
+    PROFILE: {
+      ROOT: 'profile',
+      UPDATE: 'update',
+    },
     CLASS: {
       ROOT: 'class', // 강의목록
       DETAIL: {
@@ -42,6 +46,7 @@ export const PATH = {
     PROFILE: {
       ROOT: 'profile',
       UPDATE: 'update',
+      UPDATE_PW: 'update-password',
     },
     MANAGE_MEMBERS: {
       ROOT: 'manage-members',

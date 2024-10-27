@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Container, TextField, Typography, Grid, Avatar } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { SubmitButtons } from '../../../components';
+import { SimpleDialog, SubmitButtons } from '../../../components';
+import { useUpdateProfile } from '../../../api/queries/user/useProfile';
+import { useUserAuthStore } from '../../../store';
+import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 
 const directorProfile = {
   personal: {
@@ -57,15 +60,58 @@ function CheckPasswd({ setPassed }) {
 }
 
 function UpdateProfileForm({ currentInfo }) {
-  const navigate = useNavigate();
-  const [date, setDate] = useState(dayjs(currentInfo.personal.birthdate));
+  const { user } = useUserAuthStore();
+  const [date, setDate] = useState(dayjs(user.birth_date));
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
+  const updateProfileMutation = useUpdateProfile(user.user_id);
+  const cancelAccountMutation = useCancelAccount(user.user_id);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  };
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  // 프로필 수정
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 프로필 수정 요청
+    const data = new FormData(e.currentTarget);
+    const submitData = {
+      user_name: data.get('user_name'),
+      phone_number: data.get('phone_number'),
+      email: data.get('email'),
+      birth_date: date.toISOString(),
+    };
 
-    navigate('/director/profile');
+    // console.log(submitData);
+    updateProfileMutation.mutate(submitData);
+  };
+
+  // 회원 탈퇴
+  const handleCancelAccount = () => {
+    handleCloseDialog();
+
+    cancelAccountMutation.mutate('', {
+      onError: (error) => {
+        handleOpenSnackbar();
+        if (error.errorCode === 403) setErrorMsg('학원에 소속된 사용자는 탈퇴할 수 없습니다.');
+        else setErrorMsg('탈퇴 실패. 나중에 다시 시도해주세요.');
+      },
+    });
   };
 
   return (
@@ -78,7 +124,7 @@ function UpdateProfileForm({ currentInfo }) {
           <Avatar sx={{ width: 100, height: 100 }} />
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
-          <TextField label="이름" defaultValue={currentInfo.personal.name} required />
+          <TextField label="이름" name="user_name" defaultValue={user.user_name} required />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6" sx={{ mb: 2 }}>
@@ -89,8 +135,8 @@ function UpdateProfileForm({ currentInfo }) {
               <DatePicker label="생년월일" maxDate={dayjs()} value={date} onChange={(newValue) => setDate(newValue)} />
             </DemoContainer>
           </LocalizationProvider>
-          <TextField label="전화번호" defaultValue={currentInfo.personal.phone} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="이메일" defaultValue={currentInfo.personal.email} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="전화번호" name="phone_number" defaultValue={user.phone_number} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="이메일" name="email" defaultValue={user.email} required fullWidth sx={{ mb: 2 }} />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6" sx={{ mb: 2 }}>
@@ -102,6 +148,22 @@ function UpdateProfileForm({ currentInfo }) {
           <TextField label="이메일" defaultValue={currentInfo.academy.email} required fullWidth sx={{ mb: 2 }} />
         </Grid>
       </Grid>
+      <Button sx={{ mt: 3 }} onClick={handleOpenDialog}>
+        회원 탈퇴
+      </Button>
+      <SimpleDialog openDialog={openDialog} handleClose={handleCloseDialog} text="정말로 탈퇴하시겠습니까?" second="탈퇴" handleClickSecond={handleCancelAccount} />
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        message={errorMsg}
+        action={
+          <IconButton onClick={handleCloseSnackbar} color="inherit" size="small">
+            <Close fontSize="small" />
+          </IconButton>
+        }
+      />
       <SubmitButtons submitTitle="수정 완료" />
     </Box>
   );
