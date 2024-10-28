@@ -22,9 +22,8 @@ function CheckPasswd({ setPassed }) {
     e.preventDefault();
     const password1 = e.target.password1.value;
 
-    if (password1 === '') alert('비밀번호를 입력하세요', password1);
-    // TODO: else if 올바르지 않은 비밀번호일 때 처리.
-    else setPassed(true);
+    // TODO: if 올바르지 않은 비밀번호일 때 처리.
+    setPassed(true);
   };
 
   return (

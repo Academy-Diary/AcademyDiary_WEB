@@ -39,9 +39,8 @@ function CheckPasswd({ setPassed }) {
     e.preventDefault();
     const password = e.target.password.value;
 
-    if (password === '') alert('비밀번호를 입력하세요.');
-    // else if 올바르지 않은 비밀번호일 때 처리
-    else setPassed(true);
+    // TODO: if 올바르지 않은 비밀번호일 때 처리
+    setPassed(true);
   };
 
   return (
