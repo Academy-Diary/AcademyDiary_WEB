@@ -6,5 +6,8 @@ export const QUERY_KEY = {
   SIGN_UP: PATH_API.SIGN_UP,
   SIGN_OUT: PATH_API.SIGN_OUT,
   PROFILE_BASIC: (userId) => PATH_API.PROFILE_BASIC(userId),
+
+  // manage lectures
+  LECTURELIST: (academyId) => PATH_API.LECTURELIST(academyId),
 };
 export default QUERY_KEY;

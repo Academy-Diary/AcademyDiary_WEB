@@ -15,6 +15,9 @@ export const PATH_API = {
   // register
   REGISTER_ACADEMY: '/registeration/request/academy',
   REGISTER_TEACHER: '/registeration/request/user',
+
+  // manage lectures
+  LECTURELIST: (academyId) => `/lecture/${academyId}`,
 };
 
 export default PATH_API;

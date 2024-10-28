@@ -4,18 +4,32 @@ import { useNavigate } from 'react-router-dom';
 import { List, ListItem, ListItemText, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
 
 import { TitleMedium, AddButton } from '../../../components';
+import { useUserAuthStore } from '../../../store';
+import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 
-const courses = [
-  { name: '미적분 1', teacher: '이하람', numStudents: 60 },
-  { name: '확률과 통계', teacher: '김대성', numStudents: 45 },
-  { name: '화법과 작문', teacher: '나미리', numStudents: 39 },
-  { name: '비문학', teacher: '나미리', numStudents: 34 },
-];
+// Lecture List
+//
+// [
+//   {
+//     academy_id: 'test_academy',
+//     lecture_id: 1,
+//     lecture_name: '한국사',
+//     teacher_id: 'test_teacher',
+//     teacher_name: "권해담",
+//     days: ['TUESDAY', 'THURSDAY'],
+//     headcount: 60,
+//     start_time: '2024-10-16T04:30:00.000Z',
+//     end_time: '2024-10-16T06:00:00.000Z',
+//   },
+// ];
 
 export default function ManageCourses() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
+
+  const { user } = useUserAuthStore();
+  const { data: lectures } = useLectureList(user.academy_id);
 
   const handleClickAdd = () => {
     navigate('/director/manage-courses/add-course');
@@ -35,11 +49,11 @@ export default function ManageCourses() {
     <>
       <TitleMedium title="강의 목록" />
       <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
-        {courses.map((course) => (
-          <ListItem key={course.name} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
-            <ListItemText primary={course.name} secondary={course.teacher} />
+        {lectures?.map((lecture) => (
+          <ListItem key={lecture.lecture_id} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
+            <ListItemText primary={lecture.lecture_name} secondary={lecture.teacher_name} />
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <ListItemText align="right" secondary={`수강 인원: ${course.numStudents}`} sx={{ mb: 2 }} />
+              <ListItemText align="right" secondary={`수강 인원: ${lecture.headcount}`} sx={{ mb: 2 }} />
               <ButtonGroup size="small">
                 <Button variant="outlined" onClick={handleClickDetails}>
                   강의 상세
@@ -48,7 +62,7 @@ export default function ManageCourses() {
                   variant="contained"
                   onClick={() => {
                     handleOpenDialog();
-                    setSelected(course);
+                    setSelected(lecture);
                   }}
                 >
                   폐강하기
