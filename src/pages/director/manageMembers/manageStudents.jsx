@@ -85,13 +85,13 @@ export default function ManageStudents() {
         </Table>
       </TableContainer>
       <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>{selected.name} 학생을 학생 목록에서 삭제하시겠습니까?</DialogTitle>
+        <DialogTitle>{selected.user_name} 학생을 학생 목록에서 삭제하시겠습니까?</DialogTitle>
         <DialogContent>
           <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
-            <DialogContentText>학생 이름: {selected.name}</DialogContentText>
-            <DialogContentText>학부모 이름: {selected.parentName}</DialogContentText>
-            <DialogContentText>학생 연락처: {selected.phone}</DialogContentText>
-            <DialogContentText>학부모 연락처: {selected.parentPhone}</DialogContentText>
+            <DialogContentText>학생 이름: {selected.user_name}</DialogContentText>
+            <DialogContentText>학부모 이름: {selected.familiesAsStudent && selected.familiesAsStudent[0]?.parent.user_name}</DialogContentText>
+            <DialogContentText>학생 연락처: {selected.phone_number}</DialogContentText>
+            <DialogContentText>학부모 연락처: {selected.familiesAsStudent && selected.familiesAsStudent[0]?.parent.phone_number}</DialogContentText>
           </Box>
         </DialogContent>
         <DialogActions>
