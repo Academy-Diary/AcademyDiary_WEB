@@ -37,17 +37,18 @@ const students = [
 ];
 const teachers = ['나미리', '이하람', '권해담', '김대성'];
 
+const time = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+
 export default function AddCourse() {
   const [teacher, setTeacher] = useState('');
   const [open, setOpen] = useState(false);
+  const [lectureDays, setLectureDays] = useState([]);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
 
   // 수강생 등록 TransferList에 넘겨줄 리스트 (왼,오)
   const [left, setLeft] = useState(students);
   const [right, setRight] = useState([]);
-
-  const handleChangeTeacher = (e) => {
-    setTeacher(e.target.value);
-  };
 
   const handleOpenDialog = () => {
     setOpen(true);
@@ -57,6 +58,20 @@ export default function AddCourse() {
   };
   const handleClickRegister = () => {
     setOpen(false);
+  };
+
+  const handleChangeTeacher = (e) => {
+    setTeacher(e.target.value);
+  };
+  const handleLectureDays = (e) => {
+    const { value } = e.target;
+    setLectureDays(typeof value === 'string' ? value.split(',') : value);
+  };
+  const handleStartTime = (e) => {
+    setStartTime(e.target.value);
+  };
+  const handleEndTime = (e) => {
+    setEndTime(e.target.value);
   };
 
   return (
@@ -74,6 +89,39 @@ export default function AddCourse() {
               <InputLabel id="teacher-input-label">강사명</InputLabel>
               <Select label="강사명" labelId="teacher-input-label" value={teacher} onChange={handleChangeTeacher} required>
                 {teachers.map((t) => (
+                  <MenuItem key={t} value={t}>
+                    {t}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>강의 시간</Typography>
+            <FormControl sx={{ mt: 2, minWidth: 195 }}>
+              <InputLabel>요일</InputLabel>
+              <Select label="요일" multiple value={lectureDays} onChange={handleLectureDays} required>
+                <MenuItem value="Monday">월</MenuItem>
+                <MenuItem value="Tuesday">화</MenuItem>
+                <MenuItem value="Wednesday">수</MenuItem>
+                <MenuItem value="Thursday">목</MenuItem>
+                <MenuItem value="Friday">금</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ ml: 4, mt: 2, minWidth: 150 }}>
+              <InputLabel>시작 시간</InputLabel>
+              <Select label="시작 시간" value={startTime} onChange={handleStartTime} required>
+                {time.map((t) => (
+                  <MenuItem key={t} value={t}>
+                    {t}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl sx={{ ml: 2, mt: 2, minWidth: 150 }}>
+              <InputLabel>종료 시간</InputLabel>
+              <Select label="종료 시간" value={endTime} onChange={handleEndTime} required>
+                {time.map((t) => (
                   <MenuItem key={t} value={t}>
                     {t}
                   </MenuItem>
