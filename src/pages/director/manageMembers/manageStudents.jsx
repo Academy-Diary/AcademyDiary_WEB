@@ -6,12 +6,30 @@ import { useStudentList } from '../../../api/queries/members/useStudentList';
 import { useUserAuthStore } from '../../../store';
 import { useDeleteStudent } from '../../../api/queries/members/useDeleteStudent';
 
+// Students Data
+//
+// [
+//   {
+//     user_id:'string',
+//     user_name: 'string',
+//     phone_number: 'string',
+//     familiesAsStudent: [
+//       {
+//         parent: {
+//           user_name: 'string',
+//           phone_number: 'string',
+//         },
+//       },
+//     ],
+//   },
+// ];
+
 export default function ManageStudents() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState({ name: '', parentName: '', phone: '', parentPhone: '' });
 
   const { user } = useUserAuthStore();
-  const { data: students } = useStudentList(user.academy_id);
+  const { data: students } = useStudentList(user.academy_id, 1);
   const deleteStudentMutation = useDeleteStudent();
 
   const handleCloseDialog = () => {
@@ -44,21 +62,25 @@ export default function ManageStudents() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {students?.map((student) => (
-              <TableRow key={student.name}>
-                <TableCell component="th" scope="row">
-                  {student.name}
-                </TableCell>
-                <TableCell>{student.parentName}</TableCell>
-                <TableCell>{student.phone}</TableCell>
-                <TableCell>{student.parentPhone}</TableCell>
-                <TableCell align="right">
-                  <Button variant="outlined" onClick={() => handleClickDelete(student)}>
-                    삭제
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {students?.map((student) => {
+              const parent = student.familiesAsStudent[0]?.parent;
+
+              return (
+                <TableRow key={student.user_id}>
+                  <TableCell component="th" scope="row">
+                    {student.user_name}
+                  </TableCell>
+                  <TableCell>{parent?.user_name}</TableCell>
+                  <TableCell>{student.phone_number}</TableCell>
+                  <TableCell>{parent?.phone_number}</TableCell>
+                  <TableCell align="right">
+                    <Button variant="outlined" onClick={() => handleClickDelete(student)}>
+                      삭제
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
