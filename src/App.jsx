@@ -12,6 +12,7 @@ import {
   TeacherHome,
   ClassHome,
   ClassPage,
+  TestList,
   CourseNotice,
   TeacherAddNotice,
   TeacherUpdateNotice,
@@ -34,6 +35,10 @@ import {
   DirectorProfile,
   DirectorProfileUpdate,
   FindId,
+  AddTest,
+  ScoreList,
+  AddScore,
+  ScoreGraph,
   ResetPassword,
   DirectorUpdatePassword,
   TeacherProfile,
@@ -72,11 +77,20 @@ function App() {
                 <Route path="" element={<ClassHome />} />
                 <Route path={PATH.TEACHER.CLASS.DETAIL.ROOT} element={<Outlet />}>
                   <Route path="" element={<ClassPage />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.ALL} element={<ScoreGraph />} />
                   <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ROOT} element={<Outlet />}>
                     <Route path="" element={<CourseNotice />} />
                     <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ADD} element={<TeacherAddNotice />} />
                     <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.UPDATE} element={<TeacherUpdateNotice />} />
                     <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.DETAIL} element={<TeacherNoticeDetails />} />
+                  </Route>
+                </Route>
+                <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.ROOT} element={<Outlet />}>
+                  <Route path="" element={<TestList />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.ADD} element={<AddTest />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.DETAILS.ROOT} element={<Outlet />}>
+                    <Route path="" element={<ScoreList />} />
+                    <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.DETAILS.ADD} element={<AddScore />} />
                   </Route>
                 </Route>
               </Route>
