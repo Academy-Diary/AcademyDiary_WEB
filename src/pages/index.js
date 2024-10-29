@@ -7,6 +7,7 @@ export { default as ResetPassword } from './login/resetPassword';
 
 // 강사 페이지
 export { default as TeacherHome } from './home/teacherHome';
+export { default as ChatRoom } from './teacher/chatting/chatRoom';
 export { default as TestList } from './teacher/test/testList';
 export { default as AddTest } from './teacher/test/addTest';
 export { default as ScoreList } from './teacher/test/scoreList';

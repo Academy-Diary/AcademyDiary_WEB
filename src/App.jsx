@@ -43,6 +43,7 @@ import {
   DirectorUpdatePassword,
   TeacherProfile,
   TeacherUpdateProfile,
+  ChatRoom,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -94,6 +95,7 @@ function App() {
                   </Route>
                 </Route>
               </Route>
+              <Route path={PATH.TEACHER.COUNSELING} element={<ChatRoom />} />
               <Route path={PATH.TEACHER.NOTICE.ROOT} element={<Outlet />}>
                 <Route path="" element={<TeacherNotice />} />
                 <Route path={PATH.TEACHER.NOTICE.DETAILS} element={<TeacherNoticeDetails />} />
