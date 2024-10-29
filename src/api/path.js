@@ -15,6 +15,14 @@ export const PATH_API = {
   // register
   REGISTER_ACADEMY: '/registeration/request/academy',
   REGISTER_TEACHER: '/registeration/request/user',
+
+  // manage members
+  REQUESTLIST: '/registeration/list/user',
+  DECIDE_REGISTER: '/registeration/decide/user', // 사용자 승인 or 거절
+  TEACHERLIST: (academyId) => `/teacher/${academyId}`,
+  DELETE_TEACHER: (id) => `/teacher/${id}`,
+  STUDENTLIST: (academyId) => `/student/${academyId}`,
+  DELETE_STUDENT: (id) => `/student/${id}`,
 };
 
 export default PATH_API;

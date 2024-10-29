@@ -2,34 +2,53 @@ import React, { useState } from 'react';
 
 import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions, DialogContentText, Box, DialogTitle } from '@mui/material';
 import { TitleMedium } from '../../../components';
+import useTeacherList from '../../../api/queries/members/useTeacherList';
+import { useDeleteTeacher } from '../../../api/queries/members/useDeleteTeacher';
+import { useUserAuthStore } from '../../../store';
 
-function createData(name, lectures, phone, email) {
-  return { name, lectures, phone, email };
-}
-
-const teachers = [
-  createData('미나리', ['화법과 작문', '비문학'], '010-1234-5678', 'minary@gmail.com'),
-  createData('이하람', ['미적분 1'], '010-0000-0000', 'haram99@naver.com'),
-  createData('권해담', ['물리 1'], '010-1004-1004', 'godeka@naver.com'),
-  createData('김대성', ['확률과 통계'], '010-1111-1111', 'bigcastle@gmail.com'),
-];
+// Teacher List
+//
+// [
+//   {
+//     user_id: 'test_id',
+//     user_name: 'test_name',
+//     email: 'string',
+//     phone_number: 'string',
+//     lectures: [
+//       {
+//         lecture_id: 0,
+//         lecture_name: 'string',
+//       },
+//     ],
+//   },
+// ];
 
 export default function ManageTeachers() {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState({ name: '', lectures: [], phone: '', email: '' });
+  const [selected, setSelected] = useState({ user_id: '', user_name: '', lectures: [], phone_number: '', email: '' });
+
+  const { user } = useUserAuthStore();
+  const { data: teachers } = useTeacherList(user.academy_id);
+  const deleteTeacherMutation = useDeleteTeacher();
 
   const handleCloseDialog = () => {
     setOpen(false);
   };
+
   const handleClickDelete = (selectedTeacher) => {
     setOpen(true);
     setSelected(selectedTeacher);
+  };
+  const handleDelete = () => {
+    deleteTeacherMutation.mutate(selected.user_id, {
+      onSuccess: handleCloseDialog,
+    });
   };
 
   return (
     <>
       <TitleMedium title="강사 관리" />
-      <Typography mb={2}>강사 인원: {teachers.length}</Typography>
+      <Typography mb={2}>강사 인원: {teachers?.length}</Typography>
       <TableContainer component={Paper} sx={{ maxHeight: '65vh', width: '80vw' }}>
         <Table stickyHeader sx={{ minWidth: 650 }}>
           <TableHead>
@@ -42,18 +61,18 @@ export default function ManageTeachers() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {teachers.map((teacher) => (
-              <TableRow key={teacher.name}>
+            {teachers?.map((teacher) => (
+              <TableRow key={teacher.user_id}>
                 <TableCell component="th" scope="row">
-                  {teacher.name}
+                  {teacher.user_name}
                 </TableCell>
                 <TableCell>
                   {teacher.lectures.map((lecture, idx) => {
-                    if (idx < teacher.lectures.length - 1) return `${lecture}, `;
-                    return lecture;
+                    if (idx < teacher.lectures.length - 1) return `${lecture.lecture_name}, `;
+                    return lecture.lecture_name;
                   })}
                 </TableCell>
-                <TableCell>{teacher.phone}</TableCell>
+                <TableCell>{teacher.phone_number}</TableCell>
                 <TableCell>{teacher.email}</TableCell>
                 <TableCell align="right">
                   <Button variant="outlined" onClick={() => handleClickDelete(teacher)}>
@@ -66,24 +85,24 @@ export default function ManageTeachers() {
         </Table>
       </TableContainer>
       <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>{selected.name} 강사님을 강사 목록에서 삭제하시겠습니까?</DialogTitle>
+        <DialogTitle>{selected.user_name} 강사님을 강사 목록에서 삭제하시겠습니까?</DialogTitle>
         <DialogContent>
           <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
-            <DialogContentText>강사 이름: {selected.name}</DialogContentText>
+            <DialogContentText>강사 이름: {selected.user_name}</DialogContentText>
             <DialogContentText>
               담당 과목:{' '}
               {selected.lectures.map((lecture, idx) => {
-                if (idx < selected.lectures.length - 1) return `${lecture}, `;
-                return lecture;
-              })}{' '}
+                if (idx < selected.lectures.length - 1) return `${lecture.lecture_name}, `;
+                return lecture.lecture_name;
+              })}
             </DialogContentText>
-            <DialogContentText>연락처: {selected.phone}</DialogContentText>
+            <DialogContentText>연락처: {selected.phone_number}</DialogContentText>
             <DialogContentText>이메일: {selected.email}</DialogContentText>
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>취소</Button>
-          <Button onClick={handleCloseDialog}>삭제</Button>
+          <Button onClick={handleDelete}>삭제</Button>
         </DialogActions>
       </Dialog>
     </>
