@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Typography,
@@ -26,17 +26,7 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { TitleMedium, TransferList, SubmitButtons } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useTeacherList } from '../../../api/queries/members/useTeacherList';
-
-function createData(name, phone, email) {
-  return { name, phone, email };
-}
-
-const students = [
-  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
-  createData('신짱아', '010-0000-0000', 'jjanga0@naver.com'),
-  createData('김철수', '010-1004-1004', 'smartguy@gmail.com'),
-  createData('이훈이', '010-1111-1111', 'hoonhoonguy@daum.net'),
-];
+import { useStudentList } from '../../../api/queries/members/useStudentList';
 
 const time = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
@@ -48,11 +38,17 @@ export default function AddCourse() {
   const [endTime, setEndTime] = useState('');
 
   // 수강생 등록 TransferList에 넘겨줄 리스트 (왼,오)
-  const [left, setLeft] = useState(students);
+  const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
 
   const { user } = useUserAuthStore();
   const { data: teachers } = useTeacherList(user.academy_id);
+  const { data: students } = useStudentList(user.academy_id, 1);
+
+  // 학생 목록 불러오면 왼쪽 리스트에 담기
+  useEffect(() => {
+    setLeft(students);
+  }, [students]);
 
   const handleOpenDialog = () => {
     setOpen(true);
@@ -151,19 +147,25 @@ export default function AddCourse() {
                   <Table stickyHeader>
                     <TableHead>
                       <TableRow>
-                        <TableCell>이름</TableCell>
-                        <TableCell>전화번호</TableCell>
-                        <TableCell>이메일</TableCell>
+                        <TableCell>학생 이름</TableCell>
+                        <TableCell>학생 연락처</TableCell>
+                        <TableCell>학부모 이름</TableCell>
+                        <TableCell>학부모 연락처</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {right.map((attendee) => (
-                        <TableRow key={attendee.name}>
-                          <TableCell>{attendee.name}</TableCell>
-                          <TableCell>{attendee.phone}</TableCell>
-                          <TableCell>{attendee.email}</TableCell>
-                        </TableRow>
-                      ))}
+                      {right.map((student) => {
+                        const parent = student.familiesAsStudent[0]?.parent;
+
+                        return (
+                          <TableRow key={student.user_id}>
+                            <TableCell>{student.user_name}</TableCell>
+                            <TableCell>{student.phone_number}</TableCell>
+                            <TableCell>{parent?.user_name}</TableCell>
+                            <TableCell>{parent?.phone_number}</TableCell>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 </TableContainer>
