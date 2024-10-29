@@ -4,21 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { Typography, Box, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer } from '@mui/material';
 import { TitleMedium, BottomTwoButtons } from '../../../components';
 import { useLectureStore } from '../../../store';
-
-function createData(name, phone, email) {
-  return { name, phone, email };
-}
-const attendees = [
-  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
-  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
-  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
-  createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com'),
-];
+import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
 
 export default function CourseDetails() {
   const navigate = useNavigate();
 
   const { lecture } = useLectureStore();
+  const { data: attendees } = useAttendeeList(lecture.lecture_id);
 
   const handleCancle = () => {
     navigate('/director/manage-courses/');
@@ -42,7 +34,7 @@ export default function CourseDetails() {
           </Grid>
           <Grid item xs={12}>
             <Typography sx={{ py: 1 }}>수강생 목록</Typography>
-            <Typography variant="body2">총 {attendees.length}명</Typography>
+            <Typography variant="body2">총 {attendees?.length}명</Typography>
             <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '25vh', width: '50vw' }}>
               <Table stickyHeader>
                 <TableHead>
@@ -53,7 +45,7 @@ export default function CourseDetails() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {attendees.map((att) => (
+                  {attendees?.map((att) => (
                     <TableRow key={att.name}>
                       <TableCell>{att.name}</TableCell>
                       <TableCell>{att.phone}</TableCell>
