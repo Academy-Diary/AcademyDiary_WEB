@@ -45,9 +45,10 @@ export default function AddCourse() {
   const { data: teachers } = useTeacherList(user.academy_id);
   const { data: students } = useStudentList(user.academy_id, 1);
 
-  // 학생 목록 불러오면 왼쪽 리스트에 담기
+  // 학생 목록 새로 불러오면 왼쪽 리스트에 담기 (오른쪽은 초기화)
   useEffect(() => {
     setLeft(students);
+    setRight([]);
   }, [students]);
 
   const handleOpenDialog = () => {
