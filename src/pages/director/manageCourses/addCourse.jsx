@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import {
   Typography,
@@ -27,11 +28,14 @@ import { TitleMedium, TransferList, SubmitButtons } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useTeacherList } from '../../../api/queries/members/useTeacherList';
 import { useStudentList } from '../../../api/queries/members/useStudentList';
+import { useAddLecture } from '../../../api/queries/lectures/useAddLecture';
 
 const time = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
 export default function AddCourse() {
-  const [teacher, setTeacher] = useState('');
+  const navigate = useNavigate();
+
+  const [teacherId, setTeacherId] = useState('');
   const [open, setOpen] = useState(false);
   const [lectureDays, setLectureDays] = useState([]);
   const [startTime, setStartTime] = useState('');
@@ -44,6 +48,8 @@ export default function AddCourse() {
   const { user } = useUserAuthStore();
   const { data: teachers } = useTeacherList(user.academy_id);
   const { data: students } = useStudentList(user.academy_id, 1);
+
+  const addLectureMutation = useAddLecture();
 
   // 학생 목록 새로 불러오면 왼쪽 리스트에 담기 (오른쪽은 초기화)
   useEffect(() => {
@@ -62,7 +68,7 @@ export default function AddCourse() {
   };
 
   const handleChangeTeacher = (e) => {
-    setTeacher(e.target.value);
+    setTeacherId(e.target.value);
   };
   const handleLectureDays = (e) => {
     const { value } = e.target;
@@ -75,22 +81,47 @@ export default function AddCourse() {
     setEndTime(e.target.value);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = new FormData(e.currentTarget);
+    const submitData = {
+      lecture_name: data.get('lecture_name'),
+      user_id: teacherId,
+      academy_id: user.academy_id,
+      day: lectureDays,
+      start_time: startTime,
+      end_time: endTime,
+    };
+    // console.log(submitData);
+
+    addLectureMutation.mutate(submitData, {
+      onSuccess: () => {
+        alert('강의 생성 성공!');
+        navigate('/director/manage-courses');
+      },
+      onError: () => {
+        alert('강의 생성 실패! 나중에 다시 시도해주세요.');
+      },
+    });
+  };
+
   return (
     <>
       <TitleMedium title="강의 생성" />
-      <Box component="form" sx={{ mt: 5 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 5 }}>
         <Grid container spacing={5}>
           <Grid item xs={12}>
             <Typography>강의명</Typography>
-            <TextField label="강의명" sx={{ mt: 2 }} required />
+            <TextField label="강의명" name="lecture_name" sx={{ mt: 2 }} required />
           </Grid>
           <Grid item xs={12}>
             <Typography>강사명</Typography>
             <FormControl sx={{ mt: 2, minWidth: 195 }}>
               <InputLabel id="teacher-input-label">강사명</InputLabel>
-              <Select label="강사명" labelId="teacher-input-label" value={teacher} onChange={handleChangeTeacher} required>
+              <Select label="강사명" labelId="teacher-input-label" value={teacherId} onChange={handleChangeTeacher} required>
                 {teachers?.map((t) => (
-                  <MenuItem key={t.user_id} value={t.user_name}>
+                  <MenuItem key={t.user_id} value={t.user_id}>
                     {t.user_name}
                   </MenuItem>
                 ))}
@@ -102,11 +133,11 @@ export default function AddCourse() {
             <FormControl sx={{ mt: 2, minWidth: 195 }}>
               <InputLabel>요일</InputLabel>
               <Select label="요일" multiple value={lectureDays} onChange={handleLectureDays} required>
-                <MenuItem value="Monday">월</MenuItem>
-                <MenuItem value="Tuesday">화</MenuItem>
-                <MenuItem value="Wednesday">수</MenuItem>
-                <MenuItem value="Thursday">목</MenuItem>
-                <MenuItem value="Friday">금</MenuItem>
+                <MenuItem value="MONDAY">월</MenuItem>
+                <MenuItem value="TUESDAY">화</MenuItem>
+                <MenuItem value="WEDNESDAY">수</MenuItem>
+                <MenuItem value="THURSDAY">목</MenuItem>
+                <MenuItem value="FRIDAY">금</MenuItem>
               </Select>
             </FormControl>
             <FormControl sx={{ ml: 4, mt: 2, minWidth: 150 }}>
