@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { List, ListItem, ListItemText, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
 
 import { TitleMedium, AddButton } from '../../../components';
-import { useUserAuthStore } from '../../../store';
+import { useUserAuthStore, useLectureStore } from '../../../store';
 import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 
 // Lecture List
@@ -29,12 +29,15 @@ export default function ManageCourses() {
   const [selected, setSelected] = useState(null);
 
   const { user } = useUserAuthStore();
+  const { setLecture } = useLectureStore();
+
   const { data: lectures } = useLectureList(user.academy_id);
 
   const handleClickAdd = () => {
     navigate('/director/manage-courses/add-course');
   };
-  const handleClickDetails = () => {
+  const handleClickDetails = (lecture) => {
+    setLecture(lecture);
     navigate('/director/manage-courses/course-details');
   };
 
@@ -55,7 +58,7 @@ export default function ManageCourses() {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <ListItemText align="right" secondary={`수강 인원: ${lecture.headcount}`} sx={{ mb: 2 }} />
               <ButtonGroup size="small">
-                <Button variant="outlined" onClick={handleClickDetails}>
+                <Button variant="outlined" onClick={() => handleClickDetails(lecture)}>
                   강의 상세
                 </Button>
                 <Button

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Typography, Box, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer } from '@mui/material';
 import { TitleMedium, BottomTwoButtons } from '../../../components';
+import { useLectureStore } from '../../../store';
 
 function createData(name, phone, email) {
   return { name, phone, email };
@@ -16,6 +17,8 @@ const attendees = [
 
 export default function CourseDetails() {
   const navigate = useNavigate();
+
+  const { lecture } = useLectureStore();
 
   const handleCancle = () => {
     navigate('/director/manage-courses/');
@@ -31,11 +34,11 @@ export default function CourseDetails() {
         <Grid container spacing={5}>
           <Grid item xs={12}>
             <Typography>강의명</Typography>
-            <TextField label="강의명" defaultValue="화법과 작문" sx={{ mt: 2, color: 'black' }} disabled />
+            <TextField label="강의명" value={lecture.lecture_name} sx={{ mt: 2 }} disabled />
           </Grid>
           <Grid item xs={12}>
             <Typography>강사명</Typography>
-            <TextField label="강사명" defaultValue="나미리" sx={{ mt: 2 }} disabled />
+            <TextField label="강사명" value={lecture.teacher_name} sx={{ mt: 2 }} disabled />
           </Grid>
           <Grid item xs={12}>
             <Typography sx={{ py: 1 }}>수강생 목록</Typography>
