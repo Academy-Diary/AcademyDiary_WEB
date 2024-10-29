@@ -24,6 +24,8 @@ import {
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { TitleMedium, TransferList, SubmitButtons } from '../../../components';
+import { useUserAuthStore } from '../../../store';
+import { useTeacherList } from '../../../api/queries/members/useTeacherList';
 
 function createData(name, phone, email) {
   return { name, phone, email };
@@ -35,7 +37,6 @@ const students = [
   createData('김철수', '010-1004-1004', 'smartguy@gmail.com'),
   createData('이훈이', '010-1111-1111', 'hoonhoonguy@daum.net'),
 ];
-const teachers = ['나미리', '이하람', '권해담', '김대성'];
 
 const time = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
@@ -49,6 +50,9 @@ export default function AddCourse() {
   // 수강생 등록 TransferList에 넘겨줄 리스트 (왼,오)
   const [left, setLeft] = useState(students);
   const [right, setRight] = useState([]);
+
+  const { user } = useUserAuthStore();
+  const { data: teachers } = useTeacherList(user.academy_id);
 
   const handleOpenDialog = () => {
     setOpen(true);
@@ -88,9 +92,9 @@ export default function AddCourse() {
             <FormControl sx={{ mt: 2, minWidth: 195 }}>
               <InputLabel id="teacher-input-label">강사명</InputLabel>
               <Select label="강사명" labelId="teacher-input-label" value={teacher} onChange={handleChangeTeacher} required>
-                {teachers.map((t) => (
-                  <MenuItem key={t} value={t}>
-                    {t}
+                {teachers?.map((t) => (
+                  <MenuItem key={t.user_id} value={t.user_name}>
+                    {t.user_name}
                   </MenuItem>
                 ))}
               </Select>
