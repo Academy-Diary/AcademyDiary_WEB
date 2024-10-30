@@ -29,7 +29,7 @@ export default function ManageStudents() {
   const [selected, setSelected] = useState({ name: '', parentName: '', phone: '', parentPhone: '' });
 
   const { user } = useUserAuthStore();
-  const { data: students } = useStudentList(user.academy_id, 1);
+  const { data: students } = useStudentList(user.academy_id);
   const deleteStudentMutation = useDeleteStudent();
 
   const handleCloseDialog = () => {
@@ -63,7 +63,7 @@ export default function ManageStudents() {
           </TableHead>
           <TableBody>
             {students?.map((student) => {
-              const parent = student.familiesAsStudent[0]?.parent;
+              const parent = student.familiesAsStudent ? student.familiesAsStudent[0]?.parent : null;
 
               return (
                 <TableRow key={student.user_id}>
