@@ -40,15 +40,15 @@ export default function TeacherHome() {
       <Title title="학원명" />
       <Grid container>
         <Grid item xs={12} md={4}>
-          <Box sx={{ width: '95%', height: '70vh', bgcolor: '#d9d9d9', mr: '10px', padding: '10px' }}>
+          <Box sx={{ width: '95%', height: '70vh', bgcolor: '#d9d9d9', m: '10px', padding: '10px' }}>
             <Stack spacing={3}>
               <Typography variant="h5" fontWeight="bold">
                 Today&apos;s Lectures
               </Typography>
               {lectures.map((lecture) => (
                 <>
-                  <Grid container>
-                    <Stack sx={{ width: '75%', ml: '10px' }}>
+                  <Grid container sx={{ justifyContent: 'space-between' }}>
+                    <Stack sx={{ ml: '10px' }}>
                       <Typography variant="subtitle1">
                         {lecture.name} ({user.user_name})
                       </Typography>
@@ -63,13 +63,13 @@ export default function TeacherHome() {
           </Box>
         </Grid>
         <Grid item xs={12} md={8}>
-          <Box sx={{ width: '95%', height: '70vh', bgcolor: '#d9d9d9', padding: '10px' }}>
+          <Box sx={{ width: '95%', height: '70vh', bgcolor: '#d9d9d9', m: '10px', padding: '10px' }}>
             <Stack>
               <Typography variant="h5" fontWeight="bold">
                 학원 공지 사항
               </Typography>
               {noticeList.map((notice) => (
-                <Box sx={{ width: '100%', bgcolor: '#ffffff', padding: '10px', marginY: '10px' }} onClick={() => handleNoticeClick(notice.id)}>
+                <Box sx={{ width: '100%', bgcolor: '#ffffff', padding: '5px', marginY: '10px' }} onClick={() => handleNoticeClick(notice.id)}>
                   <Stack spacing={2}>
                     <Grid container justifyContent="space-between">
                       <Typography variant="subtitle1" fontWeight="bold">
@@ -79,7 +79,9 @@ export default function TeacherHome() {
                         조회수 : {notice.view}
                       </Typography>
                     </Grid>
-                    <Typography variant="overline">{notice.content}</Typography>
+                    <Typography variant="overline" sx={{ width: '100%', maxHeight: '100px', overflowY: 'hidden' }}>
+                      {notice.content}
+                    </Typography>
                   </Stack>
                 </Box>
               ))}
