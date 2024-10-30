@@ -1,33 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  Typography,
-  Box,
-  Button,
-  TextField,
-  Select,
-  MenuItem,
-  InputLabel,
-  FormControl,
-  IconButton,
-  Grid,
-  Dialog,
-  DialogActions,
-  Paper,
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-} from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { Typography, Box, TextField, Select, MenuItem, InputLabel, FormControl, Grid } from '@mui/material';
 
-import { TitleMedium, TransferList, SubmitButtons } from '../../../components';
+import { TitleMedium, SubmitButtons } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useTeacherList } from '../../../api/queries/members/useTeacherList';
-import { useStudentList } from '../../../api/queries/members/useStudentList';
 import { useAddLecture } from '../../../api/queries/lectures/useAddLecture';
 
 const time = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
@@ -36,36 +14,14 @@ export default function AddCourse() {
   const navigate = useNavigate();
 
   const [teacherId, setTeacherId] = useState('');
-  const [open, setOpen] = useState(false);
   const [lectureDays, setLectureDays] = useState([]);
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
 
-  // 수강생 등록 TransferList에 넘겨줄 리스트 (왼,오)
-  const [left, setLeft] = useState([]);
-  const [right, setRight] = useState([]);
-
   const { user } = useUserAuthStore();
   const { data: teachers } = useTeacherList(user.academy_id);
-  const { data: students } = useStudentList(user.academy_id, 1);
 
   const addLectureMutation = useAddLecture();
-
-  // 학생 목록 새로 불러오면 왼쪽 리스트에 담기 (오른쪽은 초기화)
-  useEffect(() => {
-    setLeft(students);
-    setRight([]);
-  }, [students]);
-
-  const handleOpenDialog = () => {
-    setOpen(true);
-  };
-  const handleCloseDialog = () => {
-    setOpen(false);
-  };
-  const handleClickRegister = () => {
-    setOpen(false);
-  };
 
   const handleChangeTeacher = (e) => {
     setTeacherId(e.target.value);
@@ -161,68 +117,8 @@ export default function AddCourse() {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sx={{ mt: 3 }}>
-            <Grid container>
-              <Grid item xs={1}>
-                <Typography sx={{ py: 1 }}>수강생 등록</Typography>
-              </Grid>
-              <Grid item xs={11}>
-                <IconButton onClick={handleOpenDialog}>
-                  <OpenInNewIcon />
-                </IconButton>
-              </Grid>
-            </Grid>
-            {right.length > 0 && (
-              <>
-                <Typography variant="body2">총 {right.length}명</Typography>
-                <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '25vh', width: '50vw' }}>
-                  <Table stickyHeader>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>학생 이름</TableCell>
-                        <TableCell>학생 연락처</TableCell>
-                        <TableCell>학부모 이름</TableCell>
-                        <TableCell>학부모 연락처</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {right.map((student) => {
-                        const parent = student.familiesAsStudent[0]?.parent;
-
-                        return (
-                          <TableRow key={student.user_id}>
-                            <TableCell>{student.user_name}</TableCell>
-                            <TableCell>{student.phone_number}</TableCell>
-                            <TableCell>{parent?.user_name}</TableCell>
-                            <TableCell>{parent?.phone_number}</TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </>
-            )}
-          </Grid>
           <SubmitButtons submitTitle="등록하기" />
         </Grid>
-        <Dialog open={open} onClose={handleCloseDialog}>
-          <Grid container spacing={5} sx={{ py: 3, px: 5 }}>
-            <Grid item xs={12}>
-              <Typography variant="h6">수강생 등록</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <TransferList leftTitle="전체 학생 목록" rightTitle="수강생 목록" left={left} right={right} setLeft={setLeft} setRight={setRight} />
-            </Grid>
-            <Grid item xs={12}>
-              <DialogActions>
-                <Button variant="contained" onClick={handleClickRegister}>
-                  등록 완료
-                </Button>
-              </DialogActions>
-            </Grid>
-          </Grid>
-        </Dialog>
       </Box>
     </>
   );
