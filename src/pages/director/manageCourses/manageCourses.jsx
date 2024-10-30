@@ -6,6 +6,7 @@ import { List, ListItem, ListItemText, Box, Button, ButtonGroup, Dialog, DialogC
 import { TitleMedium, AddButton } from '../../../components';
 import { useUserAuthStore, useLectureStore } from '../../../store';
 import { useLectureList } from '../../../api/queries/lectures/useLectureList';
+import { useDeleteLecture } from '../../../api/queries/lectures/useDeleteLecture';
 
 // Lecture List
 //
@@ -32,6 +33,7 @@ export default function ManageCourses() {
   const { setLecture } = useLectureStore();
 
   const { data: lectures } = useLectureList(user.academy_id);
+  const deleteLectureMutation = useDeleteLecture();
 
   const handleClickAdd = () => {
     navigate('/director/manage-courses/add-course');
@@ -46,6 +48,18 @@ export default function ManageCourses() {
   };
   const handleCloseDialog = () => {
     setOpen(false);
+  };
+
+  const handleDeleteLecture = () => {
+    deleteLectureMutation.mutate(selected.lecture_id, {
+      onSuccess: () => {
+        handleCloseDialog();
+        alert('강의 삭제 성공!');
+      },
+      onError: () => {
+        alert('강의 삭제 실패!');
+      },
+    });
   };
 
   return (
@@ -78,17 +92,17 @@ export default function ManageCourses() {
       <AddButton title="새 강의 생성" onClick={handleClickAdd} />
       {selected && (
         <Dialog open={open} onClose={handleCloseDialog}>
-          <DialogTitle>{selected.name} 강의를 폐강하시겠습니까?</DialogTitle>
+          <DialogTitle>{selected.lecture_name} 강의를 폐강하시겠습니까?</DialogTitle>
           <DialogContent>
             <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
-              <DialogContentText>강의명: {selected.name}</DialogContentText>
-              <DialogContentText>강사명: {selected.teacher}</DialogContentText>
-              <DialogContentText>수강인원: {selected.numStudents}</DialogContentText>
+              <DialogContentText>강의명: {selected.lecture_name}</DialogContentText>
+              <DialogContentText>강사명: {selected.teacher_name}</DialogContentText>
+              <DialogContentText>수강인원: {selected.headcount}</DialogContentText>
             </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>취소</Button>
-            <Button onClick={handleCloseDialog}>폐강</Button>
+            <Button onClick={handleDeleteLecture}>폐강</Button>
           </DialogActions>
         </Dialog>
       )}
