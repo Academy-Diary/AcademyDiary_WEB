@@ -26,6 +26,9 @@ export default function ClassPage() {
   const handleGraphClick = () => {
     navigate(`all`);
   };
+  const handleQuizClick = () => {
+    navigate('quiz');
+  };
 
   return (
     <>
@@ -43,7 +46,7 @@ export default function ClassPage() {
           </Container>
         </Grid>
         <Grid item xs={6}>
-          <Container maxWidth="md" sx={{ height: 200 }}>
+          <Container maxWidth="md" sx={{ height: 200 }} onClick={handleQuizClick}>
             <Typography>퀴즈</Typography>
           </Container>
         </Grid>

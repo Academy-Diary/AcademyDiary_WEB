@@ -33,6 +33,11 @@ export const PATH = {
           },
           ADD: 'add', // 시험 추가
         }, // 시험 관련
+        QUIZ: {
+          ROOT: 'quiz',
+          DETAIL: ':quizid',
+          NEW: 'new',
+        },
         ALL: 'all', // 전체성적 그래프
       },
     },
