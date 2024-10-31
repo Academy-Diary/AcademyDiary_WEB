@@ -59,19 +59,25 @@ export default function CourseDetails() {
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
-                    <TableCell>이름</TableCell>
-                    <TableCell>전화번호</TableCell>
-                    <TableCell>이메일</TableCell>
+                    <TableCell>학생 이름</TableCell>
+                    <TableCell>학생 연락처</TableCell>
+                    <TableCell>학부모 이름</TableCell>
+                    <TableCell>학부모 연락처</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {attendees?.map((att) => (
-                    <TableRow key={att.name}>
-                      <TableCell>{att.name}</TableCell>
-                      <TableCell>{att.phone}</TableCell>
-                      <TableCell>{att.email}</TableCell>
-                    </TableRow>
-                  ))}
+                  {attendees?.map((att) => {
+                    const { parent } = att;
+
+                    return (
+                      <TableRow key={att.user_id}>
+                        <TableCell>{att.user_name}</TableCell>
+                        <TableCell>{att.phone_number}</TableCell>
+                        <TableCell>{parent?.user_name}</TableCell>
+                        <TableCell>{parent?.phone_number}</TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </TableContainer>
