@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Avatar, Box, Grid, Stack, TextField, Typography } from '@mui/material';
 import { AssignmentInd } from '@mui/icons-material';
 import { Title, TitleMedium } from '../../../components';
+import { useUserAuthStore } from '../../../store';
 
 const students = [
   { id: 1, name: '김대성' },
@@ -78,6 +79,7 @@ export default function ChatRoom() {
 }
 
 function MessageBox({ name, msg, myMessage, time }) {
+  const { user } = useUserAuthStore();
   if (myMessage) {
     // 강사가 보낸 메세지일 때
     return (
@@ -86,7 +88,7 @@ function MessageBox({ name, msg, myMessage, time }) {
         <Grid item sx={{ marginLeft: '5px' }}>
           <Grid container sx={{ width: '10vw', justifyContent: 'space-between' }}>
             <Typography variant="subtitle2" color="#10ba23" fontWeight="bold">
-              강사이름
+              {user.user_name}(강사)
             </Typography>
             <Typography variant="caption">{time}</Typography>
           </Grid>
