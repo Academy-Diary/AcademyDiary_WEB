@@ -1,10 +1,33 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Typography, Box, Button, TextField, Grid, Paper, Table, TableHead, TableBody, TableRow, TableCell, TableContainer, IconButton, Dialog, DialogActions } from '@mui/material';
+import {
+  Typography,
+  Box,
+  Button,
+  TextField,
+  Grid,
+  Paper,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContainer,
+  IconButton,
+  Dialog,
+  DialogActions,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import { TitleMedium, TransferList, SubmitButtons } from '../../../components';
+import { useLectureStore, useUserAuthStore } from '../../../store';
+import { useTeacherList } from '../../../api/queries/members/useTeacherList';
+import { useUpdateLecture } from '../../../api/queries/lectures/useUpdateLecture';
 
 function createData(name, phone, email) {
   return { name, phone, email };
@@ -17,6 +40,8 @@ const nonAttendees = [
 ];
 const attendees = [createData('신짱구', '010-1234-5678', 'jjanggu33@naver.com')];
 
+const time = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+
 export default function UpdateCourse() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -25,15 +50,61 @@ export default function UpdateCourse() {
   const [left, setLeft] = useState(nonAttendees);
   const [right, setRight] = useState(attendees);
 
+  const { lecture } = useLectureStore();
+
+  const { user } = useUserAuthStore();
+  const { data: teachers } = useTeacherList(user.academy_id);
+  const updateLectureMutation = useUpdateLecture(lecture.lecture_id);
+
+  const [teacherId, setTeacherId] = useState(lecture.teacher_id);
+  const [lectureDays, setLectureDays] = useState(lecture.days);
+  const [startTime, setStartTime] = useState(lecture.start_time);
+  const [endTime, setEndTime] = useState(lecture.end_time);
+
   const handleOpenDialog = () => {
     setOpen(true);
   };
   const handleCloseDialog = () => {
     setOpen(false);
   };
+
+  const handleChangeTeacher = (e) => {
+    setTeacherId(e.target.value);
+  };
+  const handleLectureDays = (e) => {
+    const { value } = e.target;
+    console.log(value);
+    setLectureDays(typeof value === 'string' ? value.split(',') : value);
+  };
+  const handleStartTime = (e) => {
+    setStartTime(e.target.value);
+  };
+  const handleEndTime = (e) => {
+    setEndTime(e.target.value);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate('/director/manage-courses/');
+
+    const data = new FormData(e.currentTarget);
+    const submitData = {
+      lecture_name: data.get('lecture_name'),
+      teacher_id: teacherId,
+      day: lectureDays,
+      start_time: startTime,
+      end_time: endTime,
+    };
+    // console.log(submitData);
+
+    updateLectureMutation.mutate(submitData, {
+      onSuccess: () => {
+        alert('강의 수정 성공!');
+        navigate('/director/manage-courses/');
+      },
+      onError: () => {
+        alert('강의 수정 실패!');
+      },
+    });
   };
 
   return (
@@ -43,11 +114,53 @@ export default function UpdateCourse() {
         <Grid container spacing={5}>
           <Grid item xs={12}>
             <Typography>강의명</Typography>
-            <TextField label="강의명" defaultValue="화법과 작문" sx={{ mt: 2, color: 'black' }} required />
+            <TextField label="강의명" name="lecture_name" defaultValue={lecture.lecture_name} sx={{ mt: 2, color: 'black' }} required />
           </Grid>
           <Grid item xs={12}>
             <Typography>강사명</Typography>
-            <TextField label="강사명" defaultValue="나미리" sx={{ mt: 2 }} required />
+            <FormControl sx={{ mt: 2, minWidth: 195 }}>
+              <InputLabel id="teacher-input-label">강사명</InputLabel>
+              <Select label="강사명" labelId="teacher-input-label" value={teacherId} onChange={handleChangeTeacher} required>
+                {teachers?.map((t) => (
+                  <MenuItem key={t.user_id} value={t.user_id}>
+                    {t.user_name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>강의 시간</Typography>
+            <FormControl sx={{ mt: 2, minWidth: 195 }}>
+              <InputLabel>요일</InputLabel>
+              <Select label="요일" multiple value={lectureDays} onChange={handleLectureDays} required>
+                <MenuItem value="MONDAY">월</MenuItem>
+                <MenuItem value="TUESDAY">화</MenuItem>
+                <MenuItem value="WEDNESDAY">수</MenuItem>
+                <MenuItem value="THURSDAY">목</MenuItem>
+                <MenuItem value="FRIDAY">금</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ ml: 4, mt: 2, minWidth: 150 }}>
+              <InputLabel>시작 시간</InputLabel>
+              <Select label="시작 시간" value={startTime} onChange={handleStartTime} required>
+                {time.map((t) => (
+                  <MenuItem key={t} value={t}>
+                    {t}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl sx={{ ml: 2, mt: 2, minWidth: 150 }}>
+              <InputLabel>종료 시간</InputLabel>
+              <Select label="종료 시간" value={endTime} onChange={handleEndTime} required>
+                {time.map((t) => (
+                  <MenuItem key={t} value={t}>
+                    {t}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item xs={12}>
             <Grid container>
