@@ -36,7 +36,7 @@ export const PATH = {
         QUIZ: {
           ROOT: 'quiz',
           DETAIL: ':quizid',
-          NEW: 'new',
+          ADD: 'add',
         },
         ALL: 'all', // 전체성적 그래프
       },
