@@ -45,6 +45,8 @@ import {
   TeacherUpdateProfile,
   ChatRoom,
   QuizList,
+  QuizDetail,
+  QuizAdd,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -96,8 +98,8 @@ function App() {
                   </Route>
                   <Route path={PATH.TEACHER.CLASS.DETAIL.QUIZ.ROOT} element={<Outlet />}>
                     <Route path="" element={<QuizList />} />
-                    <Route path={PATH.TEACHER.CLASS.DETAIL.QUIZ.DETAIL} element={<>상세퀴즈</>} />
-                    <Route path={PATH.TEACHER.CLASS.DETAIL.QUIZ.ADD} element={<>퀴즈추가</>} />
+                    <Route path={PATH.TEACHER.CLASS.DETAIL.QUIZ.DETAIL} element={<QuizDetail />} />
+                    <Route path={PATH.TEACHER.CLASS.DETAIL.QUIZ.ADD} element={<QuizAdd />} />
                   </Route>
                 </Route>
               </Route>

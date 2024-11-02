@@ -23,6 +23,8 @@ export { default as TeacherUpdateNotice } from './teacher/notice/updateNotice';
 export { default as TeacherNotice } from './teacher/notice/teacherNotice';
 export { default as TeacherNoticeDetails } from './teacher/notice/noticeDetails';
 export { default as QuizList } from './teacher/quiz/quizHome';
+export { default as QuizDetail } from './teacher/quiz/quizDetail';
+export { default as QuizAdd } from './teacher/quiz/quizAdd';
 export { default as Register } from './register/register';
 
 // 원장 페이지
