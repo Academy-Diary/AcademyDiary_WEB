@@ -6,7 +6,8 @@ export { default as FindId } from './login/findId';
 export { default as ResetPassword } from './login/resetPassword';
 
 // 강사 페이지
-export { default as TeacherHome } from './home/teacherHome';
+export { default as TeacherHome } from './teacher/teacherHome';
+export { default as ChatRoom } from './teacher/chatting/chatRoom';
 export { default as TestList } from './teacher/test/testList';
 export { default as AddTest } from './teacher/test/addTest';
 export { default as ScoreList } from './teacher/test/scoreList';
@@ -21,6 +22,9 @@ export { default as TeacherAddNotice } from './teacher/notice/addNotice';
 export { default as TeacherUpdateNotice } from './teacher/notice/updateNotice';
 export { default as TeacherNotice } from './teacher/notice/teacherNotice';
 export { default as TeacherNoticeDetails } from './teacher/notice/noticeDetails';
+export { default as QuizList } from './teacher/quiz/quizHome';
+export { default as QuizDetail } from './teacher/quiz/quizDetail';
+export { default as QuizAdd } from './teacher/quiz/quizAdd';
 export { default as Register } from './register/register';
 
 // 원장 페이지

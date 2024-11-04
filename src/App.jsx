@@ -43,6 +43,10 @@ import {
   DirectorUpdatePassword,
   TeacherProfile,
   TeacherUpdateProfile,
+  ChatRoom,
+  QuizList,
+  QuizDetail,
+  QuizAdd,
 } from './pages';
 import { PATH } from './route/path';
 import { useUserAuthStore } from './store';
@@ -84,16 +88,22 @@ function App() {
                     <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.UPDATE} element={<TeacherUpdateNotice />} />
                     <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.DETAIL} element={<TeacherNoticeDetails />} />
                   </Route>
-                </Route>
-                <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.ROOT} element={<Outlet />}>
-                  <Route path="" element={<TestList />} />
-                  <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.ADD} element={<AddTest />} />
-                  <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.DETAILS.ROOT} element={<Outlet />}>
-                    <Route path="" element={<ScoreList />} />
-                    <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.DETAILS.ADD} element={<AddScore />} />
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.ROOT} element={<Outlet />}>
+                    <Route path="" element={<TestList />} />
+                    <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.ADD} element={<AddTest />} />
+                    <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.DETAILS.ROOT} element={<Outlet />}>
+                      <Route path="" element={<ScoreList />} />
+                      <Route path={PATH.TEACHER.CLASS.DETAIL.TEST.DETAILS.ADD} element={<AddScore />} />
+                    </Route>
+                  </Route>
+                  <Route path={PATH.TEACHER.CLASS.DETAIL.QUIZ.ROOT} element={<Outlet />}>
+                    <Route path="" element={<QuizList />} />
+                    <Route path={PATH.TEACHER.CLASS.DETAIL.QUIZ.DETAIL} element={<QuizDetail />} />
+                    <Route path={PATH.TEACHER.CLASS.DETAIL.QUIZ.ADD} element={<QuizAdd />} />
                   </Route>
                 </Route>
               </Route>
+              <Route path={PATH.TEACHER.COUNSELING} element={<ChatRoom />} />
               <Route path={PATH.TEACHER.NOTICE.ROOT} element={<Outlet />}>
                 <Route path="" element={<TeacherNotice />} />
                 <Route path={PATH.TEACHER.NOTICE.DETAILS} element={<TeacherNoticeDetails />} />
