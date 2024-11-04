@@ -23,6 +23,11 @@ export const PATH_API = {
   DELETE_TEACHER: (id) => `/teacher/${id}`,
   STUDENTLIST: (academyId) => `/student/${academyId}`,
   DELETE_STUDENT: (id) => `/student/${id}`,
+
+  // examination (test)
+  EXAM_CATEGORY: (academyId) => `/exam-type/academy/${academyId}`,
+  ADD_CATEGORY: '/exam-type',
+  DELETE_CATEGORY: (examTypeId) => `/exam-type/${examTypeId}`,
 };
 
 export default PATH_API;
