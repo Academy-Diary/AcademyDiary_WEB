@@ -1,6 +1,25 @@
 import React, { useState } from 'react';
 
-import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions, DialogContentText, Box, DialogTitle } from '@mui/material';
+import {
+  Typography,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+  Box,
+  DialogTitle,
+  OutlinedInput,
+} from '@mui/material';
+import { Search } from '@mui/icons-material';
+
 import { TitleMedium } from '../../../components';
 import useTeacherList from '../../../api/queries/members/useTeacherList';
 import { useDeleteTeacher } from '../../../api/queries/members/useDeleteTeacher';
@@ -26,6 +45,7 @@ import { useUserAuthStore } from '../../../store';
 export default function ManageTeachers() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState({ user_id: '', user_name: '', lectures: [], phone_number: '', email: '' });
+  const [searchInput, setSearchInput] = useState('');
 
   const { user } = useUserAuthStore();
   const { data: teachers } = useTeacherList(user.academy_id);
@@ -33,6 +53,11 @@ export default function ManageTeachers() {
 
   const handleCloseDialog = () => {
     setOpen(false);
+  };
+
+  const handleInputSearch = (e) => {
+    const { value } = e.target;
+    setSearchInput(value);
   };
 
   const handleClickDelete = (selectedTeacher) => {
@@ -49,7 +74,8 @@ export default function ManageTeachers() {
     <>
       <TitleMedium title="강사 관리" />
       <Typography mb={2}>강사 인원: {teachers?.length}</Typography>
-      <TableContainer component={Paper} sx={{ maxHeight: '65vh', width: '80vw' }}>
+      <OutlinedInput endAdornment={<Search />} placeholder="강사명 또는 과목" onChange={handleInputSearch} sx={{ mb: 2 }} />
+      <TableContainer component={Paper} sx={{ maxHeight: '60vh', width: '80vw' }}>
         <Table stickyHeader sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
@@ -61,26 +87,30 @@ export default function ManageTeachers() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {teachers?.map((teacher) => (
-              <TableRow key={teacher.user_id}>
-                <TableCell component="th" scope="row">
-                  {teacher.user_name}
-                </TableCell>
-                <TableCell>
-                  {teacher.lectures.map((lecture, idx) => {
-                    if (idx < teacher.lectures.length - 1) return `${lecture.lecture_name}, `;
-                    return lecture.lecture_name;
-                  })}
-                </TableCell>
-                <TableCell>{teacher.phone_number}</TableCell>
-                <TableCell>{teacher.email}</TableCell>
-                <TableCell align="right">
-                  <Button variant="outlined" onClick={() => handleClickDelete(teacher)}>
-                    삭제
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {teachers?.map((teacher) => {
+              const lecturesName = teacher.lectures.map((lec) => lec.lecture_name).join('');
+
+              return teacher.user_name.includes(searchInput) || lecturesName.includes(searchInput) ? (
+                <TableRow key={teacher.user_id}>
+                  <TableCell component="th" scope="row">
+                    {teacher.user_name}
+                  </TableCell>
+                  <TableCell>
+                    {teacher.lectures.map((lecture, idx) => {
+                      if (idx < teacher.lectures.length - 1) return `${lecture.lecture_name}, `;
+                      return lecture.lecture_name;
+                    })}
+                  </TableCell>
+                  <TableCell>{teacher.phone_number}</TableCell>
+                  <TableCell>{teacher.email}</TableCell>
+                  <TableCell align="right">
+                    <Button variant="outlined" onClick={() => handleClickDelete(teacher)}>
+                      삭제
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ) : null;
+            })}
           </TableBody>
         </Table>
       </TableContainer>
