@@ -1,31 +1,42 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { Typography, Box, Grid, Select, FormControl, InputLabel, MenuItem, ToggleButton, ToggleButtonGroup, Button } from '@mui/material';
 
 import { TitleMedium } from '../../../components';
+import { useUserAuthStore } from '../../../store';
+import { useStudentList } from '../../../api/queries/members/useStudentList';
+import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
 
-function createData(name, parentName, phone, parentPhone) {
-  return { name, parentName, phone, parentPhone };
-}
+// const students = [
+//   {
+//     "user_id": "test_student",
+//     "user_name": "춘향이",
+//     "phone_number": "010-1234-5678",
+//     "parent": {
+//       "user_name": "홍길동",
+//       "phone_number": "010-1111-2222"
+//     }
+//   },
+// ];
 
-const students = [
-  createData('신짱구', '봉미선', '010-1234-5678', '010-8282-5959'),
-  createData('신짱아', '봉미선', '010-0000-0000', '010-8282-5959'),
-  createData('김철수', '김미영', '010-1004-1004', '010-9410-1494'),
-  createData('이훈이', '토마토', '010-1111-1111', '010-3948-2839'),
-];
-
-const classes = [
-  { name: '수학 집중반', fee: 270000 },
-  { name: '토익반', fee: 150000 },
-  { name: '국어 집중반', fee: 250000 },
-];
+// const classes = [
+//   {
+//     academy_id: 'test_academy',
+//     class_id: 1,
+//     class_name: '이과 집중반',
+//     discount: 50000,
+//     duration: 30,
+//     expense: 300000,
+//   },
+// ];
 
 export default function ClaimFee() {
   const [selectedStudent, setSelectedStudent] = useState('');
   const [selectedClasses, setSelectedClasses] = useState([]);
 
-  useEffect(() => {}, [selectedClasses]);
+  const { user } = useUserAuthStore();
+  const { data: students } = useStudentList(user.academy_id);
+  const { data: classes } = useClassList(user.academy_id);
 
   const handleChangeSelect = (e) => {
     setSelectedStudent(e.target.value);
@@ -44,8 +55,8 @@ export default function ClaimFee() {
             <FormControl sx={{ mt: 3, minWidth: 120 }}>
               <InputLabel>학생 선택</InputLabel>
               <Select value={selectedStudent} onChange={handleChangeSelect} required>
-                {students.map((s) => (
-                  <MenuItem key={s.name} value={s}>{`${s.name}(${s.phone.substr(9)})`}</MenuItem>
+                {students?.map((s) => (
+                  <MenuItem key={s.user_id} value={s}>{`${s.user_name}(${s.phone_number.substr(9)})`}</MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -53,16 +64,16 @@ export default function ClaimFee() {
           <Grid item xs={12}>
             <Typography>수강반 선택</Typography>
             <ToggleButtonGroup value={selectedClasses} onChange={handleChangeToggle} sx={{ mt: 3 }}>
-              {classes.map((c) => (
-                <ToggleButton key={c.name} value={c}>
-                  {c.name}
+              {classes?.map((c) => (
+                <ToggleButton key={c.class_id} value={c}>
+                  {c.class_name}
                 </ToggleButton>
               ))}
             </ToggleButtonGroup>
           </Grid>
         </Grid>
         <Box sx={{ position: 'fixed', left: '3vw', bottom: '5vh' }}>
-          <Typography variant="h6">{`총 청구 비용: ${selectedClasses.map((c) => c.fee).reduce((acc, cur) => acc + cur, 0)} ₩`}</Typography>
+          <Typography variant="h6">{`총 청구 비용: ${selectedClasses.map((c) => c.expense).reduce((acc, cur) => acc + cur, 0)} ₩`}</Typography>
         </Box>
         <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
           <Button size="large" variant="outlined" sx={{ mr: 2 }}>
