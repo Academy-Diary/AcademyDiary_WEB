@@ -136,18 +136,22 @@ export default function TestList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tests.map((test) => (
-                <TableRow key={test.id} onClick={() => handleRowClick(test.id)}>
-                  <TableCell>{test.name}</TableCell>
-                  <TableCell>{test.all}</TableCell>
-                  <TableCell>{test.avg}</TableCell>
-                  <TableCell>{test.stdev}</TableCell>
-                  <TableCell>
-                    <Chip label={test.category} />
-                  </TableCell>
-                  <TableCell>{test.students}</TableCell>
-                </TableRow>
-              ))}
+              {tests.map((test) => {
+                if ((test.category === selectCategory[0] && selectCategory.length !== 0) || selectCategory.length === 0)
+                  return (
+                    <TableRow key={test.id} onClick={() => handleRowClick(test.id)}>
+                      <TableCell>{test.name}</TableCell>
+                      <TableCell>{test.all}</TableCell>
+                      <TableCell>{test.avg}</TableCell>
+                      <TableCell>{test.stdev}</TableCell>
+                      <TableCell>
+                        <Chip label={test.category} />
+                      </TableCell>
+                      <TableCell>{test.students}</TableCell>
+                    </TableRow>
+                  );
+                return null;
+              })}
             </TableBody>
           </Table>
         </TableContainer>
