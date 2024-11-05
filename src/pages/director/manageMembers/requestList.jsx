@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Typography, List, ListItemText, Button, Grid, ListItemButton, ListItemIcon, Checkbox } from '@mui/material';
+import { Typography, List, ListItem, ListItemText, Button, Grid, ListItemButton, ListItemIcon, Checkbox } from '@mui/material';
 import { SimpleDialog, TitleMedium } from '../../../components';
 import useRequestList from '../../../api/queries/members/useRequestList';
 import { useUserAuthStore } from '../../../store';
@@ -36,8 +36,12 @@ export default function RequestList() {
   const { user } = useUserAuthStore();
 
   const [selected, setSelected] = useState(null);
-  const [checkedStudent, setCheckedStudent] = useState([]);
+
+  const [checkedAllTeacher, setCheckedAllTeacher] = useState(false);
+  const [checkedAllStudent, setCheckedAllStudent] = useState(false);
   const [checkedTeacher, setCheckedTeacher] = useState([]);
+  const [checkedStudent, setCheckedStudent] = useState([]);
+
   const [openApprove, setOpenApprove] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
 
@@ -78,6 +82,14 @@ export default function RequestList() {
 
     setCheckedStudent(newChecked);
   };
+  const handleToggleTeachers = () => {
+    setCheckedTeacher(checkedAllTeacher ? [] : teacherData);
+    setCheckedAllTeacher(!checkedAllTeacher);
+  };
+  const handleToggleStudents = () => {
+    setCheckedStudent(checkedAllStudent ? [] : studentData);
+    setCheckedAllStudent(!checkedAllStudent);
+  };
 
   const handleClickApprove = (selectedUser, role) => {
     handleOpenApprove();
@@ -113,6 +125,12 @@ export default function RequestList() {
             강사 요청 목록
           </Typography>
           <List sx={{ overflow: 'auto', height: '60vh', bgcolor: 'background.paper' }}>
+            <ListItem>
+              <ListItemIcon onClick={handleToggleTeachers}>
+                <Checkbox checked={checkedAllTeacher} disableRipple />
+              </ListItemIcon>
+              <ListItemText primary="전체 선택" />
+            </ListItem>
             {teacherData?.length > 0 &&
               teacherData?.map((teacher) => {
                 const teacherInfo = teacher.user;
@@ -138,6 +156,12 @@ export default function RequestList() {
             학생 요청 목록
           </Typography>
           <List sx={{ overflow: 'auto', height: '60vh', bgcolor: 'background.paper' }}>
+            <ListItem>
+              <ListItemIcon onClick={handleToggleStudents}>
+                <Checkbox checked={checkedAllStudent} disableRipple />
+              </ListItemIcon>
+              <ListItemText primary="전체 선택" />
+            </ListItem>
             {studentData?.length > 0 &&
               studentData?.map((student) => {
                 const studentInfo = student.user;
