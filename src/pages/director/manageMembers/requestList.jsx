@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Typography, List, ListItem, ListItemText, Button, Grid } from '@mui/material';
+import { Typography, List, ListItemText, Button, Grid, ListItemButton, ListItemIcon, Checkbox } from '@mui/material';
 import { SimpleDialog, TitleMedium } from '../../../components';
 import useRequestList from '../../../api/queries/members/useRequestList';
 import { useUserAuthStore } from '../../../store';
@@ -36,6 +36,8 @@ export default function RequestList() {
   const { user } = useUserAuthStore();
 
   const [selected, setSelected] = useState(null);
+  const [checkedStudent, setCheckedStudent] = useState([]);
+  const [checkedTeacher, setCheckedTeacher] = useState([]);
   const [openApprove, setOpenApprove] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
 
@@ -56,6 +58,25 @@ export default function RequestList() {
   };
   const handleCloseDecline = () => {
     setOpenDecline(false);
+  };
+
+  const handleClickTeacher = (teacher) => {
+    const currentIdx = checkedTeacher.indexOf(teacher);
+    const newChecked = [...checkedTeacher];
+
+    if (currentIdx === -1) newChecked.push(teacher);
+    else newChecked.splice(currentIdx, 1);
+
+    setCheckedTeacher(newChecked);
+  };
+  const handleClickStudent = (student) => {
+    const currentIdx = checkedStudent.indexOf(student);
+    const newChecked = [...checkedStudent];
+
+    if (currentIdx === -1) newChecked.push(student);
+    else newChecked.splice(currentIdx, 1);
+
+    setCheckedStudent(newChecked);
   };
 
   const handleClickApprove = (selectedUser, role) => {
@@ -89,51 +110,53 @@ export default function RequestList() {
       <Grid container spacing="10vw">
         <Grid item xs={6}>
           <Typography variant="h6" p={1.5}>
-            강사 등록 요청
+            강사 요청 목록
           </Typography>
-          <List sx={{ overflow: 'auto', maxHeight: '50vh', bgcolor: 'background.paper' }}>
+          <List sx={{ overflow: 'auto', height: '60vh', bgcolor: 'background.paper' }}>
             {teacherData?.length > 0 &&
               teacherData?.map((teacher) => {
                 const teacherInfo = teacher.user;
                 const lecturesName = teacherInfo.lectures.map((obj) => obj.lecture_name);
 
                 return (
-                  <ListItem key={teacherInfo.user_id}>
+                  <ListItemButton key={teacherInfo.user_id} onClick={() => handleClickTeacher(teacher)}>
+                    <ListItemIcon>
+                      <Checkbox checked={checkedTeacher.indexOf(teacher) !== -1} />
+                    </ListItemIcon>
                     <ListItemText primary={teacherInfo.user_name} secondary={`과목: ${lecturesName.join(', ')}`} />
-                    <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove(teacherInfo, '강사')}>
-                      승인
-                    </Button>
-                    <Button variant="contained" onClick={() => handleClickDecline(teacherInfo, '강사')}>
-                      거절
-                    </Button>
-                  </ListItem>
+                  </ListItemButton>
                 );
               })}
           </List>
+          <Button variant="outlined" sx={{ mr: 1 }}>
+            승인
+          </Button>
+          <Button variant="contained">거절</Button>
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h6" p={1.5}>
-            학생 등록 요청
+            학생 요청 목록
           </Typography>
-          <List sx={{ overflow: 'auto', maxHeight: '50vh', bgcolor: 'background.paper' }}>
+          <List sx={{ overflow: 'auto', height: '60vh', bgcolor: 'background.paper' }}>
             {studentData?.length > 0 &&
               studentData?.map((student) => {
                 const studentInfo = student.user;
                 const parentName = studentInfo.parent ? studentInfo.parent.user_name : '';
 
                 return (
-                  <ListItem key={studentInfo.user_id}>
+                  <ListItemButton key={studentInfo.user_id} onClick={() => handleClickStudent(student)} disableRipple>
+                    <ListItemIcon>
+                      <Checkbox checked={checkedStudent.indexOf(student) !== -1} />
+                    </ListItemIcon>
                     <ListItemText primary={studentInfo.user_name} secondary={`학부모: ${parentName}`} />
-                    <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove(studentInfo, '학생')}>
-                      승인
-                    </Button>
-                    <Button variant="contained" onClick={() => handleClickDecline(studentInfo, '학생')}>
-                      거절
-                    </Button>
-                  </ListItem>
+                  </ListItemButton>
                 );
               })}
           </List>
+          <Button variant="outlined" sx={{ mr: 1 }}>
+            승인
+          </Button>
+          <Button variant="contained">거절</Button>
         </Grid>
       </Grid>
 
