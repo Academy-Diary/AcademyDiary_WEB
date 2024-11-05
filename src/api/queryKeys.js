@@ -15,6 +15,5 @@ export const QUERY_KEY = {
   // examination (test)
   EXAM_CATEGORY: (academyId) => PATH_API.EXAM_CATEGORY(academyId),
   ADD_CATEGORY: PATH_API.ADD_CATEGORY,
-  DELETE_CATEGORY: (examTypeId) => PATH_API.DELETE_CATEGORY(examTypeId),
 };
 export default QUERY_KEY;

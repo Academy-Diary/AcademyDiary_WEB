@@ -7,6 +7,7 @@ import { AddButton, Title } from '../../../components';
 import { useCategory } from '../../../api/queries/test/useCategory';
 import { useUserAuthStore } from '../../../store';
 import { useAddCategory } from '../../../api/queries/test/useAddCategory';
+import { useDeleteCategory } from '../../../api/queries/test/useDeleteCategory';
 
 const courses = [
   { id: 1, name: '미적분', students: 60 },
@@ -21,6 +22,7 @@ export default function TestList() {
   const { user } = useUserAuthStore();
   const categoryT = useCategory(user.academy_id).data; // 서버로 부터 받아온 데이터 임시 저장 (type: Object)
   const addCategory = useAddCategory();
+  const deleteCategory = useDeleteCategory();
 
   const courseID = Number(courseid);
   const course = courses.filter((n) => n.id === courseID)[0];
@@ -68,6 +70,14 @@ export default function TestList() {
   };
   function onDeleteFilter(cat) {
     // TODO: 삭제 api 연동
+    deleteCategory.mutate([
+      cat.exam_type_id,
+      {
+        academy_id: user.academy_id,
+      },
+    ]);
+    setOriginCategory(category.filter((a) => a.exam_type_id !== cat.exam_type_id));
+    setUnCategory(unSelectCategory.filter((a) => a.exam_type_id !== cat.exam_type_id));
   }
   const onAddFilter = () => {
     const inputs = newcategoryRef.current.children[1].children[0];
@@ -96,8 +106,6 @@ export default function TestList() {
   };
 
   if (categoryT) {
-    console.log(unSelectCategory);
-    console.log('select', selectCategory);
     return (
       <>
         <Title title={`${course.name}`} />
@@ -112,7 +120,6 @@ export default function TestList() {
               <Paper sx={{ padding: 2 }}>
                 {category.map((cat) => {
                   const tmp = selectCategory.indexOf(cat, 0);
-                  console.log(cat);
                   if (tmp === -1) {
                     return <Chip label={cat.exam_type_name} variant="outlined" onClick={() => onClickFilter(cat)} sx={{ mx: 1 }} />;
                   }
