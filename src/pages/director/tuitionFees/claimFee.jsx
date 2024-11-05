@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
 import { Typography, Box, Grid, Select, FormControl, InputLabel, MenuItem, ToggleButton, ToggleButtonGroup, Button } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { TitleMedium } from '../../../components';
 import { useUserAuthStore } from '../../../store';
@@ -33,6 +37,7 @@ import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
 export default function ClaimFee() {
   const [selectedStudent, setSelectedStudent] = useState('');
   const [selectedClasses, setSelectedClasses] = useState([]);
+  const [dueDate, setDueDate] = useState(null);
 
   const { user } = useUserAuthStore();
   const { data: students } = useStudentList(user.academy_id);
@@ -49,7 +54,7 @@ export default function ClaimFee() {
     <>
       <TitleMedium title="학원비 청구" />
       <Box component="form" sx={{ mt: 5 }}>
-        <Grid container spacing={10}>
+        <Grid container spacing={6}>
           <Grid item xs={12}>
             <Typography>학생 선택</Typography>
             <FormControl sx={{ mt: 3, minWidth: 120 }}>
@@ -70,6 +75,14 @@ export default function ClaimFee() {
                 </ToggleButton>
               ))}
             </ToggleButtonGroup>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography>납부 기한</Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer components={['DatePicker']} sx={{ mt: 2, maxWidth: 200 }}>
+                <DatePicker value={dueDate} onChange={(newDate) => setDueDate(newDate)} />
+              </DemoContainer>
+            </LocalizationProvider>
           </Grid>
         </Grid>
         <Box sx={{ position: 'fixed', left: '3vw', bottom: '5vh' }}>
