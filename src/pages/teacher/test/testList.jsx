@@ -6,6 +6,7 @@ import { FilterAlt, Settings } from '@mui/icons-material';
 import { AddButton, Title } from '../../../components';
 import { useCategory } from '../../../api/queries/test/useCategory';
 import { useUserAuthStore } from '../../../store';
+import { useAddCategory } from '../../../api/queries/test/useAddCategory';
 
 const courses = [
   { id: 1, name: '미적분', students: 60 },
@@ -19,16 +20,26 @@ export default function TestList() {
   const navigate = useNavigate();
   const { user } = useUserAuthStore();
   const categoryT = useCategory(user.academy_id).data; // 서버로 부터 받아온 데이터 임시 저장 (type: Object)
+  const addCategory = useAddCategory();
 
   const courseID = Number(courseid);
   const course = courses.filter((n) => n.id === courseID)[0];
 
-  const [unSelectCategory, setUnCategory] = useState(categoryT); // 선택되지 않은 카테고리
+  const [category, setOriginCategory] = useState([]);
+  const [unSelectCategory, setUnCategory] = useState(null); // 선택되지 않은 카테고리
   const [selectCategory, setCategory] = useState([]); // 선택 된 카테고리
   const [filterEl, setFilterEl] = useState(null); // 필터링 버튼 클릭시 메뉴 열리게
   const [settingEl, setSettingEl] = useState(null); // 설정 버튼 클릭 시 메뉴 열리게
 
   const newcategoryRef = useRef();
+  useEffect(() => {
+    if (categoryT && !unSelectCategory) {
+      const originCategory = Object.values(categoryT); // Object타입을 Array타입으로 변경
+      setOriginCategory([...originCategory]);
+      setUnCategory(originCategory);
+      console.log(...originCategory);
+    }
+  }, [categoryT, unSelectCategory]);
 
   const tests = [
     { id: 1, name: '쪽지시험 3차', all: 100, avg: 46.2, stdev: 55.3, category: '단원평가', students: '20/50' },
@@ -45,16 +56,14 @@ export default function TestList() {
   const handleFilterUnClick = () => {
     setFilterEl(null);
   };
-  const onClickFilter = (e) => {
-    const isCategory = selectCategory.indexOf(e.currentTarget.innerText, 0);
-
-    if (isCategory === -1) {
+  const onClickFilter = (cat) => {
+    if (selectCategory.length === 0) {
       // 선택된 값이 selectCategory에 존재하지 않을 때
-      setCategory([...selectCategory, e.currentTarget.innerText]);
-      setUnCategory(unSelectCategory.filter((a) => a !== e.currentTarget.innerText));
+      setCategory([...selectCategory, cat]);
+      setUnCategory(unSelectCategory.filter((a) => a.exam_type_id !== cat.exam_type_id));
     } else {
-      setCategory(selectCategory.filter((a) => a !== e.currentTarget.innerText));
-      setUnCategory([...unSelectCategory, e.currentTarget.innerText]);
+      setCategory(selectCategory.filter((a) => a.exam_type_id !== cat.exam_type_id));
+      setUnCategory([...unSelectCategory, cat]);
     }
   };
   function onDeleteFilter(cat) {
@@ -63,6 +72,19 @@ export default function TestList() {
   const onAddFilter = () => {
     const inputs = newcategoryRef.current.children[1].children[0];
     // TODO: 추가 api 연동 + 다시 서버에 요청
+    addCategory.mutate(
+      {
+        academy_id: user.academy_id,
+        exam_type_name: inputs.value,
+      },
+      {
+        onSuccess: (data) => {
+          const tempData = data.data.data;
+          setOriginCategory([...category, { exam_type_id: tempData.exam_type_id, exam_type_name: tempData.exam_type_name }]);
+          setUnCategory([...unSelectCategory, { exam_type_id: tempData.exam_type_id, exam_type_name: tempData.exam_type_name }]);
+        },
+      }
+    );
     inputs.value = '';
   };
 
@@ -74,8 +96,8 @@ export default function TestList() {
   };
 
   if (categoryT) {
-    const category = Object.values(categoryT); // Object타입을 Array타입으로 변경
-    console.log(selectCategory);
+    console.log(unSelectCategory);
+    console.log('select', selectCategory);
     return (
       <>
         <Title title={`${course.name}`} />
@@ -89,11 +111,12 @@ export default function TestList() {
             <Menu anchorEl={filterEl} open={Boolean(filterEl)} onClose={handleFilterUnClick}>
               <Paper sx={{ padding: 2 }}>
                 {category.map((cat) => {
-                  const tmp = selectCategory.indexOf(cat.exam_type_name, 0);
+                  const tmp = selectCategory.indexOf(cat, 0);
+                  console.log(cat);
                   if (tmp === -1) {
-                    return <Chip label={cat.exam_type_name} variant="outlined" onClick={onClickFilter} sx={{ mx: 1 }} />;
+                    return <Chip label={cat.exam_type_name} variant="outlined" onClick={() => onClickFilter(cat)} sx={{ mx: 1 }} />;
                   }
-                  return <Chip label={cat.exam_type_name} onClick={onClickFilter} sx={{ mx: 1 }} />;
+                  return <Chip label={cat.exam_type_name} onClick={() => onClickFilter(cat)} sx={{ mx: 1 }} />;
                 })}
               </Paper>
             </Menu>
@@ -137,7 +160,7 @@ export default function TestList() {
             </TableHead>
             <TableBody>
               {tests.map((test) => {
-                if ((test.category === selectCategory[0] && selectCategory.length !== 0) || selectCategory.length === 0)
+                if ((selectCategory.length !== 0 && test.category === selectCategory[0].exam_type_name) || selectCategory.length === 0)
                   return (
                     <TableRow key={test.id} onClick={() => handleRowClick(test.id)}>
                       <TableCell>{test.name}</TableCell>
