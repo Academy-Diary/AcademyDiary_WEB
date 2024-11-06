@@ -4,7 +4,7 @@ import { Typography, List, ListItem, ListItemText, Button, Grid, ListItemButton,
 import { SimpleDialog, TitleMedium } from '../../../components';
 import useRequestList from '../../../api/queries/members/useRequestList';
 import { useUserAuthStore } from '../../../store';
-import { useDecideRegister } from '../../../api/queries/members/useDecideRegister';
+import { useDecideRegisters } from '../../../api/queries/members/useDecideRegisters';
 
 // Teacher Data
 // {
@@ -39,8 +39,8 @@ export default function RequestList() {
 
   const [checkedAllTeacher, setCheckedAllTeacher] = useState(false);
   const [checkedAllStudent, setCheckedAllStudent] = useState(false);
-  const [checkedTeacher, setCheckedTeacher] = useState([]);
-  const [checkedStudent, setCheckedStudent] = useState([]);
+  const [checkedTeachers, setCheckedTeachers] = useState([]);
+  const [checkedStudents, setCheckedStudents] = useState([]);
 
   const [openApprove, setOpenApprove] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
@@ -48,8 +48,8 @@ export default function RequestList() {
   const { data: teacherData } = useRequestList('TEACHER', user.academy_id);
   const { data: studentData } = useRequestList('STUDENT', user.academy_id);
 
-  const approveRegisterMutation = useDecideRegister(user.academy_id, true);
-  const declineRegisterMutation = useDecideRegister(user.academy_id, false);
+  const approveRegisterMutation = useDecideRegisters(true);
+  const declineRegisterMutation = useDecideRegisters(false);
 
   const handleOpenApprove = () => {
     setOpenApprove(true);
@@ -65,42 +65,45 @@ export default function RequestList() {
   };
 
   const handleClickTeacher = (teacher) => {
-    const currentIdx = checkedTeacher.indexOf(teacher);
-    const newChecked = [...checkedTeacher];
+    const currentIdx = checkedTeachers.indexOf(teacher);
+    const newChecked = [...checkedTeachers];
 
     if (currentIdx === -1) newChecked.push(teacher);
     else newChecked.splice(currentIdx, 1);
 
-    setCheckedTeacher(newChecked);
+    setCheckedTeachers(newChecked);
   };
   const handleClickStudent = (student) => {
-    const currentIdx = checkedStudent.indexOf(student);
-    const newChecked = [...checkedStudent];
+    const currentIdx = checkedStudents.indexOf(student);
+    const newChecked = [...checkedStudents];
 
     if (currentIdx === -1) newChecked.push(student);
     else newChecked.splice(currentIdx, 1);
 
-    setCheckedStudent(newChecked);
+    setCheckedStudents(newChecked);
   };
   const handleToggleTeachers = () => {
-    setCheckedTeacher(checkedAllTeacher ? [] : teacherData);
+    setCheckedTeachers(checkedAllTeacher ? [] : teacherData);
     setCheckedAllTeacher(!checkedAllTeacher);
   };
   const handleToggleStudents = () => {
-    setCheckedStudent(checkedAllStudent ? [] : studentData);
+    setCheckedStudents(checkedAllStudent ? [] : studentData);
     setCheckedAllStudent(!checkedAllStudent);
   };
 
-  const handleClickApprove = (selectedUser, role) => {
+  const handleClickApprove = (role) => {
     handleOpenApprove();
-    setSelected({ ...selectedUser, role });
+    if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
+    else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
   };
-  const handleClickDecline = (selectedUser, role) => {
+  const handleClickDecline = (role) => {
     handleOpenDecline();
-    setSelected({ ...selectedUser, role });
+    if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
+    else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
   };
   const handleApprove = () => {
-    approveRegisterMutation.mutate(selected.user_id, {
+    const userIds = selected.selectedUser.map((data) => data.user.user_id);
+    approveRegisterMutation.mutate(userIds, {
       onSuccess: () => {
         handleCloseApprove();
         alert('등록 요청 승인 성공!');
@@ -108,7 +111,8 @@ export default function RequestList() {
     });
   };
   const handleDecline = () => {
-    declineRegisterMutation.mutate(selected.user_id, {
+    const userIds = selected.selectedUser.map((data) => data.user.user_id);
+    declineRegisterMutation.mutate(userIds, {
       onSuccess: () => {
         handleCloseDecline();
         alert('등록 요청 거절 성공!');
@@ -139,17 +143,19 @@ export default function RequestList() {
                 return (
                   <ListItemButton key={teacherInfo.user_id} onClick={() => handleClickTeacher(teacher)}>
                     <ListItemIcon>
-                      <Checkbox checked={checkedTeacher.indexOf(teacher) !== -1} />
+                      <Checkbox checked={checkedTeachers.indexOf(teacher) !== -1} />
                     </ListItemIcon>
                     <ListItemText primary={teacherInfo.user_name} secondary={`과목: ${lecturesName.join(', ')}`} />
                   </ListItemButton>
                 );
               })}
           </List>
-          <Button variant="outlined" sx={{ mr: 1 }}>
+          <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove('강사')}>
             승인
           </Button>
-          <Button variant="contained">거절</Button>
+          <Button variant="contained" onClick={() => handleClickDecline('강사')}>
+            거절
+          </Button>
         </Grid>
         <Grid item xs={6}>
           <Typography variant="h6" p={1.5}>
@@ -170,34 +176,40 @@ export default function RequestList() {
                 return (
                   <ListItemButton key={studentInfo.user_id} onClick={() => handleClickStudent(student)} disableRipple>
                     <ListItemIcon>
-                      <Checkbox checked={checkedStudent.indexOf(student) !== -1} />
+                      <Checkbox checked={checkedStudents.indexOf(student) !== -1} />
                     </ListItemIcon>
                     <ListItemText primary={studentInfo.user_name} secondary={`학부모: ${parentName}`} />
                   </ListItemButton>
                 );
               })}
           </List>
-          <Button variant="outlined" sx={{ mr: 1 }}>
+          <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove('학생')}>
             승인
           </Button>
-          <Button variant="contained">거절</Button>
+          <Button variant="contained" onClick={() => handleClickDecline('학생')}>
+            거절
+          </Button>
         </Grid>
       </Grid>
 
-      <SimpleDialog
-        openDialog={openApprove}
-        handleClose={handleCloseApprove}
-        text={`${selected?.user_name} ${selected?.role}의 등록 요청을 승인하시겠습니까?`}
-        second="승인"
-        handleClickSecond={handleApprove}
-      />
-      <SimpleDialog
-        openDialog={openDecline}
-        handleClose={handleCloseDecline}
-        text={`${selected?.user_name} ${selected?.role}의 등록 요청을 거절하시겠습니까?`}
-        second="거절"
-        handleClickSecond={handleDecline}
-      />
+      {selected && (
+        <>
+          <SimpleDialog
+            openDialog={openApprove}
+            handleClose={handleCloseApprove}
+            text={`${selected.selectedUser[0].user.user_name} 외 ${selected.selectedUser.length - 1}명(${selected.role})의 등록 요청을 승인하시겠습니까?`}
+            second="승인"
+            handleClickSecond={handleApprove}
+          />
+          <SimpleDialog
+            openDialog={openDecline}
+            handleClose={handleCloseDecline}
+            text={`${selected.selectedUser[0].user.user_name} 외 ${selected.selectedUser.length - 1}명(${selected.role})의 등록 요청을 거절하시겠습니까?`}
+            second="거절"
+            handleClickSecond={handleDecline}
+          />
+        </>
+      )}
     </>
   );
 }
