@@ -5,9 +5,7 @@ import { PATH_API } from '../../path';
 export const useDeleteCategory = () =>
   useMutation({
     mutationFn: async (payload) => {
-      console.log(payload);
-      console.log(PATH_API.DELETE_CATEGORY(payload[0]));
-      const response = await axiosInstance.delete(PATH_API.DELETE_CATEGORY(payload[0]), { data: payload[1] });
+      const response = await axiosInstance.delete(PATH_API.DELETE_CATEGORY(payload.examTypeId), { data: { academy_id: payload.academyID } });
       return response;
     },
     onError: (error) => {

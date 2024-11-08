@@ -70,12 +70,10 @@ export default function TestList() {
   };
   function onDeleteFilter(cat) {
     // TODO: 삭제 api 연동
-    deleteCategory.mutate([
-      cat.exam_type_id,
-      {
-        academy_id: user.academy_id,
-      },
-    ]);
+    deleteCategory.mutate({
+      examTypeId: cat.exam_type_id,
+      academyID: user.academy_id,
+    });
     setOriginCategory(category.filter((a) => a.exam_type_id !== cat.exam_type_id));
     setUnCategory(unSelectCategory.filter((a) => a.exam_type_id !== cat.exam_type_id));
   }
