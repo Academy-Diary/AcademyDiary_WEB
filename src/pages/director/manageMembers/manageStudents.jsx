@@ -17,10 +17,11 @@ import {
   DialogTitle,
   Box,
   OutlinedInput,
+  Checkbox,
 } from '@mui/material';
 import { Search } from '@mui/icons-material';
 
-import { TitleMedium } from '../../../components';
+import { SimpleDialog, TitleMedium } from '../../../components';
 import { useStudentList } from '../../../api/queries/members/useStudentList';
 import { useUserAuthStore } from '../../../store';
 import { useDeleteStudent } from '../../../api/queries/members/useDeleteStudent';
@@ -45,8 +46,9 @@ import { useDeleteStudent } from '../../../api/queries/members/useDeleteStudent'
 
 export default function ManageStudents() {
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState({ name: '', parentName: '', phone: '', parentPhone: '' });
   const [searchInput, setSearchInput] = useState('');
+  const [allChecked, setAllChecked] = useState(false);
+  const [checkedStudents, setCheckedStudents] = useState([]);
 
   const { user } = useUserAuthStore();
   const { data: students } = useStudentList(user.academy_id);
@@ -61,14 +63,27 @@ export default function ManageStudents() {
     setSearchInput(value);
   };
 
-  const handleClickDelete = (selectedStudent) => {
-    setOpen(true);
-    setSelected(selectedStudent);
+  const handleCheckAll = () => {
+    setCheckedStudents(allChecked ? [] : students);
+    setAllChecked(!allChecked);
+  };
+  const handleCheckTeacher = (student) => {
+    const currentIdx = checkedStudents.indexOf(student);
+    const newChecked = [...checkedStudents];
+
+    if (currentIdx === -1) newChecked.push(student);
+    else newChecked.splice(currentIdx, 1);
+
+    setCheckedStudents(newChecked);
+  };
+
+  const handleClickDelete = () => {
+    if (checkedStudents && checkedStudents.length > 0) setOpen(true);
   };
   const handleDelete = () => {
-    deleteStudentMutation.mutate(selected.user_id, {
-      onSuccess: handleCloseDialog,
-    });
+    // deleteStudentMutation.mutate(selected.user_id, {
+    //   onSuccess: handleCloseDialog,
+    // });
   };
 
   return (
@@ -80,11 +95,13 @@ export default function ManageStudents() {
         <Table stickyHeader sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
+              <TableCell>
+                <Checkbox onClick={handleCheckAll} />
+              </TableCell>
               <TableCell>학생 이름</TableCell>
               <TableCell>학부모 이름</TableCell>
               <TableCell>학생 연락처</TableCell>
               <TableCell>학부모 연락처</TableCell>
-              <TableCell />
             </TableRow>
           </TableHead>
           <TableBody>
@@ -93,38 +110,31 @@ export default function ManageStudents() {
 
               return student.user_name.includes(searchInput) || parent?.user_name.includes(searchInput) ? (
                 <TableRow key={student.user_id}>
+                  <TableCell>
+                    <Checkbox checked={checkedStudents.indexOf(student) !== -1} onClick={() => handleCheckTeacher(student)} />
+                  </TableCell>
                   <TableCell component="th" scope="row">
                     {student.user_name}
                   </TableCell>
                   <TableCell>{parent?.user_name}</TableCell>
                   <TableCell>{student.phone_number}</TableCell>
                   <TableCell>{parent?.phone_number}</TableCell>
-                  <TableCell align="right">
-                    <Button variant="outlined" onClick={() => handleClickDelete(student)}>
-                      삭제
-                    </Button>
-                  </TableCell>
                 </TableRow>
               ) : null;
             })}
           </TableBody>
         </Table>
       </TableContainer>
-      <Dialog open={open} onClose={handleCloseDialog}>
-        <DialogTitle>{selected.user_name} 학생을 학생 목록에서 삭제하시겠습니까?</DialogTitle>
-        <DialogContent>
-          <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
-            <DialogContentText>학생 이름: {selected.user_name}</DialogContentText>
-            <DialogContentText>학부모 이름: {selected.familiesAsStudent && selected.familiesAsStudent[0]?.parent.user_name}</DialogContentText>
-            <DialogContentText>학생 연락처: {selected.phone_number}</DialogContentText>
-            <DialogContentText>학부모 연락처: {selected.familiesAsStudent && selected.familiesAsStudent[0]?.parent.phone_number}</DialogContentText>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog}>취소</Button>
-          <Button onClick={handleDelete}>삭제</Button>
-        </DialogActions>
-      </Dialog>
+      <Button variant="contained" onClick={handleClickDelete} size="large" sx={{ position: 'fixed', bottom: 20, right: 20 }}>
+        학생 삭제
+      </Button>
+      <SimpleDialog
+        openDialog={open}
+        handleClose={handleCloseDialog}
+        text={`${checkedStudents[0]?.user_name} 외 ${checkedStudents.length - 1}명의 학생을 삭제하겠습니까?`}
+        second="삭제"
+        handleClickSecond={handleDelete}
+      />
     </>
   );
 }
