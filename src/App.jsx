@@ -76,6 +76,7 @@ function App() {
               <Route path={PATH.TEACHER.PROFILE.ROOT} element={<Outlet />}>
                 <Route path="" element={<TeacherProfile />} />
                 <Route path={PATH.TEACHER.PROFILE.UPDATE} element={<TeacherUpdateProfile />} />
+                <Route path={PATH.DIRECTOR.PROFILE.UPDATE_PW} element={<DirectorUpdatePassword />} />
               </Route>
               <Route path={PATH.TEACHER.CLASS.ROOT} element={<Outlet />}>
                 <Route path="" element={<ClassHome />} />

@@ -3,7 +3,8 @@ import { Edit } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { useUserAuthStore } from '../../../store';
-import { TitleMedium } from '../../../components';
+import { CustomLink, TitleMedium } from '../../../components';
+import { PATH } from '../../../route/path';
 
 export default function TeacherProfile() {
   const { user } = useUserAuthStore();
@@ -39,6 +40,9 @@ export default function TeacherProfile() {
           <Box sx={{ p: 2, backgroundColor: 'lightgray' }}>
             <Typography variant="body1">확률과 통계</Typography>
           </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <CustomLink to={PATH.DIRECTOR.PROFILE.UPDATE_PW} text="비밀번호 변경" />
         </Grid>
       </Grid>
     </Container>
