@@ -47,7 +47,7 @@ export const useUpdatePassword = (userId) => {
     },
     onSuccess: () => {
       alert('비밀번호가 성공적으로 변경되었습니다!');
-      navigate('/director/profile');
+      navigate(-1);
     },
     onError: (error) => {
       console.log('Error occured at useUpdatePassword: ', error);
