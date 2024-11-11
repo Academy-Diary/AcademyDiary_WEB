@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { List, ListItem, ListItemText, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
 
 import { TitleMedium, AddButton } from '../../../components';
-import { useUserAuthStore, useLectureStore } from '../../../store';
+import { useLectureStore } from '../../../store';
 import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 import { useDeleteLecture } from '../../../api/queries/lectures/useDeleteLecture';
 
@@ -29,10 +29,9 @@ export default function ManageCourses() {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
-  const { user } = useUserAuthStore();
   const { setLecture } = useLectureStore();
 
-  const { data: lectures } = useLectureList(user.academy_id);
+  const { data: lectures } = useLectureList();
   const deleteLectureMutation = useDeleteLecture();
 
   const handleClickAdd = () => {

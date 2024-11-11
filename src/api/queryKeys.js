@@ -13,7 +13,7 @@ export const QUERY_KEY = {
   STUDENTLIST: (academyId) => PATH_API.STUDENTLIST(academyId),
 
   // manage lectures
-  LECTURELIST: (academyId) => PATH_API.LECTURELIST(academyId),
+  LECTURELIST: PATH_API.LECTURELIST,
   ATTENDEELIST: (lectureId) => PATH_API.ATTENDEELIST(lectureId),
 };
 export default QUERY_KEY;

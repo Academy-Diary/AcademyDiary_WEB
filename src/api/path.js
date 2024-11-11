@@ -25,7 +25,7 @@ export const PATH_API = {
   DELETE_STUDENT: (id) => `/student/${id}`,
 
   // manage lectures
-  LECTURELIST: (academyId) => `/lecture/${academyId}`,
+  LECTURELIST: '/lecture',
   ATTENDEELIST: (lectureId) => `/lecture/${lectureId}/student`,
   ADD_LECTURE: '/lecture',
   DELETE_LECTURE: (lectureId) => `/lecture/${lectureId}`,
