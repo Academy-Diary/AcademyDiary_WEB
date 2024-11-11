@@ -30,6 +30,7 @@ export const PATH_API = {
   ADD_LECTURE: '/lecture',
   DELETE_LECTURE: (lectureId) => `/lecture/${lectureId}`,
   UPDATE_LECTURE: (lectureId) => `/lecture/${lectureId}`,
+  UPDATE_ATTENDEES: (lectureId) => `/lecture/${lectureId}/student`,
 };
 
 export default PATH_API;

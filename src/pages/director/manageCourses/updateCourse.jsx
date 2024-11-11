@@ -30,6 +30,7 @@ import { useTeacherList } from '../../../api/queries/members/useTeacherList';
 import { useUpdateLecture } from '../../../api/queries/lectures/useUpdateLecture';
 import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
 import { useStudentList } from '../../../api/queries/members/useStudentList';
+import { useUpdateAttendees } from '../../../api/queries/lectures/useUpdateAttendees';
 
 const time = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
@@ -50,6 +51,7 @@ export default function UpdateCourse() {
 
   const { data: students } = useStudentList(user.academy_id);
   const { data: attendees } = useAttendeeList(lecture.lecture_id);
+  const updateAttendeesMutation = useUpdateAttendees(lecture.lecture_id);
   // 수강생 등록 TransferList에 넘겨줄 리스트 (왼,오)
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
@@ -71,7 +73,6 @@ export default function UpdateCourse() {
   };
   const handleLectureDays = (e) => {
     const { value } = e.target;
-    console.log(value);
     setLectureDays(typeof value === 'string' ? value.split(',') : value);
   };
   const handleStartTime = (e) => {
@@ -94,10 +95,25 @@ export default function UpdateCourse() {
     };
     // console.log(submitData);
 
+    // 강의 기본정보 수정
     updateLectureMutation.mutate(submitData, {
       onSuccess: () => {
-        alert('강의 수정 성공!');
-        navigate('/director/manage-courses/');
+        const oldAttendeeIds = attendees.map((a) => a.user_id);
+        const newAttendeeIds = right.map((s) => s.user_id);
+        const intersection = newAttendeeIds.filter((id) => oldAttendeeIds.includes(id)); // 교집합
+
+        if (newAttendeeIds.length !== intersection.length) {
+          // 강의 수강생 수정
+          updateAttendeesMutation.mutate(newAttendeeIds, {
+            onSuccess: () => {
+              alert('강의 수정 성공!');
+              navigate('/director/manage-courses/');
+            },
+          });
+        } else {
+          alert('강의 수정 성공!');
+          navigate('/director/manage-courses/');
+        }
       },
       onError: () => {
         alert('강의 수정 실패!');
