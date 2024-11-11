@@ -187,7 +187,7 @@ export default function UpdateCourse() {
                 </IconButton>
               </Grid>
             </Grid>
-            <Typography variant="body2">총 {right?.length}명</Typography>
+            <Typography variant="body2">총 {right ? right.length : 0}명</Typography>
             {right?.length > 0 && (
               <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '25vh', width: '50vw' }}>
                 <Table stickyHeader>

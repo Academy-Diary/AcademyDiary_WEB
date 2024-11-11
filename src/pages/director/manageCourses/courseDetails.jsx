@@ -54,7 +54,7 @@ export default function CourseDetails() {
           </Grid>
           <Grid item xs={12}>
             <Typography sx={{ py: 1 }}>수강생 목록</Typography>
-            <Typography variant="body2">총 {attendees?.length}명</Typography>
+            <Typography variant="body2">총 {attendees ? attendees.length : 0}명</Typography>
             <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '25vh', width: '50vw' }}>
               <Table stickyHeader>
                 <TableHead>
