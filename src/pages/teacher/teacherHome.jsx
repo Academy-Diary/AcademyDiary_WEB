@@ -32,7 +32,7 @@ export default function TeacherHome() {
   const { user, lectures } = useUserAuthStore();
   const navigate = useNavigate();
   const { refetch } = useLectures();
-  refetch();
+  if (lectures.length === 0) refetch();
   const handleLectureClick = (id) => {
     navigate(`/teacher/class/${id}`);
   };
