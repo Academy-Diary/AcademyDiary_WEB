@@ -7,7 +7,7 @@ import { CustomLink, TitleMedium } from '../../../components';
 import { PATH } from '../../../route/path';
 
 export default function TeacherProfile() {
-  const { user } = useUserAuthStore();
+  const { user, lectures } = useUserAuthStore();
   const navigate = useNavigate();
   return (
     <Container sx={{ width: '50vw', padding: 5 }}>
@@ -37,9 +37,11 @@ export default function TeacherProfile() {
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6">담당강의</Typography>
-          <Box sx={{ p: 2, backgroundColor: 'lightgray' }}>
-            <Typography variant="body1">확률과 통계</Typography>
-          </Box>
+          {lectures.map((lecture) => (
+            <Box sx={{ p: 2, backgroundColor: 'lightgray' }}>
+              <Typography variant="body1">{lecture.lecture_name}</Typography>
+            </Box>
+          ))}
         </Grid>
         <Grid item xs={12}>
           <CustomLink to={PATH.DIRECTOR.PROFILE.UPDATE_PW} text="비밀번호 변경" />

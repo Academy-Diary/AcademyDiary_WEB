@@ -2,13 +2,14 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 import { Title } from '../../../components';
+import { useUserAuthStore } from '../../../store';
 
-const courses = [
-  { id: 1, name: '미적분', students: 60 },
-  { id: 2, name: '확률과통계', students: 30 },
-  { id: 3, name: '영어', students: 20 },
-  { id: 4, name: '국어', students: 55 },
-];
+// const courses = [
+//   { id: 1, name: '미적분', students: 60 },
+//   { id: 2, name: '확률과통계', students: 30 },
+//   { id: 3, name: '영어', students: 20 },
+//   { id: 4, name: '국어', students: 55 },
+// ];
 const tests = [
   { id: 1, name: '단원평가1' },
   { id: 2, name: '단원평가2' },
@@ -19,7 +20,8 @@ const tests = [
 export default function QuizDetail() {
   const params = useParams();
   const navigate = useNavigate();
-  const course = courses.filter((n) => n.id === Number(params.courseid))[0];
+  const { lectures } = useUserAuthStore();
+  const lecture = lectures.filter((n) => n.lecture_id === Number(params.courseid))[0];
   const test = tests.filter((n) => n.id === Number(params.quizid))[0];
 
   const handleEnd = () => {
@@ -30,7 +32,7 @@ export default function QuizDetail() {
     <Grid container>
       <Grid md={6} sx={{ padding: '20px' }}>
         {/* 왼쪽 절반 */}
-        <Title title={`${course.name} 퀴즈`} />
+        <Title title={`${lecture.lecture_name} 퀴즈`} />
         <Typography variant="subtitle1">ai가 20개의 문제를 생성합니다.</Typography>
         <Grid container mt={5}>
           <Grid md={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
