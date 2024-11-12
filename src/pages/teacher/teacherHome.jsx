@@ -1,14 +1,15 @@
 import React from 'react';
-import { Box, Container, Divider, Grid, Stack, Typography } from '@mui/material';
+import { Box, Divider, Grid, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Title } from '../../components';
 import { useUserAuthStore } from '../../store';
+import { useLectures } from '../../api/queries/user/useLectures';
 
-const lectures = [
-  { name: '수학1', time: '14:00~16:00', students: 40 },
-  { name: '확률과통계', time: '16:30~18:30', students: 38 },
-  { name: '미적분', time: '19:00~21:00', students: 33 },
-];
+// const lectures = [
+//   { name: '수학1', time: '14:00~16:00', students: 40 },
+//   { name: '확률과통계', time: '16:30~18:30', students: 38 },
+//   { name: '미적분', time: '19:00~21:00', students: 33 },
+//  ];
 
 const noticeList = [
   {
@@ -28,9 +29,13 @@ const noticeList = [
 ];
 
 export default function TeacherHome() {
-  const { user } = useUserAuthStore();
+  const { user, lectures } = useUserAuthStore();
   const navigate = useNavigate();
-
+  const { refetch } = useLectures();
+  refetch();
+  const handleLectureClick = (id) => {
+    navigate(`/teacher/class/${id}`);
+  };
   const handleNoticeClick = (id) => {
     navigate(`/teacher/notice/${id}`);
   };
@@ -45,20 +50,30 @@ export default function TeacherHome() {
               <Typography variant="h5" fontWeight="bold">
                 Today&apos;s Lectures
               </Typography>
-              {lectures.map((lecture) => (
-                <>
-                  <Grid container sx={{ justifyContent: 'space-between' }}>
-                    <Stack sx={{ ml: '10px' }}>
-                      <Typography variant="subtitle1">
-                        {lecture.name} ({user.user_name})
-                      </Typography>
-                      <Typography variant="caption">{lecture.time}</Typography>
-                    </Stack>
-                    <Typography variant="subtitle1">수강생 {lecture.students}명</Typography>
-                  </Grid>
-                  <Divider />
-                </>
-              ))}
+              {lectures.map((lecture) => {
+                const time1 = lecture.start_time.split('T')[1].split('.')[0].split(':');
+                const time2 = lecture.end_time.split('T')[1].split('.')[0].split(':');
+                const week = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
+                const today = week[new Date().getDay()];
+                if (lecture.days.includes(today))
+                  return (
+                    <>
+                      <Grid container sx={{ justifyContent: 'space-between' }} onClick={() => handleLectureClick(lecture.lecture_id)}>
+                        <Stack sx={{ ml: '10px' }}>
+                          <Typography variant="subtitle1">
+                            {lecture.lecture_name} ({lecture.teacher_name})
+                          </Typography>
+                          <Typography variant="caption">
+                            {time1[0]}:{time1[1]}~{time2[0]}:{time2[1]}
+                          </Typography>
+                        </Stack>
+                        <Typography variant="subtitle1">수강생 {lecture.headcount}명</Typography>
+                      </Grid>
+                      <Divider />
+                    </>
+                  );
+                return null;
+              })}
             </Stack>
           </Box>
         </Grid>

@@ -23,6 +23,9 @@ export const PATH_API = {
   DELETE_TEACHER: (id) => `/teacher/${id}`,
   STUDENTLIST: (academyId) => `/student/${academyId}`,
   DELETE_STUDENT: (id) => `/student/${id}`,
+
+  // lectures
+  GET_LECTURES: (id) => `/lecture?user_id=${id}`,
 };
 
 export default PATH_API;
