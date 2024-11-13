@@ -81,9 +81,10 @@ export default function ManageStudents() {
     if (checkedStudents && checkedStudents.length > 0) setOpen(true);
   };
   const handleDelete = () => {
-    // deleteStudentMutation.mutate(selected.user_id, {
-    //   onSuccess: handleCloseDialog,
-    // });
+    const userIds = checkedStudents.map((student) => student.user_id);
+    deleteStudentMutation.mutate(userIds, {
+      onSuccess: handleCloseDialog,
+    });
   };
 
   return (
