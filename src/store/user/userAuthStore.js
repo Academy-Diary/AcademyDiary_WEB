@@ -17,14 +17,16 @@ const UserAuthStore = (set) => ({
   // State
   isLoggedIn: false,
   user: null,
+  lectures: [],
 
   // Actions
   login: (userData) => set({ isLoggedIn: true, user: userData }),
-  logout: () => set({ isLoggedIn: false, user: null }),
+  logout: () => set({ isLoggedIn: false, user: null, lectures: [] }),
   updateUser: (userData) =>
     set((state) => ({
       user: { ...state.user, ...userData },
     })),
+  lecture: (lecture) => set({ lectures: lecture }),
 });
 
 const useUserAuthStore = create(

@@ -4,20 +4,22 @@ import { Button, Chip, Container, Grid, IconButton, Menu, Paper, Table, TableBod
 import { FilterAlt, Settings } from '@mui/icons-material';
 
 import { AddButton, Title } from '../../../components';
+import { useUserAuthStore } from '../../../store';
 
-const courses = [
-  { id: 1, name: '미적분', students: 60 },
-  { id: 2, name: '확률과통계', students: 30 },
-  { id: 3, name: '영어', students: 20 },
-  { id: 4, name: '국어', students: 55 },
-];
+// const courses = [
+//   { id: 1, name: '미적분', students: 60 },
+//   { id: 2, name: '확률과통계', students: 30 },
+//   { id: 3, name: '영어', students: 20 },
+//   { id: 4, name: '국어', students: 55 },
+// ];
 
 export default function TestList() {
   const { courseid } = useParams();
   const navigate = useNavigate();
+  const { lectures } = useUserAuthStore();
 
   const courseID = Number(courseid);
-  const course = courses.filter((n) => n.id === courseID)[0];
+  const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
 
   const [category, setOriginCategory] = useState(['월말 정기 평가', '단원평가', '쪽지시험', '단어시험']);
   const [unSelectCategory, setUnCategory] = useState(category); // 선택되지 않은 카테고리
@@ -33,7 +35,7 @@ export default function TestList() {
   ];
 
   const handleRowClick = (id) => {
-    navigate(`/teacher/class/${course.id}/test/${id}`);
+    navigate(`/teacher/class/${lecture.lecture_id}/test/${id}`);
   };
 
   const handleFilterClick = (e) => {
@@ -73,8 +75,8 @@ export default function TestList() {
 
   return (
     <>
-      <Title title={`${course.name}`} />
-      <Typography align="left">수강생 {course.students}명</Typography>
+      <Title title={`${lecture.lecture_name}`} />
+      <Typography align="left">수강생 {lecture.headcount}명</Typography>
       <TableContainer component={Paper} sx={{ padding: 3 }}>
         <Container sx={{ display: 'flex' }}>
           <TextField label="Search" sx={{ mb: 1 }} />
@@ -146,7 +148,7 @@ export default function TestList() {
           </TableBody>
         </Table>
       </TableContainer>
-      <AddButton title="시험생성" onClick={() => navigate(`/teacher/class/${course.id}/test/add`)} />
+      <AddButton title="시험생성" onClick={() => navigate(`/teacher/class/${lecture.lecture_id}/test/add`)} />
     </>
   );
 }

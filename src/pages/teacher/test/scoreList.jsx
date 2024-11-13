@@ -3,13 +3,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Title } from '../../../components';
+import { useUserAuthStore } from '../../../store';
 
-const courses = [
-  { id: 1, name: '미적분', students: 60 },
-  { id: 2, name: '확률과통계', students: 30 },
-  { id: 3, name: '영어', students: 20 },
-  { id: 4, name: '국어', students: 55 },
-];
+// const courses = [
+//   { id: 1, name: '미적분', students: 60 },
+//   { id: 2, name: '확률과통계', students: 30 },
+//   { id: 3, name: '영어', students: 20 },
+//   { id: 4, name: '국어', students: 55 },
+// ];
 
 const scores = [
   { id: 1, name: '김대성', score: 100 },
@@ -23,6 +24,7 @@ const scores = [
 export default function ScoreList() {
   const { courseid } = useParams();
   const navigate = useNavigate();
+  const { lectures } = useUserAuthStore();
 
   const [isEditing, setEditing] = useState([false, false, false, false, false, false]);
 
@@ -38,15 +40,15 @@ export default function ScoreList() {
   };
 
   const courseID = Number(courseid);
-  const course = courses.filter((n) => n.id === courseID)[0];
+  const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
   return (
     <Grid container spacing={2} sx={{ width: '80vw' }}>
       <Grid xs={12}>
-        <Title title={course.name} />
+        <Title title={lecture.lecture_name} />
       </Grid>
       <Grid xs={8}>
         <Typography fullWidth variant="h6">
-          문제수 : 20, 총점 : 100, 평균: 70, 표준오차 : 35, 수강인원 : {course.students}명
+          문제수 : 20, 총점 : 100, 평균: 70, 표준오차 : 35, 수강인원 : {lecture.headcount}명
         </Typography>
       </Grid>
       <Grid xs={4}>
