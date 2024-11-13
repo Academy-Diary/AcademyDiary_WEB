@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, colors, Grid, Typography } from '@mui/material';
-import { Title, TitleMedium } from '../../../components';
+import { Container, Grid, Typography } from '@mui/material';
+import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 
 // const courses = [
@@ -11,7 +11,7 @@ import { useUserAuthStore } from '../../../store';
 //   { id: 4, name: '국어', students: 55 },
 // ];
 
-export default function ClassPage() {
+export default function LecturePage() {
   const params = useParams();
   const navigate = useNavigate();
   const { lectures } = useUserAuthStore();

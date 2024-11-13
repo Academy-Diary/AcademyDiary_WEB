@@ -10,8 +10,8 @@ import {
   NotFound,
   DirectorHome,
   TeacherHome,
-  ClassHome,
-  ClassPage,
+  LectureHome,
+  LecturePage,
   TestList,
   CourseNotice,
   TeacherAddNotice,
@@ -79,9 +79,9 @@ function App() {
                 <Route path={PATH.DIRECTOR.PROFILE.UPDATE_PW} element={<DirectorUpdatePassword />} />
               </Route>
               <Route path={PATH.TEACHER.CLASS.ROOT} element={<Outlet />}>
-                <Route path="" element={<ClassHome />} />
+                <Route path="" element={<LectureHome />} />
                 <Route path={PATH.TEACHER.CLASS.DETAIL.ROOT} element={<Outlet />}>
-                  <Route path="" element={<ClassPage />} />
+                  <Route path="" element={<LecturePage />} />
                   <Route path={PATH.TEACHER.CLASS.DETAIL.ALL} element={<ScoreGraph />} />
                   <Route path={PATH.TEACHER.CLASS.DETAIL.LECTURENOTICE.ROOT} element={<Outlet />}>
                     <Route path="" element={<CourseNotice />} />

@@ -4,7 +4,7 @@ import { Box, List, ListItem, ListItemText } from '@mui/material';
 import { useUserAuthStore } from '../../../store';
 import { TitleMedium } from '../../../components';
 
-export default function ClassHome() {
+export default function LectureHome() {
   const navigate = useNavigate();
   const { lectures } = useUserAuthStore();
   // const courses = [
