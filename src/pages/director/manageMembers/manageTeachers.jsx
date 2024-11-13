@@ -65,9 +65,10 @@ export default function ManageTeachers() {
     if (checkedTeachers && checkedTeachers.length > 0) handleOpenDialog();
   };
   const handleDelete = () => {
-    // deleteTeacherMutation.mutate(selected.user_id, {
-    //   onSuccess: handleCloseDialog,
-    // });
+    const userIds = checkedTeachers.map((teacher) => teacher.user_id);
+    deleteTeacherMutation.mutate(userIds, {
+      onSuccess: handleCloseDialog,
+    });
   };
 
   return (

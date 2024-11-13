@@ -20,7 +20,7 @@ export const PATH_API = {
   REQUESTLIST: '/registeration/list/user',
   DECIDE_REGISTER: '/registeration/decide/user', // 사용자 승인 or 거절
   TEACHERLIST: (academyId) => `/teacher/${academyId}`,
-  DELETE_TEACHER: (id) => `/teacher/${id}`,
+  DELETE_TEACHER: `/teacher`,
   STUDENTLIST: (academyId) => `/student/${academyId}`,
   DELETE_STUDENT: (id) => `/student/${id}`,
 };

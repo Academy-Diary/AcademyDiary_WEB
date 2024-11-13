@@ -4,9 +4,9 @@ import { PATH_API } from '../../path';
 
 export const useDeleteTeacher = () =>
   useMutation({
-    mutationFn: async (teacherId) => {
-      const response = await axiosInstance.delete(PATH_API.DELETE_TEACHER(teacherId));
-      //   console.log(response);
+    mutationFn: async (teachers) => {
+      const response = await axiosInstance.delete(PATH_API.DELETE_TEACHER, { data: { user_id: teachers } });
+      // console.log(response);
       return response.data;
     },
     onSuccess: () => {
