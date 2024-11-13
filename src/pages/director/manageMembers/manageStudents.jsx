@@ -1,24 +1,6 @@
 import React, { useState } from 'react';
 
-import {
-  Typography,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Button,
-  Dialog,
-  DialogContent,
-  DialogActions,
-  DialogContentText,
-  DialogTitle,
-  Box,
-  OutlinedInput,
-  Checkbox,
-} from '@mui/material';
+import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, OutlinedInput, Checkbox } from '@mui/material';
 import { Search } from '@mui/icons-material';
 
 import { SimpleDialog, TitleMedium } from '../../../components';
@@ -30,17 +12,13 @@ import { useDeleteStudent } from '../../../api/queries/members/useDeleteStudent'
 //
 // [
 //   {
-//     user_id:'string',
+//     user_id: 'string',
 //     user_name: 'string',
 //     phone_number: 'string',
-//     familiesAsStudent: [
-//       {
-//         parent: {
-//           user_name: 'string',
-//           phone_number: 'string',
-//         },
-//       },
-//     ],
+//     parent: {
+//       user_name: '홍길동',
+//       phone_number: '010-1111-2222',
+//     },
 //   },
 // ];
 
@@ -100,14 +78,14 @@ export default function ManageStudents() {
                 <Checkbox onClick={handleCheckAll} />
               </TableCell>
               <TableCell>학생 이름</TableCell>
-              <TableCell>학부모 이름</TableCell>
               <TableCell>학생 연락처</TableCell>
+              <TableCell>학부모 이름</TableCell>
               <TableCell>학부모 연락처</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {students?.map((student) => {
-              const parent = student.familiesAsStudent ? student.familiesAsStudent[0]?.parent : null;
+              const { parent } = student;
 
               return student.user_name.includes(searchInput) || parent?.user_name.includes(searchInput) ? (
                 <TableRow key={student.user_id}>
@@ -117,8 +95,8 @@ export default function ManageStudents() {
                   <TableCell component="th" scope="row">
                     {student.user_name}
                   </TableCell>
-                  <TableCell>{parent?.user_name}</TableCell>
                   <TableCell>{student.phone_number}</TableCell>
+                  <TableCell>{parent?.user_name}</TableCell>
                   <TableCell>{parent?.phone_number}</TableCell>
                 </TableRow>
               ) : null;
