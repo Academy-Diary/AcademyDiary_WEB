@@ -12,5 +12,9 @@ export const QUERY_KEY = {
   REQUESTLIST: PATH_API.REQUESTLIST,
   TEACHERLIST: (academyId) => PATH_API.TEACHERLIST(academyId),
   STUDENTLIST: (academyId) => PATH_API.STUDENTLIST(academyId),
+
+  // manage lectures
+  LECTURELIST: PATH_API.LECTURELIST,
+  ATTENDEELIST: (lectureId) => PATH_API.ATTENDEELIST(lectureId),
 };
 export default QUERY_KEY;

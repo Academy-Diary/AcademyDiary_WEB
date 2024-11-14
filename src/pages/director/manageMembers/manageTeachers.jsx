@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, Dialog, DialogContent, DialogActions, DialogContentText, Box, DialogTitle } from '@mui/material';
 import { TitleMedium } from '../../../components';
-import useTeacherList from '../../../api/queries/members/useTeacherList';
+import { useTeacherList } from '../../../api/queries/members/useTeacherList';
 import { useDeleteTeacher } from '../../../api/queries/members/useDeleteTeacher';
 import { useUserAuthStore } from '../../../store';
 

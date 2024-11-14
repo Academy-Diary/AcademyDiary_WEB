@@ -4,23 +4,41 @@ import { useNavigate } from 'react-router-dom';
 import { List, ListItem, ListItemText, Box, Button, ButtonGroup, Dialog, DialogContent, DialogContentText, DialogActions, DialogTitle } from '@mui/material';
 
 import { TitleMedium, AddButton } from '../../../components';
+import { useLectureStore } from '../../../store';
+import { useLectureList } from '../../../api/queries/lectures/useLectureList';
+import { useDeleteLecture } from '../../../api/queries/lectures/useDeleteLecture';
 
-const courses = [
-  { name: '미적분 1', teacher: '이하람', numStudents: 60 },
-  { name: '확률과 통계', teacher: '김대성', numStudents: 45 },
-  { name: '화법과 작문', teacher: '나미리', numStudents: 39 },
-  { name: '비문학', teacher: '나미리', numStudents: 34 },
-];
+// Lecture List
+//
+// [
+//   {
+//     academy_id: 'test_academy',
+//     lecture_id: 1,
+//     lecture_name: '한국사',
+//     teacher_id: 'test_teacher',
+//     teacher_name: "권해담",
+//     days: ['TUESDAY', 'THURSDAY'],
+//     headcount: 60,
+//     start_time: '2024-10-16T04:30:00.000Z',
+//     end_time: '2024-10-16T06:00:00.000Z',
+//   },
+// ];
 
 export default function ManageCourses() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
 
+  const { setLecture } = useLectureStore();
+
+  const { data: lectures } = useLectureList();
+  const deleteLectureMutation = useDeleteLecture();
+
   const handleClickAdd = () => {
     navigate('/director/manage-courses/add-course');
   };
-  const handleClickDetails = () => {
+  const handleClickDetails = (lecture) => {
+    setLecture(lecture);
     navigate('/director/manage-courses/course-details');
   };
 
@@ -31,24 +49,36 @@ export default function ManageCourses() {
     setOpen(false);
   };
 
+  const handleDeleteLecture = () => {
+    deleteLectureMutation.mutate(selected.lecture_id, {
+      onSuccess: () => {
+        handleCloseDialog();
+        alert('강의 삭제 성공!');
+      },
+      onError: () => {
+        alert('강의 삭제 실패!');
+      },
+    });
+  };
+
   return (
     <>
       <TitleMedium title="강의 목록" />
       <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
-        {courses.map((course) => (
-          <ListItem key={course.name} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
-            <ListItemText primary={course.name} secondary={course.teacher} />
+        {lectures?.map((lecture) => (
+          <ListItem key={lecture.lecture_id} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
+            <ListItemText primary={lecture.lecture_name} secondary={lecture.teacher_name} />
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <ListItemText align="right" secondary={`수강 인원: ${course.numStudents}`} sx={{ mb: 2 }} />
+              <ListItemText align="right" secondary={`수강 인원: ${lecture.headcount}`} sx={{ mb: 2 }} />
               <ButtonGroup size="small">
-                <Button variant="outlined" onClick={handleClickDetails}>
+                <Button variant="outlined" onClick={() => handleClickDetails(lecture)}>
                   강의 상세
                 </Button>
                 <Button
                   variant="contained"
                   onClick={() => {
                     handleOpenDialog();
-                    setSelected(course);
+                    setSelected(lecture);
                   }}
                 >
                   폐강하기
@@ -61,17 +91,17 @@ export default function ManageCourses() {
       <AddButton title="새 강의 생성" onClick={handleClickAdd} />
       {selected && (
         <Dialog open={open} onClose={handleCloseDialog}>
-          <DialogTitle>{selected.name} 강의를 폐강하시겠습니까?</DialogTitle>
+          <DialogTitle>{selected.lecture_name} 강의를 폐강하시겠습니까?</DialogTitle>
           <DialogContent>
             <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
-              <DialogContentText>강의명: {selected.name}</DialogContentText>
-              <DialogContentText>강사명: {selected.teacher}</DialogContentText>
-              <DialogContentText>수강인원: {selected.numStudents}</DialogContentText>
+              <DialogContentText>강의명: {selected.lecture_name}</DialogContentText>
+              <DialogContentText>강사명: {selected.teacher_name}</DialogContentText>
+              <DialogContentText>수강인원: {selected.headcount}</DialogContentText>
             </Box>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>취소</Button>
-            <Button onClick={handleCloseDialog}>폐강</Button>
+            <Button onClick={handleDeleteLecture}>폐강</Button>
           </DialogActions>
         </Dialog>
       )}
