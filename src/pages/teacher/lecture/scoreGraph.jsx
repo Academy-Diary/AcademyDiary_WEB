@@ -6,12 +6,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 
-const courses = [
-  { id: 1, name: '미적분', students: 60 },
-  { id: 2, name: '확률과통계', students: 30 },
-  { id: 3, name: '영어', students: 20 },
-  { id: 4, name: '국어', students: 55 },
-];
+// const courses = [
+//   { id: 1, name: '미적분', students: 60 },
+//   { id: 2, name: '확률과통계', students: 30 },
+//   { id: 3, name: '영어', students: 20 },
+//   { id: 4, name: '국어', students: 55 },
+// ];
 const data = [
   { name: '3월 모의고사', score: '88' },
   { name: '6월 모의고사', score: '70' },
@@ -43,15 +43,15 @@ const rows = [
 export default function ScoreGraph() {
   const { courseid } = useParams();
   const navigate = useNavigate();
-  const { user } = useUserAuthStore();
+  const { user, lectures } = useUserAuthStore();
 
   const courseID = Number(courseid);
-  const course = courses.filter((n) => n.id === courseID)[0];
+  const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
 
   return (
     <Container sx={{ maxHeight: '90vh', overflowY: 'scroll' }}>
-      <Title title={course.name} />
-      <Typography>수강생 {course.students}명</Typography>
+      <Title title={lecture.lecture_name} />
+      <Typography>수강생 {lecture.headcount}명</Typography>
       <Grid container sx={{ margin: '0 auto' }}>
         <Grid item md={6}>
           <Stack spacing={2}>
