@@ -4,7 +4,7 @@ import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRo
 import { Search } from '@mui/icons-material';
 
 import { SimpleDialog, TitleMedium } from '../../../components';
-import useTeacherList from '../../../api/queries/members/useTeacherList';
+import { useTeacherList } from '../../../api/queries/members/useTeacherList';
 import { useDeleteTeacher } from '../../../api/queries/members/useDeleteTeacher';
 import { useUserAuthStore } from '../../../store';
 

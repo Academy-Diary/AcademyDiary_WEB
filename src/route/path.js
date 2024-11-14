@@ -10,6 +10,7 @@ export const PATH = {
   REGISTER_TEACHER: '/register-teacher',
   TEACHER: {
     ROOT: '/teacher',
+    COUNSELING: 'counseling', // 학생상담
     PROFILE: {
       ROOT: 'profile',
       UPDATE: 'update',
@@ -24,9 +25,22 @@ export const PATH = {
           UPDATE: 'update',
           DETAIL: ':id',
         },
+        TEST: {
+          ROOT: 'test', // 시험리스트
+          DETAILS: {
+            ROOT: ':testid', // 해당 시험에 대한 성적 리스트
+            ADD: 'add-score', // 전체 성적 추가
+          },
+          ADD: 'add', // 시험 추가
+        }, // 시험 관련
+        QUIZ: {
+          ROOT: 'quiz',
+          DETAIL: ':quizid',
+          ADD: 'add',
+        },
+        ALL: 'all', // 전체성적 그래프
       },
     },
-    COUNSELING: 'counseling', // 학생상담
     NOTICE: {
       ROOT: 'notice',
       DETAILS: ':id',
