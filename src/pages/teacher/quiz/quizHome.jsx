@@ -2,13 +2,14 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Grid, Typography } from '@mui/material';
 import { AddButton, Title } from '../../../components';
+import { useUserAuthStore } from '../../../store';
 
-const courses = [
-  { id: 1, name: '미적분', students: 60 },
-  { id: 2, name: '확률과통계', students: 30 },
-  { id: 3, name: '영어', students: 20 },
-  { id: 4, name: '국어', students: 55 },
-];
+// const courses = [
+//   { id: 1, name: '미적분', students: 60 },
+//   { id: 2, name: '확률과통계', students: 30 },
+//   { id: 3, name: '영어', students: 20 },
+//   { id: 4, name: '국어', students: 55 },
+// ];
 const tests = [
   { id: 1, name: '단원평가1' },
   { id: 2, name: '단원평가2' },
@@ -18,7 +19,8 @@ const tests = [
 
 export default function QuizHome() {
   const params = useParams();
-  const course = courses.filter((n) => n.id === Number(params.courseid))[0];
+  const { lectures } = useUserAuthStore();
+  const lecture = lectures.filter((n) => n.lecture_id === Number(params.courseid))[0];
   const navigate = useNavigate();
 
   const handleDetail = (id) => {
@@ -30,7 +32,7 @@ export default function QuizHome() {
 
   return (
     <>
-      <Title title={`${course.name} 퀴즈`} />
+      <Title title={`${lecture.lecture_name} 퀴즈`} />
       <Grid container>
         {tests.map((test) => (
           <Grid md={6} xs={12} sx={{ padding: '10px' }}>
