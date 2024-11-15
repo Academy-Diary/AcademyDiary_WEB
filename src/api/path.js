@@ -2,7 +2,7 @@ import { SECRET } from '../config/secret';
 
 export const PATH_API = {
   API_DOMAIN: SECRET.server_ip,
-  
+
   // user
   SIGN_IN: '/user/login',
   FIND_ID: '/user/find-id',

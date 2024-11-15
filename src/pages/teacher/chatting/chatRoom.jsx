@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Avatar, Box, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Avatar, Box, FormControl, FormControlLabel, FormLabel, Grid, MenuItem, Radio, RadioGroup, Stack, TextField, Typography } from '@mui/material';
 import { AssignmentInd } from '@mui/icons-material';
 import socket from '../../../components/socket';
 import { Title } from '../../../components';
@@ -15,10 +15,12 @@ const students = [
 ];
 
 export default function ChatRoom() {
-  const { user } = useUserAuthStore();
+  const { user, lectures } = useUserAuthStore();
   const [nowSelect, setSelect] = useState(students[0]);
   const [nowMessage, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [selectLectureId, setLectureSelect] = useState(lectures[0].lecture_id);
+  const [selectRole, setRoleSelect] = useState('STUDENT');
 
   useEffect(() => {
     // 서버에서 수신한 실시간 메시지를 상태에 추가
@@ -80,11 +82,35 @@ export default function ChatRoom() {
     }
   };
 
+  const handleLectureSelect = (e) => {
+    setLectureSelect(e.target.value);
+  };
+
+  const handleRoleSelect = (e) => {
+    setRoleSelect(e.target.value);
+  };
+
   return (
     <>
       <Title title="채팅 상담" />
       <Grid container>
         <Grid item md={3} sx={{ height: '80vh', overflowY: 'auto', overflowX: 'hidden' }}>
+          <Grid container>
+            <TextField select defaultValue={lectures[0].lecture_id} fullWidth onChange={handleLectureSelect}>
+              {lectures.map((lecture) => (
+                <MenuItem key={lecture.lecture_id} value={lecture.lecture_id}>
+                  {lecture.lecture_name}
+                </MenuItem>
+              ))}
+            </TextField>
+            <FormControl fullWidth sx={{ alignItems: 'center' }}>
+              <FormLabel id="demo-radio-buttons-group-label">학생/학부모 구분</FormLabel>
+              <RadioGroup row aria-labelledby="demo-radio-buttons-group-label" defaultValue="STUDENT" name="radio-buttons-group" onChange={handleRoleSelect}>
+                <FormControlLabel value="STUDENT" control={<Radio />} label="학생" />
+                <FormControlLabel value="PARENT" control={<Radio />} label="학부모" />
+              </RadioGroup>
+            </FormControl>
+          </Grid>
           {students.map((student) => (
             <Box key={student.id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(student.id)}>
               <Typography variant="h6" textAlign="left" pl="10px">
