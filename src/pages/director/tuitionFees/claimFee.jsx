@@ -1,6 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Typography, Box, Grid, Select, FormControl, InputLabel, MenuItem, ToggleButton, ToggleButtonGroup, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import {
+  Typography,
+  Box,
+  Grid,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  ToggleButton,
+  ToggleButtonGroup,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  IconButton,
+  TableContainer,
+  Paper,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Checkbox,
+} from '@mui/material';
+import { OpenInNew } from '@mui/icons-material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -8,8 +33,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { TitleMedium } from '../../../components';
 import { useUserAuthStore } from '../../../store';
-import { useStudentList } from '../../../api/queries/members/useStudentList';
 import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
+import { useLectureList } from '../../../api/queries/lectures/useLectureList';
+import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
 
 // const students = [
 //   {
@@ -38,17 +64,21 @@ import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
 const getTotalFee = (fees) => fees.reduce((acc, cur) => acc + cur, 0);
 
 export default function ClaimFee() {
-  const [selectedStudent, setSelectedStudent] = useState('');
+  // 학생 선택
+  const [openSelect, setOpenSelect] = useState(false);
+  const [selectedLectureId, setSelectedLectureId] = useState('');
+  const [selectedStudents, setSelectedStudents] = useState([]);
+
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [dueDate, setDueDate] = useState(null);
-  const [open, setOpen] = useState(false);
+  const [openPreview, setOpenPreview] = useState(false);
 
   const { user } = useUserAuthStore();
-  const { data: students } = useStudentList(user.academy_id);
+  const { data: lectures } = useLectureList();
   const { data: classes } = useClassList(user.academy_id);
 
   const handleChangeSelect = (e) => {
-    setSelectedStudent(e.target.value);
+    setSelectedLectureId(e.target.value);
   };
   const handleChangeToggle = (e, newList) => {
     setSelectedClasses(newList);
@@ -56,7 +86,7 @@ export default function ClaimFee() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setOpen(true);
+    setOpenPreview(true);
   };
 
   return (
@@ -65,15 +95,11 @@ export default function ClaimFee() {
       <Box component="form" sx={{ mt: 5 }} onSubmit={handleSubmit}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
-            <Typography>학생 선택</Typography>
-            <FormControl sx={{ mt: 3, minWidth: 120 }}>
-              <InputLabel>학생 선택</InputLabel>
-              <Select value={selectedStudent} onChange={handleChangeSelect} required>
-                {students?.map((s) => (
-                  <MenuItem key={s.user_id} value={s}>{`${s.user_name}(${s.phone_number.substr(9)})`}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            학생 선택
+            <IconButton onClick={() => setOpenSelect(true)}>
+              <OpenInNew />
+            </IconButton>
+            <Typography>{selectedStudents.map((s, idx) => `${s.user_name}(${s.phone_number.slice(9)})${idx < selectedStudents.length - 1 ? ', ' : ''}`)}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography>수강반 선택</Typography>
@@ -102,7 +128,28 @@ export default function ClaimFee() {
             청구하기
           </Button>
         </Box>
-        <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
+        <Dialog open={openSelect} onClose={() => setOpenSelect(false)} maxWidth="sm" fullWidth>
+          <DialogTitle>학생 선택</DialogTitle>
+          <DialogContent>
+            <FormControl sx={{ mt: 2, minWidth: 200 }}>
+              <InputLabel>강의 선택</InputLabel>
+              <Select label="강의 선택" value={selectedLectureId} onChange={handleChangeSelect}>
+                {lectures?.map((lecture) => (
+                  <MenuItem key={lecture.lecture_id} value={lecture.lecture_id}>
+                    {`${lecture.lecture_name}(${lecture.teacher_name})`}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {selectedLectureId !== '' && <AttendeesTable lectureId={selectedLectureId} selectedStudents={selectedStudents} setSelectedStudents={setSelectedStudents} />}
+          </DialogContent>
+          <DialogActions>
+            <Button variant="contained" onClick={() => setOpenSelect(false)}>
+              선택 완료
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={openPreview} onClose={() => setOpenPreview(false)} maxWidth="sm" fullWidth>
           <DialogTitle>청구서 미리보기</DialogTitle>
           <DialogContent>
             <Grid container spacing={2}>
@@ -110,7 +157,7 @@ export default function ClaimFee() {
                 <Typography>청구 대상</Typography>
               </Grid>
               <Grid item xs={10}>
-                <Typography>{`${selectedStudent?.user_name}(${selectedStudent?.phone_number?.substr(9)})`}</Typography>
+                <Typography>{selectedStudents.map((s, idx) => `${s.user_name}(${s.phone_number.slice(9)})${idx < selectedStudents.length - 1 ? ', ' : ''}`)}</Typography>
               </Grid>
               <Grid item xs={12}>
                 <Box sx={{ border: '1px solid black', padding: 2 }}>
@@ -139,13 +186,97 @@ export default function ClaimFee() {
             </Grid>
           </DialogContent>
           <DialogActions>
-            <Button variant="outlined" onClick={() => setOpen(false)}>
+            <Button variant="outlined" onClick={() => setOpenPreview(false)}>
               취소
             </Button>
             <Button variant="contained">전송하기</Button>
           </DialogActions>
         </Dialog>
       </Box>
+    </>
+  );
+}
+
+function AttendeesTable({ lectureId, selectedStudents, setSelectedStudents }) {
+  const { data: attendees } = useAttendeeList(lectureId);
+  const [allChecked, setAllChecked] = useState(false);
+
+  // selectedStudents에 user_id가 동일한 학생이 있는지 확인하는 함수
+  const hasStudent = (student) => selectedStudents.filter((s) => s.user_id === student.user_id).length > 0;
+
+  // 전체 선택 여부 업데이트
+  useEffect(() => {
+    if (attendees) {
+      const selectedIds = selectedStudents.map((s) => s.user_id);
+      const checked = attendees.filter((att) => selectedIds.includes(att.user_id));
+
+      if (checked.length === attendees.length) setAllChecked(true);
+      else setAllChecked(false);
+    }
+  }, [attendees, selectedStudents]);
+
+  const handleCheckAll = () => {
+    let newChecked = [...selectedStudents];
+
+    if (allChecked) {
+      // 전체 해제
+      attendees.forEach((att) => {
+        if (hasStudent(att)) newChecked = newChecked.filter((s) => s.user_id !== att.user_id);
+      });
+    } else {
+      // 전체 선택
+      attendees.forEach((att) => {
+        if (!hasStudent(att)) newChecked.push(att);
+      });
+    }
+    setSelectedStudents(newChecked);
+  };
+
+  const handleCheckStudent = (student) => {
+    let newChecked = [...selectedStudents];
+
+    if (hasStudent(student)) newChecked = newChecked.filter((s) => s.user_id !== student.user_id);
+    else newChecked.push(student);
+
+    setSelectedStudents(newChecked);
+  };
+
+  return (
+    <>
+      <Typography sx={{ py: 1 }}>수강생 목록</Typography>
+      <Typography variant="body2">총 {attendees?.length || 0}명</Typography>
+      <TableContainer component={Paper} sx={{ maxHeight: '25vh', maxWidth: '40vw' }}>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Checkbox checked={allChecked} onClick={handleCheckAll} />
+              </TableCell>
+              <TableCell>학생 이름</TableCell>
+              <TableCell>학생 연락처</TableCell>
+              <TableCell>학부모 이름</TableCell>
+              <TableCell>학부모 연락처</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {attendees?.map((att) => {
+              const { parent } = att;
+
+              return (
+                <TableRow key={att.user_id}>
+                  <TableCell>
+                    <Checkbox checked={hasStudent(att)} onClick={() => handleCheckStudent(att)} />
+                  </TableCell>
+                  <TableCell>{att.user_name}</TableCell>
+                  <TableCell>{att.phone_number}</TableCell>
+                  <TableCell>{parent?.user_name}</TableCell>
+                  <TableCell>{parent?.phone_number}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 }
