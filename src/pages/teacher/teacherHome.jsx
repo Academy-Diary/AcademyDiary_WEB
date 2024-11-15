@@ -3,7 +3,7 @@ import { Box, Divider, Grid, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Title } from '../../components';
 import { useUserAuthStore } from '../../store';
-import { useLectures } from '../../api/queries/user/useLectures';
+import { useLectures } from '../../api/queries/lectures/useLectures';
 
 // const lectures = [
 //   { name: '수학1', time: '14:00~16:00', students: 40 },
