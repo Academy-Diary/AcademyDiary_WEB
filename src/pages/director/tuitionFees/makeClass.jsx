@@ -24,6 +24,7 @@ import { useUserAuthStore } from '../../../store';
 import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
 import { useMakeClass } from '../../../api/queries/tuitionFees/useMakeClass';
 import { useUpdateClass } from '../../../api/queries/tuitionFees/useUpdateClass';
+import { useDeleteClass } from '../../../api/queries/tuitionFees/useDeleteClass';
 
 function DialogForm({ type, open, handleCloseFormDialog, selected }) {
   const title = type === 'add' ? '수강반 추가' : '수강반 수정';
@@ -98,11 +99,12 @@ export default function MakeClass() {
   const [openFormDialog, setOpenFormDialog] = useState(false);
   const [dialogType, setDialogType] = useState('add');
 
-  const [openDeleteDialog, setDeleteDialog] = useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selected, setSelected] = useState('');
 
   const { user } = useUserAuthStore();
   const { data: classes } = useClassList(user.academy_id);
+  const deleteClassMutation = useDeleteClass(user.academy_id, selected.class_id);
 
   const handleOpenFormDialog = (type, _class) => {
     setOpenFormDialog(true);
@@ -113,10 +115,25 @@ export default function MakeClass() {
     setOpenFormDialog(false);
   };
 
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
   // 수강반 삭제 핸들러
-  const handleDelete = (_class) => {
-    setDeleteDialog(true);
+  const handleClickDelete = (_class) => {
+    setOpenDeleteDialog(true);
     setSelected(_class);
+  };
+  const handleDelete = () => {
+    deleteClassMutation.mutate('', {
+      onSuccess: () => {
+        alert('수강반 삭제 성공!');
+        handleCloseDeleteDialog();
+      },
+      onError: () => {
+        alert('수강반 삭제 실패!');
+      },
+    });
   };
 
   return (
@@ -147,7 +164,7 @@ export default function MakeClass() {
                       </Button>
                     </Grid>
                     <Grid item xs={4}>
-                      <Button variant="contained" onClick={() => handleDelete(c)}>
+                      <Button variant="contained" onClick={() => handleClickDelete(c)}>
                         삭제
                       </Button>
                     </Grid>
@@ -160,7 +177,7 @@ export default function MakeClass() {
       </TableContainer>
       <AddButton title="수강반 추가" onClick={() => handleOpenFormDialog('add')} />
       <DialogForm type={dialogType} open={openFormDialog} handleCloseFormDialog={handleCloseFormDialog} selected={selected} />
-      <Dialog open={openDeleteDialog} onClose={() => setDeleteDialog(false)}>
+      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
         <DialogTitle>해당 수강반을 삭제하시겠습니까?</DialogTitle>
         <DialogContent>
           <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
@@ -170,8 +187,8 @@ export default function MakeClass() {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialog(false)}>취소</Button>
-          <Button onClick={() => setDeleteDialog(false)}>삭제</Button>
+          <Button onClick={handleCloseDeleteDialog}>취소</Button>
+          <Button onClick={handleDelete}>삭제</Button>
         </DialogActions>
       </Dialog>
     </>
