@@ -22,9 +22,7 @@ export default function ChatRoom() {
   const [selectLectureId, setLectureSelect] = useState(lectures[0].lecture_id);
   const [selectRole, setRoleSelect] = useState('STUDENT');
   const { data: students } = useAttendeeList(selectLectureId);
-  const [nowSelect, setSelect] = useState({ user_id: 0, user_name: '' });
-
-  // console.log(attendees);
+  const [nowSelect, setSelect] = useState({ user_id: 0, user_name: '왼쪽에서 이름을 선택하세요.' });
 
   useEffect(() => {
     // 서버에서 수신한 실시간 메시지를 상태에 추가
@@ -40,6 +38,8 @@ export default function ChatRoom() {
 
   const handleNameClick = (id) => {
     const selectedStudent = students.find((n) => n.user_id === id);
+
+    console.log(id);
 
     // 현재 선택된 방과 다른 방을 클릭한 경우만 실행
     if (nowSelect.user_id !== selectedStudent.user_id) {
@@ -67,6 +67,10 @@ export default function ChatRoom() {
   };
 
   const sendMessage = (e) => {
+    if (nowSelect.user_id === 0) {
+      alert('채팅을 보낼 학생을 선택하세요');
+      return;
+    }
     if (e.keyCode === 13 && nowMessage.trim() !== '') {
       const messageData = {
         roomId: nowSelect.user_id,
@@ -80,7 +84,7 @@ export default function ChatRoom() {
       socket.emit('chat message', messageData);
 
       // 로컬 상태에 즉시 메시지 추가
-      setMessages((prevMessages) => [...prevMessages, messageData]);
+      // setMessages((prevMessages) => [...prevMessages, messageData]);
 
       setMessage('');
     }
@@ -116,7 +120,7 @@ export default function ChatRoom() {
             </FormControl>
           </Grid>
           {students?.map((student) => (
-            <Box key={student.user_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(student.id)}>
+            <Box key={student.user_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(student.user_id)}>
               <Typography variant="h6" textAlign="left" pl="10px">
                 {student.user_name}
               </Typography>
