@@ -4,23 +4,27 @@ import { AssignmentInd } from '@mui/icons-material';
 import socket from '../../../components/socket';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
+import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
 
-const students = [
-  { id: 1, name: '김대성' },
-  { id: 2, name: '김민수' },
-  { id: 3, name: '김선우' },
-  { id: 4, name: '권해담' },
-  { id: 5, name: '이태윤' },
-  { id: 6, name: '서민석' },
-];
+// const students = [
+//   { id: 1, name: '김대성' },
+//   { id: 2, name: '김민수' },
+//   { id: 3, name: '김선우' },
+//   { id: 4, name: '권해담' },
+//   { id: 5, name: '이태윤' },
+//   { id: 6, name: '서민석' },
+// ];
 
 export default function ChatRoom() {
   const { user, lectures } = useUserAuthStore();
-  const [nowSelect, setSelect] = useState(students[0]);
   const [nowMessage, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [selectLectureId, setLectureSelect] = useState(lectures[0].lecture_id);
   const [selectRole, setRoleSelect] = useState('STUDENT');
+  const { data: students } = useAttendeeList(selectLectureId);
+  const [nowSelect, setSelect] = useState({ user_id: 0, user_name: '' });
+
+  // console.log(attendees);
 
   useEffect(() => {
     // 서버에서 수신한 실시간 메시지를 상태에 추가
@@ -35,18 +39,18 @@ export default function ChatRoom() {
   }, [user.user_id]);
 
   const handleNameClick = (id) => {
-    const selectedStudent = students.find((n) => n.id === id);
+    const selectedStudent = students.find((n) => n.user_id === id);
 
     // 현재 선택된 방과 다른 방을 클릭한 경우만 실행
-    if (nowSelect.id !== selectedStudent.id) {
+    if (nowSelect.user_id !== selectedStudent.user_id) {
       // 기존 방을 나가기
-      socket.emit('leave room', { roomId: nowSelect.id, userId: user.user_id });
+      socket.emit('leave room', { roomId: nowSelect.user_id, userId: user.user_id });
 
       // 새로운 방에 조인
-      socket.emit('create or join room', { roomId: selectedStudent.id, userId: user.user_id });
+      socket.emit('create or join room', { roomId: selectedStudent.user_id, userId: user.user_id });
 
       // 새로운 방의 이전 메시지 요청
-      socket.emit('get messages', { roomId: selectedStudent.id });
+      socket.emit('get messages', { roomId: selectedStudent.user_id });
 
       // 서버에서 수신한 메시지 업데이트
       socket.on('all messages', (msgs) => {
@@ -65,7 +69,7 @@ export default function ChatRoom() {
   const sendMessage = (e) => {
     if (e.keyCode === 13 && nowMessage.trim() !== '') {
       const messageData = {
-        roomId: nowSelect.id,
+        roomId: nowSelect.user_id,
         message: nowMessage,
         userId: user.user_id,
         time: new Date().toLocaleTimeString(),
@@ -111,10 +115,10 @@ export default function ChatRoom() {
               </RadioGroup>
             </FormControl>
           </Grid>
-          {students.map((student) => (
-            <Box key={student.id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(student.id)}>
+          {students?.map((student) => (
+            <Box key={student.user_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(student.id)}>
               <Typography variant="h6" textAlign="left" pl="10px">
-                {student.name}
+                {student.user_name}
               </Typography>
             </Box>
           ))}
@@ -122,7 +126,7 @@ export default function ChatRoom() {
         <Grid item md={9} sx={{ height: '80vh' }}>
           <Box sx={{ width: '100%', height: '100%', backgroundColor: '#b9b9b9', ml: '10px' }}>
             <Typography variant="h4" sx={{ padding: '10px' }}>
-              {nowSelect.name}
+              {nowSelect.user_name}
             </Typography>
             <Stack alignItems="center">
               <Box sx={{ width: '90%', height: '65vh', backgroundColor: '#ffffff', overflowY: 'auto', overflowX: 'hidden' }}>
