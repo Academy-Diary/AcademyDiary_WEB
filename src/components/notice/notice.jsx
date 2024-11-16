@@ -69,16 +69,16 @@ function Notice({
               <TableRow key={`${notice.title}_${notice.date}`}>
                 <TableCell>
                   {role === 'teacher' && courseid !== undefined ? (
-                    <Link to={`/${role}/class/${courseid}/notice/${notice.id}`}>{notice.title}</Link>
+                    <Link to={`/${role}/class/${courseid}/notice/${notice.notice_id}`}>{notice.title}</Link>
                   ) : (
-                    <Link to={`/${role}/notice/${notice.id}`}>{notice.title}</Link>
+                    <Link to={`/${role}/notice/${notice.notice_id}`}>{notice.title}</Link>
                   )}
                 </TableCell>
                 <TableCell align="right">{notice.date}</TableCell>
-                <TableCell align="right">{notice.view}</TableCell>
+                <TableCell align="right">{notice.views}</TableCell>
                 {!editable ? null : (
                   <TableCell align="right">
-                    <IconButton onClick={handleClickMore} value={notice.id}>
+                    <IconButton onClick={handleClickMore} value={notice.notice_id}>
                       <MoreVert />
                     </IconButton>
                   </TableCell>

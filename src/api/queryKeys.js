@@ -16,5 +16,8 @@ export const QUERY_KEY = {
   // manage lectures
   LECTURELIST: PATH_API.LECTURELIST,
   ATTENDEELIST: (lectureId) => PATH_API.ATTENDEELIST(lectureId),
+
+  // notice
+  NOTICELIST: (lectureId, page, pageSize) => PATH_API.NOTICE_LIST(lectureId, page, pageSize),
 };
 export default QUERY_KEY;
