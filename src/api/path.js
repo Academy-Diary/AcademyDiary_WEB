@@ -36,6 +36,7 @@ export const PATH_API = {
 
   // tuition fees
   CLASSLIST: (academyId) => `/expense/${academyId}`,
+  MAKE_BILL: '/bill',
 
   // 강사
   // lectures

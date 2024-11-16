@@ -36,6 +36,7 @@ import { useUserAuthStore } from '../../../store';
 import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
 import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
+import { useMakeBill } from '../../../api/queries/tuitionFees/useMakeBill';
 
 // const students = [
 //   {
@@ -76,6 +77,7 @@ export default function ClaimFee() {
   const { user } = useUserAuthStore();
   const { data: lectures } = useLectureList();
   const { data: classes } = useClassList(user.academy_id);
+  const makeBillMutation = useMakeBill();
 
   const handleChangeSelect = (e) => {
     setSelectedLectureId(e.target.value);
@@ -87,6 +89,24 @@ export default function ClaimFee() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setOpenPreview(true);
+  };
+  const handleClaim = () => {
+    const submitData = {
+      user_id: selectedStudents.map((s) => s.user_id),
+      class_id: selectedClasses.map((c) => c.class_id),
+      deadline: dueDate.format('YYYY-MM-DD'),
+    };
+    // console.log(submitData);
+
+    makeBillMutation.mutate(submitData, {
+      onSuccess: () => {
+        alert('학원비 청구 성공!');
+        setOpenPreview(false);
+      },
+      onError: () => {
+        alert('학원비 청구 실패!');
+      },
+    });
   };
 
   return (
@@ -189,7 +209,9 @@ export default function ClaimFee() {
             <Button variant="outlined" onClick={() => setOpenPreview(false)}>
               취소
             </Button>
-            <Button variant="contained">전송하기</Button>
+            <Button variant="contained" onClick={handleClaim}>
+              전송하기
+            </Button>
           </DialogActions>
         </Dialog>
       </Box>
