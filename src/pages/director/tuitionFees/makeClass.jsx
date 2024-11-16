@@ -20,12 +20,8 @@ import {
 } from '@mui/material';
 
 import { TitleMedium, AddButton } from '../../../components';
-
-const classes = [
-  { name: '수학 집중반', fee: 270000, period: '30' },
-  { name: '토익반', fee: 150000, period: '60' },
-  { name: '국어 집중반', fee: 250000, period: '30' },
-];
+import { useUserAuthStore } from '../../../store';
+import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
 
 function DialogForm({ type, open, onClose }) {
   const title = type === 'add' ? '수강반 추가' : '수강반 수정';
@@ -57,6 +53,9 @@ export default function MakeClass() {
   const [openDeleteDialog, setDeleteDialog] = useState(false);
   const [selected, setSelected] = useState('');
 
+  const { user } = useUserAuthStore();
+  const { data: classes } = useClassList(user.academy_id);
+
   const handleOpenFormDialog = (type) => {
     setOpenFormDialog(true);
     setDialogType(type);
@@ -85,11 +84,11 @@ export default function MakeClass() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {classes.map((c) => (
-              <TableRow key={c.name}>
-                <TableCell>{c.name}</TableCell>
-                <TableCell align="right">{c.period}</TableCell>
-                <TableCell align="right">{c.fee}</TableCell>
+            {classes?.map((c) => (
+              <TableRow key={c.class_id}>
+                <TableCell>{c.class_name}</TableCell>
+                <TableCell align="right">{c.duration}</TableCell>
+                <TableCell align="right">{c.expense}</TableCell>
                 <TableCell sx={{ width: '25%' }}>
                   <Grid container spacing={1}>
                     <Grid item xs={4} />
@@ -116,9 +115,9 @@ export default function MakeClass() {
         <DialogTitle>해당 수강반을 삭제하시겠습니까?</DialogTitle>
         <DialogContent>
           <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
-            <DialogContentText>수강반 이름: {selected.name}</DialogContentText>
-            <DialogContentText>기간 (일): {selected.period}</DialogContentText>
-            <DialogContentText>가격: {selected.fee}</DialogContentText>
+            <DialogContentText>수강반 이름: {selected.class_name}</DialogContentText>
+            <DialogContentText>기간 (일): {selected.duration}</DialogContentText>
+            <DialogContentText>가격: {selected.expense}</DialogContentText>
           </Box>
         </DialogContent>
         <DialogActions>
