@@ -22,20 +22,49 @@ import {
 import { TitleMedium, AddButton } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
+import { useMakeClass } from '../../../api/queries/tuitionFees/useMakeClass';
 
-function DialogForm({ type, open, onClose }) {
+function DialogForm({ type, open, handleCloseFormDialog }) {
   const title = type === 'add' ? '수강반 추가' : '수강반 수정';
 
+  const { user } = useUserAuthStore();
+  const makeClassMutation = useMakeClass(user.academy_id);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const data = new FormData(e.currentTarget);
+
+    const submitData = {
+      class_name: data.get('class_name'),
+      expense: Number(data.get('expense')),
+      duration: Number(data.get('duration')),
+    };
+    // console.log(submitData);
+
+    if (type === 'add') {
+      makeClassMutation.mutate(submitData, {
+        onSuccess: () => {
+          alert('수강반 추가 성공!');
+          handleCloseFormDialog();
+        },
+        onError: () => {
+          alert('수강반 추가 실패!');
+        },
+      });
+    }
+  };
+
   return (
-    <Dialog component="form" open={open} onClose={onClose}>
+    <Dialog component="form" open={open} onClose={handleCloseFormDialog} onSubmit={handleSubmit}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent sx={{ mt: 3 }}>
-        <TextField label="수강반 이름" required fullWidth sx={{ mb: 2 }} />
-        <TextField label="기간 (일)" type="number" required fullWidth sx={{ mb: 2 }} />
-        <TextField label="가격" type="number" required fullWidth sx={{ mb: 2 }} />
+        <TextField name="class_name" label="수강반 이름" required fullWidth sx={{ my: 2 }} />
+        <TextField name="duration" label="기간 (일)" type="number" required fullWidth sx={{ mb: 2 }} />
+        <TextField name="expense" label="가격" type="number" required fullWidth sx={{ mb: 2 }} />
       </DialogContent>
       <DialogActions sx={{ m: 3 }}>
-        <Button variant="outlined" onClick={onClose}>
+        <Button variant="outlined" onClick={handleCloseFormDialog}>
           취소
         </Button>
         <Button type="submit" variant="contained">
@@ -110,7 +139,7 @@ export default function MakeClass() {
         </Table>
       </TableContainer>
       <AddButton title="수강반 추가" onClick={() => handleOpenFormDialog('add')} />
-      <DialogForm type={dialogType} open={openFormDialog} onClose={handleCloseFormDialog} />
+      <DialogForm type={dialogType} open={openFormDialog} handleCloseFormDialog={handleCloseFormDialog} />
       <Dialog open={openDeleteDialog} onClose={() => setDeleteDialog(false)}>
         <DialogTitle>해당 수강반을 삭제하시겠습니까?</DialogTitle>
         <DialogContent>
