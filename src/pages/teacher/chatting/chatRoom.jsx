@@ -22,7 +22,7 @@ export default function ChatRoom() {
   const [selectLectureId, setLectureSelect] = useState(lectures[0].lecture_id);
   const [selectRole, setRoleSelect] = useState('STUDENT');
   const { data: students } = useAttendeeList(selectLectureId);
-  const [nowSelect, setSelect] = useState({ user_id: 0, user_name: '왼쪽에서 이름을 선택하세요.' });
+  const [nowSelect, setSelect] = useState({ user_id: 0, user_name: '학생 선택' });
 
   useEffect(() => {
     // 서버에서 수신한 실시간 메시지를 상태에 추가
