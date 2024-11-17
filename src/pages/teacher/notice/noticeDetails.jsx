@@ -31,13 +31,14 @@ export default function TeacherNoticeDetails() {
   const { courseid, id } = useParams();
   const navigate = useNavigate();
 
-  const { data: notice } = useNoticeDetail(id);
+  const { data: notice, isStale, refetch } = useNoticeDetail(id);
+  console.log(isStale);
 
   const handleClickList = () => {
     navigate(`/teacher/class/${courseid}/notice`);
   };
   const handleClickUpdate = () => {
-    navigate(`/teacher/class/${courseid}/notice/update?id=${id}`);
+    navigate(`/teacher/class/${courseid}/notice/update?academy_id=${id.split('&')[0]}&lecture_id=${id.split('&')[1]}&notice_id=${id.split('&')[2]}`);
   };
   const hadleFileDownload = (url, name) => {
     fetch(url, { method: 'get' })

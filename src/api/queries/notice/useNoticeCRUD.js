@@ -10,6 +10,7 @@ export const useNoticeDetail = (noticeId) =>
       const response = await axiosInstance.get(PATH_API.NOTICE_CRUD(noticeId));
       return response.data.data;
     },
+    refetchOnMount: true,
   });
 
 export const useNoticeDelete = () =>
@@ -18,4 +19,13 @@ export const useNoticeDelete = () =>
       const response = await axiosInstance.delete(PATH_API.NOTICE_CRUD(noticeId));
       return response.data.data;
     },
+  });
+
+export const useNoticeUpdate = () =>
+  useMutation({
+    mutationFn: async (payload) => {
+      const response = await axiosInstance.putForm(PATH_API.NOTICE_CRUD(payload.noticeId), payload.body, { headers: { 'Content-Type': 'multipart/form-data' } });
+      return response.data.data;
+    },
+    onError: (error) => console.log('updateError', error),
   });

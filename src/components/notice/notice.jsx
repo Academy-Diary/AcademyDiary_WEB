@@ -35,7 +35,7 @@ function Notice({
 
   const handleClickUpdate = () => {
     handleClose();
-    navigate(`${updateURL}?id=${anchorEl?.value}`);
+    navigate(`${updateURL}?academy_id=${anchorEl?.value.split('&')[0]}&lecture_id=${anchorEl?.value.split('&')[1]}&notice_id=${anchorEl?.value.split('&')[2]}`);
   };
 
   const handleCloseDialog = () => {
