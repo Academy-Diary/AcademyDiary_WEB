@@ -66,7 +66,7 @@ function Notice({
           </TableHead>
           <TableBody>
             {notices.map((notice) => (
-              <TableRow key={`${notice.title}_${notice.date}`}>
+              <TableRow key={`${notice.title}_${notice.created_at}`}>
                 <TableCell>
                   {role === 'teacher' && courseid !== undefined ? (
                     <Link to={`/${role}/class/${courseid}/notice/${notice.notice_id}`}>{notice.title}</Link>
@@ -74,7 +74,7 @@ function Notice({
                     <Link to={`/${role}/notice/${notice.notice_id}`}>{notice.title}</Link>
                   )}
                 </TableCell>
-                <TableCell align="right">{notice.date}</TableCell>
+                <TableCell align="right">{notice.created_at}</TableCell>
                 <TableCell align="right">{notice.views}</TableCell>
                 {!editable ? null : (
                   <TableCell align="right">

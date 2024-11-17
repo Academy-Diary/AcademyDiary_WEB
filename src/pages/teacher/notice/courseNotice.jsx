@@ -36,7 +36,7 @@ export default function CourseNotice() {
   return (
     <>
       <TitleMedium title={`${lecture.lecture_name} 공지사항`} />
-      <Notice notices={notices !== undefined ? notices : []} updateURL={`/teacher/class/${params.courseid}/notice/update`} handleClickDelete={handleClickDelete} />
+      <Notice notices={notices !== undefined ? notices.notice_list : []} updateURL={`/teacher/class/${params.courseid}/notice/update`} handleClickDelete={handleClickDelete} />
       <AddButton title="새 공지사항 등록" onClick={handleClickAdd} />
     </>
   );

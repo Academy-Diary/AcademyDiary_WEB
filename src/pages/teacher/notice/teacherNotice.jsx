@@ -23,7 +23,7 @@ export default function TeacherNotice() {
   return (
     <>
       <TitleMedium title="전체 공지사항" />
-      <Notice notices={notices !== undefined ? notices : []} editable={false} />
+      <Notice notices={notices !== undefined ? notices.notice_list : []} editable={false} />
     </>
   );
 }
