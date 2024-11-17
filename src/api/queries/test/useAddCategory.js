@@ -5,7 +5,6 @@ import { PATH_API } from '../../path';
 
 export const useAddCategory = () =>
   useMutation({
-    useMutation: [QUERY_KEY.addCategory],
     mutationFn: async (payload) => {
       const response = await axiosInstance.post(PATH_API.ADD_CATEGORY, payload);
       return response;
