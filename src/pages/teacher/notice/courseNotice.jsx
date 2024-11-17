@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Pagination } from '@mui/material';
 import { AddButton, Notice, TitleMedium } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useNoticeList } from '../../../api/queries/notice/useNoticeList';
@@ -25,7 +26,8 @@ export default function CourseNotice() {
 
   const courseID = Number(params.courseid);
   const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
-  const { data: notices, refetch } = useNoticeList(courseID, 1, 10);
+  const [pageNo, setPage] = useState(1);
+  const { data: notices, refetch } = useNoticeList(courseID, pageNo, 10);
   const noticeDelete = useNoticeDelete();
 
   const handleClickAdd = () => {
@@ -36,10 +38,16 @@ export default function CourseNotice() {
     refetch();
   };
 
+  const handleChangePage = (event, value) => {
+    setPage(value);
+    refetch();
+  };
+
   return (
     <>
       <TitleMedium title={`${lecture.lecture_name} 공지사항`} />
       <Notice notices={notices !== undefined ? notices.notice_list : []} updateURL={`/teacher/class/${params.courseid}/notice/update`} handleClickDelete={handleClickDelete} />
+      <Pagination count={notices !== undefined ? Math.trunc(notices.notice_count / 10) + 1 : 1} sx={{ mt: 10 }} page={pageNo} onChange={handleChangePage} />
       <AddButton title="새 공지사항 등록" onClick={handleClickAdd} />
     </>
   );

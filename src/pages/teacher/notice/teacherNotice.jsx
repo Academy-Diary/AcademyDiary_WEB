@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Pagination } from '@mui/material';
 
 import { useUserAuthStore } from '../../../store';
 import { TitleMedium, Notice } from '../../../components';
@@ -18,12 +19,19 @@ export default function TeacherNotice() {
   const { user } = useUserAuthStore();
   const navigate = useNavigate();
 
-  const { data: notices } = useNoticeList(0, 1, 10);
+  const [pageNo, setPage] = useState(1);
+  const { data: notices, refetch } = useNoticeList(0, pageNo, 10);
+
+  const handleChangePage = (event, value) => {
+    setPage(value);
+    refetch();
+  };
 
   return (
     <>
       <TitleMedium title="전체 공지사항" />
       <Notice notices={notices !== undefined ? notices.notice_list : []} editable={false} />
+      <Pagination count={notices !== undefined ? notices.notice_count / 10 + 1 : 1} sx={{ mt: 10 }} page={pageNo} onChange={handleChangePage} />
     </>
   );
 }
