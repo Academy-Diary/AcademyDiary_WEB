@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AddButton, Notice, TitleMedium } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useNoticeList } from '../../../api/queries/notice/useNoticeList';
+import { useNoticeDelete } from '../../../api/queries/notice/useNoticeCRUD';
 
 // test data
 // const courses = [
@@ -24,13 +25,15 @@ export default function CourseNotice() {
 
   const courseID = Number(params.courseid);
   const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
-  const { data: notices } = useNoticeList(courseID, 1, 10);
+  const { data: notices, refetch } = useNoticeList(courseID, 1, 10);
+  const noticeDelete = useNoticeDelete();
 
   const handleClickAdd = () => {
     navigate(`/teacher/class/${params.courseid}/notice/add`);
   };
   const handleClickDelete = (id) => {
-    console.log('delete', id);
+    noticeDelete.mutate(id);
+    refetch();
   };
 
   return (
