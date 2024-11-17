@@ -3,7 +3,7 @@ import { QUERY_KEY } from '../../queryKeys';
 import { axiosInstance } from '../../axios';
 import { PATH_API } from '../../path';
 
-export const useNoticeDetil = (noticeId) =>
+export const useNoticeDetail = (noticeId) =>
   useQuery({
     queryKey: [QUERY_KEY.NOTICECRUD(noticeId)],
     queryFn: async () => {

@@ -4,7 +4,7 @@ import { Button, Box, Grid, Typography, Paper, Link } from '@mui/material';
 import { saveAs } from 'file-saver';
 
 import { BottomTwoButtons, TitleMedium } from '../../../components';
-import { useNoticeDetil } from '../../../api/queries/notice/useNoticeCRUD';
+import { useNoticeDetail } from '../../../api/queries/notice/useNoticeCRUD';
 
 // const noticeList = [
 //   {
@@ -31,7 +31,7 @@ export default function TeacherNoticeDetails() {
   const { courseid, id } = useParams();
   const navigate = useNavigate();
 
-  const { data: notice } = useNoticeDetil(id);
+  const { data: notice } = useNoticeDetail(id);
 
   const handleClickList = () => {
     navigate(`/teacher/class/${courseid}/notice`);
