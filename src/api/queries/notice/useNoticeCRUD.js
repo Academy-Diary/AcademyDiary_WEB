@@ -29,3 +29,12 @@ export const useNoticeUpdate = () =>
     },
     onError: (error) => console.log('updateError', error),
   });
+
+export const useNoticeAdd = () =>
+  useMutation({
+    mutationFn: async (payload) => {
+      const response = await axiosInstance.postForm(PATH_API.NOTICE_CREATE, payload, { headers: { 'Content-Type': 'multipart/form-data' } });
+      return response.data.data;
+    },
+    onError: (error) => console.log('create Error', error),
+  });

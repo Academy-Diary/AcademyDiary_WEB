@@ -1,16 +1,32 @@
-import React from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
-import { Box, Button, Grid, styled, TextField } from '@mui/material';
+import { Box, Button, Container, Grid, styled, TextField } from '@mui/material';
 import { AttachFile } from '@mui/icons-material';
 
 import { SubmitButtons, TitleMedium } from '../../../components';
+import { useNoticeAdd } from '../../../api/queries/notice/useNoticeCRUD';
 
 const VisuallyHiddenInput = styled('input')({ display: 'none' });
 
 export default function TeacherAddNotice() {
   const navigate = useNavigate();
   const { courseid } = useParams();
+  const addNotice = useNoticeAdd();
+  const { state } = useLocation();
+
+  const [files, setFiles] = useState([]); // 첨부파일
+
+  const handleFileAdd = (e) => {
+    for (let i = 0; i < e.target.files.length; i += 1) {
+      const tmpImage = e.target.files[i];
+
+      setFiles((prev) => [...prev, tmpImage]);
+    }
+  };
+  const handleFileDelete = (name) => {
+    setFiles(files.filter((n) => n.name !== name));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,10 +37,20 @@ export default function TeacherAddNotice() {
     if (title.length === 0) alert('제목을 입력해주세요');
     else if (content.length === 0) alert('내용을 입력해주세요');
     else {
-      console.log(title);
-      console.log(content);
+      const splitNoticeId = state?.noticeId.split('&');
+      const newNoticeId = `${splitNoticeId[0]}&${splitNoticeId[1]}&${Number(splitNoticeId[2]) + 1}`;
 
-      navigate(`/teacher/class/${courseid}/notice`);
+      const fd = new FormData();
+      fd.append('title', title);
+      fd.append('content', content);
+      fd.append('notice_id', newNoticeId);
+      files.forEach((f) => fd.append('file', f));
+
+      addNotice.mutate(fd, {
+        onSuccess: () => {
+          navigate(`/teacher/class/${courseid}/notice`);
+        },
+      });
     }
   };
 
@@ -32,6 +58,7 @@ export default function TeacherAddNotice() {
     <>
       <TitleMedium title="공지사항 작성" />
       <Box component="form" onSubmit={handleSubmit}>
+        <VisuallyHiddenInput type="text" name="newid" defaultValue={state?.noticeId} />
         <Grid container spacing={2} sx={{ mx: 3, width: '60vw' }}>
           <Grid item xs={12}>
             <TextField name="title" label="제목" fullWidth />
@@ -42,8 +69,13 @@ export default function TeacherAddNotice() {
           <Grid item xs={12}>
             <Button component="label" role={undefined} tabIndex={-1} startIcon={<AttachFile />}>
               파일첨부
-              <VisuallyHiddenInput type="file" accept="image/*" onChange={(e) => console.log(e.target.files)} multiple />
+              <VisuallyHiddenInput type="file" onChange={handleFileAdd} multiple />
             </Button>
+            {files.map((file) => (
+              <Container key={file.name}>
+                {file.name} <Button onClick={() => handleFileDelete(file.name)}>삭제</Button>
+              </Container>
+            ))}
           </Grid>
         </Grid>
         <SubmitButtons submitTitle="등록하기" />

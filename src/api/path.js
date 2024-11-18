@@ -20,6 +20,7 @@ export const PATH_API = {
   // 공지
   NOTICE_LIST: (lectureId, page, pageSize) => `/notice/list?lecture_id=${lectureId}&page=${page}&page_size=${pageSize}`,
   NOTICE_RUD: (noticeId) => `/notice/${noticeId}`,
+  NOTICE_CREATE: '/notice/create',
 
   // 원장
   // manage members

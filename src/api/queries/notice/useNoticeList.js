@@ -11,4 +11,5 @@ export const useNoticeList = (lectureId, page, pageSize) =>
 
       return response.data.data;
     },
+    refetchOnMount: true,
   });

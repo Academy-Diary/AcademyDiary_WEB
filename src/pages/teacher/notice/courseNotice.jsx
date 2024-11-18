@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Pagination } from '@mui/material';
 import { AddButton, Notice, TitleMedium } from '../../../components';
@@ -22,7 +22,7 @@ import { useNoticeDelete } from '../../../api/queries/notice/useNoticeCRUD';
 export default function CourseNotice() {
   const params = useParams();
   const navigate = useNavigate();
-  const { lectures } = useUserAuthStore();
+  const { user, lectures } = useUserAuthStore();
 
   const courseID = Number(params.courseid);
   const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
@@ -30,12 +30,21 @@ export default function CourseNotice() {
   const { data: notices, refetch } = useNoticeList(courseID, pageNo, 10);
   const noticeDelete = useNoticeDelete();
 
+  const [lastNoticeId, setLastNoticeId] = useState('');
+
+  useEffect(() => {
+    if (notices) {
+      // 공지를 불러왔을 때 마지막 noticeId.
+      // 공지가 없다면 user.academy_id&courseId&0 으로 세팅.
+      setLastNoticeId(notices.notice_count !== 0 ? notices.notice_list[0].notice_id : `${user.academy_id}&${courseID}&0`);
+    }
+  }, [notices, courseID, user]);
+
   const handleClickAdd = () => {
-    navigate(`/teacher/class/${params.courseid}/notice/add`);
+    navigate(`/teacher/class/${params.courseid}/notice/add`, { state: { noticeId: lastNoticeId } });
   };
   const handleClickDelete = (id) => {
-    noticeDelete.mutate(id);
-    refetch();
+    noticeDelete.mutate(id, { onSuccess: () => refetch() });
   };
 
   const handleChangePage = (event, value) => {
