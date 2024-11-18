@@ -58,7 +58,6 @@ export default function TeacherAddNotice() {
     <>
       <TitleMedium title="공지사항 작성" />
       <Box component="form" onSubmit={handleSubmit}>
-        <VisuallyHiddenInput type="text" name="newid" defaultValue={state?.noticeId} />
         <Grid container spacing={2} sx={{ mx: 3, width: '60vw' }}>
           <Grid item xs={12}>
             <TextField name="title" label="제목" fullWidth />
