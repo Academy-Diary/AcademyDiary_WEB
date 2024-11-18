@@ -19,6 +19,6 @@ export const QUERY_KEY = {
 
   // notice
   NOTICELIST: (lectureId, page, pageSize) => PATH_API.NOTICE_LIST(lectureId, page, pageSize),
-  NOTICECRUD: (noticeId) => PATH_API.NOTICE_CRUD(noticeId),
+  NOTICERUD: (noticeId) => PATH_API.NOTICE_RUD(noticeId),
 };
 export default QUERY_KEY;

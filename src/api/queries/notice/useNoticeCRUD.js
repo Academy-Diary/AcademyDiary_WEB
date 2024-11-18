@@ -5,9 +5,9 @@ import { PATH_API } from '../../path';
 
 export const useNoticeDetail = (noticeId) =>
   useQuery({
-    queryKey: [QUERY_KEY.NOTICECRUD(noticeId)],
+    queryKey: [QUERY_KEY.NOTICERUD(noticeId)],
     queryFn: async () => {
-      const response = await axiosInstance.get(PATH_API.NOTICE_CRUD(noticeId));
+      const response = await axiosInstance.get(PATH_API.NOTICE_RUD(noticeId));
       return response.data.data;
     },
     refetchOnMount: true,
@@ -16,7 +16,7 @@ export const useNoticeDetail = (noticeId) =>
 export const useNoticeDelete = () =>
   useMutation({
     mutationFn: async (noticeId) => {
-      const response = await axiosInstance.delete(PATH_API.NOTICE_CRUD(noticeId));
+      const response = await axiosInstance.delete(PATH_API.NOTICE_RUD(noticeId));
       return response.data.data;
     },
   });
@@ -24,7 +24,7 @@ export const useNoticeDelete = () =>
 export const useNoticeUpdate = () =>
   useMutation({
     mutationFn: async (payload) => {
-      const response = await axiosInstance.putForm(PATH_API.NOTICE_CRUD(payload.noticeId), payload.body, { headers: { 'Content-Type': 'multipart/form-data' } });
+      const response = await axiosInstance.putForm(PATH_API.NOTICE_RUD(payload.noticeId), payload.body, { headers: { 'Content-Type': 'multipart/form-data' } });
       return response.data.data;
     },
     onError: (error) => console.log('updateError', error),
