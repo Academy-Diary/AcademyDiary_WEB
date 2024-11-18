@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 
-import { Avatar, Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, Container, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { Close } from '@mui/icons-material';
 
 import { useUserAuthStore } from '../../../store';
 import { SubmitButtons } from '../../../components';
+import { useUpdateProfile } from '../../../api/queries/user/useProfile';
+import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 
 export default function TeacherUpdateProfile() {
   const { user } = useUserAuthStore();
@@ -41,14 +44,57 @@ function CheckPasswd({ setPassed }) {
 
 function UpdateProfileForm({ currentInfo }) {
   const navigate = useNavigate();
+  const { user } = useUserAuthStore();
   const [date, setDate] = useState(dayjs(currentInfo.birth_date.split('T')[0]));
+  const [openDialog, setOpenDialog] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const updateProfileMutation = useUpdateProfile(user.user_id);
+  const deleteAccountMutation = useCancelAccount(user.user_id);
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
+  };
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaaway') return;
+    setOpenSnackbar(false);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // TODO: 프로필 수정 요청
+    const { target } = e;
+    const name = target[0].value;
+    const birth = new Date(target[2].value);
+    const phone = target[5].value;
+    const eMail = target[7].value;
+    const submitData = {
+      user_name: name,
+      phone_number: phone,
+      email: eMail,
+      birth_date: birth.toISOString(),
+    };
 
-    navigate('/teacher/profile');
+    updateProfileMutation.mutate(submitData, { onSuccess: (data) => navigate('/teacher/profile') });
+  };
+  const handleDeleteAccount = () => {
+    handleCloseDialog();
+
+    deleteAccountMutation.mutate('', {
+      onError: (error) => {
+        handleOpenSnackbar();
+        if (error.errorCode === 403) setErrorMsg('학원에 소속된 사용자는 탈퇴할 수 없습니다.');
+        else setErrorMsg('탈퇴 실패. 나중에 다시 시도해주세요.');
+      },
+    });
   };
 
   return (
@@ -69,12 +115,28 @@ function UpdateProfileForm({ currentInfo }) {
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={['DatePicker']} sx={{ mb: 2 }}>
-              <DatePicker label="생년월일" maxDate={dayjs()} value={date} onChange={(newValue) => setDate(newValue)} />
+              <DatePicker label="생년월일" maxDate={dayjs()} value={date} onChange={(newValue) => setDate(newValue)} format="YYYY-MM-DD" />
             </DemoContainer>
           </LocalizationProvider>
           <TextField label="전화번호" defaultValue={currentInfo.phone_number} required fullWidth sx={{ mb: 2 }} />
           <TextField label="이메일" defaultValue={currentInfo.email} required fullWidth sx={{ mb: 2 }} />
         </Grid>
+        <Button sx={{ mt: 3 }} onClick={handleDeleteAccount}>
+          {' '}
+          회원탈퇴{' '}
+        </Button>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={5000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          message={errorMsg}
+          action={
+            <IconButton onClick={handleCloseSnackbar} color="inherit" size="small">
+              <Close fontSize="small" />
+            </IconButton>
+          }
+        />
       </Grid>
       <SubmitButtons submitTitle="수정 완료" />
     </Box>

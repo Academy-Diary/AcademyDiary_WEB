@@ -3,12 +3,11 @@ import { axiosInstance } from '../../axios';
 import { PATH_API } from '../../path';
 
 // 원장이 사용자(강사/학생)의 등록 요청을 승인 또는 거절하는 useMutation
-export const useDecideRegister = (academyId, agreed) =>
+export const useDecideRegisters = (agreed) =>
   useMutation({
-    mutationFn: async (userId) => {
+    mutationFn: async (userIds) => {
       const response = await axiosInstance.post(PATH_API.DECIDE_REGISTER, {
-        academy_id: academyId,
-        user_id: userId,
+        user_id: userIds,
         agreed,
       });
       //   console.log(response);

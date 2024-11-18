@@ -61,26 +61,28 @@ export default function TransferList({ leftTitle, rightTitle, left, right, setLe
   const customList = (items, title) => (
     <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
       <List dense component="div" role="list" subheader={<ListSubheader component="div">{title}</ListSubheader>}>
-        {items.map((obj) => {
-          const value = `${obj.name}(${obj.phone.substr(9)})`;
-          const labelId = `transfer-list-item-${value}-label`;
+        {items && items.length > 0
+          ? items.map((obj) => {
+              const value = `${obj.user_name}(${obj.phone_number.substr(9)})`;
+              const labelId = `transfer-list-item-${value}-label`;
 
-          return (
-            <ListItemButton key={value} role="listitem" onClick={handleToggle(obj)}>
-              <ListItemIcon>
-                <Checkbox
-                  checked={checked.indexOf(obj) !== -1}
-                  tabIndex={-1}
-                  disableRipple
-                  inputProps={{
-                    'aria-labelledby': labelId,
-                  }}
-                />
-              </ListItemIcon>
-              <ListItemText id={labelId} primary={value} />
-            </ListItemButton>
-          );
-        })}
+              return (
+                <ListItemButton key={value} role="listitem" onClick={handleToggle(obj)}>
+                  <ListItemIcon>
+                    <Checkbox
+                      checked={checked.indexOf(obj) !== -1}
+                      tabIndex={-1}
+                      disableRipple
+                      inputProps={{
+                        'aria-labelledby': labelId,
+                      }}
+                    />
+                  </ListItemIcon>
+                  <ListItemText id={labelId} primary={value} />
+                </ListItemButton>
+              );
+            })
+          : null}
       </List>
     </Paper>
   );

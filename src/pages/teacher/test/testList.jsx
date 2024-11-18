@@ -9,23 +9,23 @@ import { useUserAuthStore } from '../../../store';
 import { useAddCategory } from '../../../api/queries/test/useAddCategory';
 import { useDeleteCategory } from '../../../api/queries/test/useDeleteCategory';
 
-const courses = [
-  { id: 1, name: '미적분', students: 60 },
-  { id: 2, name: '확률과통계', students: 30 },
-  { id: 3, name: '영어', students: 20 },
-  { id: 4, name: '국어', students: 55 },
-];
+// const courses = [
+//   { id: 1, name: '미적분', students: 60 },
+//   { id: 2, name: '확률과통계', students: 30 },
+//   { id: 3, name: '영어', students: 20 },
+//   { id: 4, name: '국어', students: 55 },
+// ];
 
 export default function TestList() {
   const { courseid } = useParams();
   const navigate = useNavigate();
-  const { user } = useUserAuthStore();
+  const { user, lectures } = useUserAuthStore();
   const categoryT = useCategory(user.academy_id).data; // 서버로 부터 받아온 데이터 임시 저장 (type: Object)
   const addCategory = useAddCategory();
   const deleteCategory = useDeleteCategory();
 
   const courseID = Number(courseid);
-  const course = courses.filter((n) => n.id === courseID)[0];
+  const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
 
   const [category, setOriginCategory] = useState([]);
   const [unSelectCategory, setUnCategory] = useState(null); // 선택되지 않은 카테고리
@@ -49,7 +49,7 @@ export default function TestList() {
   ];
 
   const handleRowClick = (id) => {
-    navigate(`/teacher/class/${course.id}/test/${id}`);
+    navigate(`/teacher/class/${lecture.lecture_id}/test/${id}`);
   };
 
   const handleFilterClick = (e) => {
