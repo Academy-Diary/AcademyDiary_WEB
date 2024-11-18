@@ -31,6 +31,11 @@ export const PATH_API = {
   STUDENTLIST: (academyId) => `/student/${academyId}`,
   DELETE_STUDENT: '/student',
 
+  // examination (test)
+  EXAM_CATEGORY: (academyId) => `/exam-type/academy/${academyId}`,
+  ADD_CATEGORY: '/exam-type',
+  DELETE_CATEGORY: (examTypeId) => `/exam-type/${examTypeId}`,
+
   // manage lectures
   LECTURELIST: '/lecture',
   ATTENDEELIST: (lectureId) => `/lecture/${lectureId}/student`,

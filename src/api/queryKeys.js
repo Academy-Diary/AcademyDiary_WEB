@@ -13,6 +13,9 @@ export const QUERY_KEY = {
   TEACHERLIST: (academyId) => PATH_API.TEACHERLIST(academyId),
   STUDENTLIST: (academyId) => PATH_API.STUDENTLIST(academyId),
 
+  // examination (test)
+  EXAM_CATEGORY: (academyId) => PATH_API.EXAM_CATEGORY(academyId),
+
   // manage lectures
   LECTURELIST: PATH_API.LECTURELIST,
   ATTENDEELIST: (lectureId) => PATH_API.ATTENDEELIST(lectureId),
