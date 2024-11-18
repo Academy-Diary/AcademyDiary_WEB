@@ -66,7 +66,7 @@ function Notice({
           </TableHead>
           <TableBody>
             {notices.map((notice) => (
-              <TableRow key={`${notice.title}_${notice.created_at}`}>
+              <TableRow key={`${notice.notice_id}`}>
                 <TableCell>
                   {role === 'teacher' && courseid !== undefined ? (
                     <Link to={`/${role}/class/${courseid}/notice/${notice.notice_id}`}>{notice.title}</Link>
