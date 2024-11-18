@@ -104,10 +104,11 @@ export default function TestList() {
   };
 
   if (categoryT) {
+    console.log(lecture);
     return (
       <>
-        <Title title={`${course.name}`} />
-        <Typography align="left">수강생 {course.students}명</Typography>
+        <Title title={`${lecture.lecture_name}`} />
+        <Typography align="left">수강생 {lecture.headcount}명</Typography>
         <TableContainer component={Paper} sx={{ padding: 3 }}>
           <Container sx={{ display: 'flex' }}>
             <TextField label="Search" sx={{ mb: 1 }} />
@@ -183,7 +184,7 @@ export default function TestList() {
             </TableBody>
           </Table>
         </TableContainer>
-        <AddButton title="시험생성" onClick={() => navigate(`/teacher/class/${course.id}/test/add`)} />
+        <AddButton title="시험생성" onClick={() => navigate(`/teacher/class/${lecture.lecture_id}/test/add`)} />
       </>
     );
   }
