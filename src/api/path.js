@@ -2,7 +2,7 @@ import { SECRET } from '../config/secret';
 
 export const PATH_API = {
   API_DOMAIN: SECRET.server_ip,
-  
+
   // user
   SIGN_IN: '/user/login',
   FIND_ID: '/user/find-id',
@@ -16,6 +16,11 @@ export const PATH_API = {
   // register
   REGISTER_ACADEMY: '/registeration/request/academy',
   REGISTER_TEACHER: '/registeration/request/user',
+
+  // 공지
+  NOTICE_LIST: (lectureId, page, pageSize) => `/notice/list?lecture_id=${lectureId}&page=${page}&page_size=${pageSize}`,
+  NOTICE_RUD: (noticeId) => `/notice/${noticeId}`,
+  NOTICE_CREATE: '/notice/create',
 
   // 원장
   // manage members
