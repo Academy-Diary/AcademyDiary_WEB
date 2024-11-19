@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Chip, Container, Grid, Stack, TextField, Typography } from '@mui/material';
@@ -9,6 +8,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
 
 import { SubmitButtons, Title } from '../../../components';
+import { useAddExam } from '../../../api/queries/test/useAddExam';
 import { useUserAuthStore } from '../../../store';
 import { useCategory } from '../../../api/queries/test/useCategory';
 
@@ -24,8 +24,8 @@ export default function AddTest() {
   const navigate = useNavigate();
   const { user } = useUserAuthStore();
 
-  const courseID = Number(courseid);
-  const course = courses.filter((n) => n.id === courseID)[0];
+  const lectureId = Number(courseid);
+  const course = courses.filter((n) => n.id === lectureId)[0];
 
   const addExam = useAddExam(lectureId);
   const { data: categoryT } = useCategory(user.academy_id);
@@ -54,14 +54,29 @@ export default function AddTest() {
     setOriginCategory([...category, selectCategory[0]]);
     setSelCategory('');
   };
-  const handleCreate = () => {
-    navigate(`/teacher/class/${course.id}/test`);
+  const handleCreate = (e) => {
+    e.preventDefault();
+
+    const name = e.currentTarget.testname.value;
+    // console.log(date.$y.$M.$D);
+    addExam.mutate(
+      {
+        exam_name: name,
+        exam_type_id: selectCategory[0].exam_type_id.toString(),
+        exam_date: `${date.$y}-${date.$M}-${date.$D}`,
+      },
+      {
+        onSuccess: () => {
+          navigate(`/teacher/class/${course.id}/test`);
+        },
+      }
+    );
   };
 
   return (
     <Container>
       <Title title={course.name} subtitle="시험만들기" />
-      <Stack component="form" spacing={2} useFlexGap sx={{ alignItems: 'center' }}>
+      <Stack component="form" spacing={2} useFlexGap sx={{ alignItems: 'center' }} onSubmit={handleCreate}>
         <TextField required name="testname" label="시험 이름" />
         <Grid sx={[12, { m: 1, p: 1 }]}>
           <Typography variant="h6" align="center">
@@ -84,7 +99,7 @@ export default function AddTest() {
           </LocalizationProvider>
         </Grid>
         <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-          <Button size="large" variant="contained" onClick={handleCreate}>
+          <Button type="submit" size="large" variant="contained">
             시험 생성 완료
           </Button>
         </Box>
