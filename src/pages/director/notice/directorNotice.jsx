@@ -6,6 +6,7 @@ import { Pagination } from '@mui/material';
 import { TitleMedium, Notice, AddButton } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useNoticeList } from '../../../api/queries/notice/useNoticeList';
+import { useNoticeDelete } from '../../../api/queries/notice/useNoticeCRUD';
 
 // const notices = {
 //   notice_count: 25,
@@ -27,10 +28,12 @@ const PAGE_SIZE = 6;
 export default function DirectorNotice() {
   const { user } = useUserAuthStore();
   const navigate = useNavigate();
+
   const [page, setPage] = useState(1);
   const [lastNoticeId, setLastNoticeId] = useState('');
 
   const { data: notices, refetch } = useNoticeList(0, page, PAGE_SIZE);
+  const deleteNoticeMutation = useNoticeDelete();
 
   useEffect(() => {
     if (notices) {
@@ -53,8 +56,14 @@ export default function DirectorNotice() {
   };
 
   const handleClickDelete = (id) => {
-    // TODO: 전체공지 삭제 api 연동
-    console.log('delete', id);
+    deleteNoticeMutation.mutate(id, {
+      onSuccess: () => {
+        alert('공지 삭제 성공!');
+      },
+      onError: () => {
+        alert('공지 삭제 실패!');
+      },
+    });
   };
 
   return (
