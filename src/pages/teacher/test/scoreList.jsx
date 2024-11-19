@@ -128,7 +128,7 @@ export default function ScoreList() {
             </Box>
           </Grid>
           <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-            <Button size="large" variant="contained" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
+            <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
               삭제하기
             </Button>
             <Button
