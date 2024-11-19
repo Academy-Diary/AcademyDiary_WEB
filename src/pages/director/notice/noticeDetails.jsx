@@ -1,37 +1,38 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { saveAs } from 'file-saver';
 
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography, Button } from '@mui/material';
 
 import { TitleMedium, BottomTwoButtons } from '../../../components';
+import { useNoticeDetail } from '../../../api/queries/notice/useNoticeCRUD';
 
-const noticeList = [
-  {
-    id: 1,
-    title: '8월 정기고사 안내',
-    content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...',
-    date: '2024-07-20',
-    view: 55,
-  },
-  {
-    id: 2,
-    title: '7월 정기고사 안내',
-    content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...',
-    date: '2024-06-18',
-    view: 101,
-  },
-  { id: 3, title: '6월 정기고사 안내', content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...', date: '2024-05-21', view: 129 },
-  { id: 4, title: '5월 정기고사 안내', content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...', date: '2024-04-21', view: 129 },
-  { id: 5, title: '4월 정기고사 안내', content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...', date: '2024-03-21', view: 129 },
-  { id: 6, title: '3월 정기고사 안내', content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...', date: '2024-02-29', view: 201 },
-];
+// const data = {
+//   notice: {
+//     notice_id: 'test_academy2&0&5',
+//     notice_num: 5,
+//     lecture_id: 0,
+//     title: '코로나19로 인한 학원 운영 방침',
+//     content: '코로나19로 인한 운영 방침 안내',
+//     user_id: 'test_chief',
+//     views: 0,
+//     created_at: '2021-08-30',
+//     updated_at: '2021-08-30',
+//   },
+//   files: [
+//     {
+//       url: 'String',
+//       name: '코로나.jpg',
+//     },
+//   ],
+// };
 
 export default function NoticeDetails() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const noticeId = Number(params.id);
-  const notice = noticeList.filter((n) => n.id === noticeId)[0];
+  const noticeId = params.id;
+  const { data } = useNoticeDetail(noticeId);
 
   const handleClickBefore = () => {
     navigate('/director/notice');
@@ -39,27 +40,44 @@ export default function NoticeDetails() {
   const handleClickUpdate = () => {
     navigate('/director/notice/update');
   };
+  const hadleFileDownload = (url, name) => {
+    fetch(url, { method: 'get' })
+      .then((res) => res.blob())
+      .then((blob) => {
+        saveAs(blob, name);
+      });
+  };
 
   return (
     <>
       <TitleMedium title="공지사항 상세" />
       <Grid container spacing={2} sx={{ mt: 3, width: '60vw' }}>
         <Grid item xs={6}>
-          <Typography variant="body2">조회수: {notice.view}</Typography>
+          <Typography variant="body2">조회수: {data?.notice.views}</Typography>
         </Grid>
         <Grid item xs={6}>
           <Typography variant="body2" align="right">
-            날짜: {notice.date}
+            날짜: {data?.notice.created_at}
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Paper variant="outlined" sx={{ minHeight: 50, padding: 2 }}>
-            <Typography>{notice.title}</Typography>
+            <Typography>{data?.notice.title}</Typography>
           </Paper>
         </Grid>
         <Grid item xs={12}>
           <Paper variant="outlined" sx={{ height: 350, padding: 2, overflow: 'auto' }}>
-            <Typography>{notice.content}</Typography>
+            <Typography>{data?.notice.content}</Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>첨부파일</Typography>
+          <Paper variant="outlined" sx={{ height: 100, padding: 2, overflow: 'auto' }}>
+            {data?.files.map((file) => (
+              <Button variant="text" size="small" onClick={() => hadleFileDownload(file.url, file.name)}>
+                {file.name}
+              </Button>
+            ))}
           </Paper>
         </Grid>
       </Grid>
