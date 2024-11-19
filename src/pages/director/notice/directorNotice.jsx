@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Pagination } from '@mui/material';
@@ -28,8 +28,16 @@ export default function DirectorNotice() {
   const { user } = useUserAuthStore();
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
+  const [lastNoticeId, setLastNoticeId] = useState('');
 
   const { data: notices, refetch } = useNoticeList(0, page, PAGE_SIZE);
+
+  useEffect(() => {
+    if (notices) {
+      // 공지가 없으면 academyId&0&0으로
+      setLastNoticeId(notices.notice_count !== 0 ? notices.notice_list[0].notice_id : `${user.academy_id}&0&0`);
+    }
+  }, [notices, user]);
 
   const handleChangePage = (e, value) => {
     setPage(value);
@@ -37,7 +45,11 @@ export default function DirectorNotice() {
   };
 
   const handleClickAdd = () => {
-    navigate('/director/notice/add');
+    navigate('/director/notice/add', {
+      state: {
+        lastNoticeId,
+      },
+    });
   };
 
   const handleClickDelete = (id) => {
