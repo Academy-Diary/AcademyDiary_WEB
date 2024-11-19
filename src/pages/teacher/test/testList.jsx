@@ -112,7 +112,7 @@ export default function TestList() {
       <>
         <Title title={`${lecture.lecture_name}`} />
         <Typography align="left">수강생 {lecture.headcount}명</Typography>
-        <TableContainer component={Paper} sx={{ padding: 3 }}>
+        <TableContainer component={Paper} sx={{ padding: 3, maxHeight: '70vh', overflowY: 'auto' }}>
           <Container sx={{ display: 'flex' }}>
             <TextField label="Search" sx={{ mb: 1 }} />
             <IconButton onClick={handleFilterClick}>
