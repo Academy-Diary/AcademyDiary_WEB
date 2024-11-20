@@ -57,7 +57,7 @@ export default function NoticeDetails() {
         </Grid>
         <Grid item xs={6}>
           <Typography variant="body2" align="right">
-            날짜: {data?.notice.created_at}
+            날짜: {data?.notice.created_at.split('T')[0]}
           </Typography>
         </Grid>
         <Grid item xs={12}>
