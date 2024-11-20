@@ -19,6 +19,7 @@ export const useNoticeDelete = () =>
       const response = await axiosInstance.delete(PATH_API.NOTICE_RUD(noticeId));
       return response.data.data;
     },
+    onError: (error) => console.log('Error occurred at useNoticeDelete:', error),
   });
 
 export const useNoticeUpdate = () =>
@@ -27,7 +28,7 @@ export const useNoticeUpdate = () =>
       const response = await axiosInstance.putForm(PATH_API.NOTICE_RUD(payload.noticeId), payload.body, { headers: { 'Content-Type': 'multipart/form-data' } });
       return response.data.data;
     },
-    onError: (error) => console.log('updateError', error),
+    onError: (error) => console.log('Error occurred at useNoticeUpdate:', error),
   });
 
 export const useNoticeAdd = () =>
@@ -36,5 +37,5 @@ export const useNoticeAdd = () =>
       const response = await axiosInstance.postForm(PATH_API.NOTICE_CREATE, payload, { headers: { 'Content-Type': 'multipart/form-data' } });
       return response.data.data;
     },
-    onError: (error) => console.log('create Error', error),
+    onError: (error) => console.log('Error occurred at useNoticeAdd:', error),
   });
