@@ -20,12 +20,16 @@ export default function TeacherUpdateNotice() {
   // 파일 수정하기
   const noticeUpdate = useNoticeUpdate();
 
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const [deleteFiles, setDeleteFiles] = useState([]); // 삭제한 파일 들
   const [addFiles, setAddFiles] = useState([]); // 새로 추가한 파일
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
     if (notice) {
+      setTitle(notice.notice.title);
+      setContent(notice.notice.content);
       setFiles([...notice.files]);
     }
   }, [notice]);
@@ -33,18 +37,15 @@ export default function TeacherUpdateNotice() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const vtitle = e.currentTarget.title.value; // value Title
-    const vcontent = e.currentTarget.content.value; // value Content
-
     const fd = new FormData();
-    fd.append('title', vtitle);
-    fd.append('content', vcontent);
+    fd.append('title', title);
+    fd.append('content', content);
     fd.append('files_deleted', deleteFiles.join(','));
 
     addFiles.forEach((f) => fd.append('file', f));
 
-    if (vtitle.length === 0) alert('제목을 입력해주세요');
-    else if (vcontent.length === 0) alert('내용을 입력해주세요');
+    if (title.length === 0) alert('제목을 입력해주세요');
+    else if (content.length === 0) alert('내용을 입력해주세요');
     else {
       noticeUpdate.mutate(
         { noticeId, body: fd },
@@ -78,10 +79,10 @@ export default function TeacherUpdateNotice() {
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2} sx={{ mt: 3, width: '60vw' }}>
           <Grid item xs={12}>
-            <TextField name="title" label="제목" fullWidth defaultValue={notice?.notice.title} />
+            <TextField label="제목" value={title} onChange={(e) => setTitle(e.target.value)} fullWidth />
           </Grid>
           <Grid item xs={12}>
-            <TextField name="content" label="내용" fullWidth multiline rows={14} defaultValue={notice?.notice.content} />
+            <TextField label="내용" value={content} onChange={(e) => setContent(e.target.value)} fullWidth multiline rows={14} />
           </Grid>
           <Grid item xs={12}>
             <Button component="label" role={undefined} tabIndex={-1} startIcon={<AttachFile />}>
