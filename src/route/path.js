@@ -22,7 +22,7 @@ export const PATH = {
         LECTURENOTICE: {
           ROOT: 'notice', // 각 강의별 공지사항
           ADD: 'add',
-          UPDATE: 'update',
+          UPDATE: 'update/:id',
           DETAIL: ':id',
         },
         TEST: {
@@ -74,7 +74,7 @@ export const PATH = {
     NOTICE: {
       ROOT: 'notice',
       ADD: 'add',
-      UPDATE: 'update',
+      UPDATE: 'update/:id',
       DETAILS: ':id',
     },
   },

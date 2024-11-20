@@ -1,15 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Container, Grid, styled, TextField } from '@mui/material';
 import { AttachFile } from '@mui/icons-material';
 
 import { SubmitButtons, TitleMedium } from '../../../components';
 import { useNoticeDetail, useNoticeUpdate } from '../../../api/queries/notice/useNoticeCRUD';
-
-// 테스트 데이터
-const oldTitle = '8월 정기고사 안내';
-const oldContent = '안녕하세요. \n1학기 마지막 정기고사 안내입니다. \n...';
 
 const VisuallyHiddenInput = styled('input')({
   display: 'none',
@@ -17,27 +13,23 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function TeacherUpdateNotice() {
   const navigate = useNavigate();
-  const { courseid } = useParams();
-
-  // ? 뒤의 쿼리 파라미터 읽어오기.
-  const [queryParameter, setSearchParams] = useSearchParams();
-  const academyId = queryParameter.get('academy_id'); // 학원아이디
-  const lectureId = queryParameter.get('lecture_id'); // 강의아이디
-  const noticeId = queryParameter.get('notice_id'); // 공지아이디
-
-  const concatNoticeId = `${academyId}&${lectureId}&${noticeId}`;
+  const { courseid, id: noticeId } = useParams();
 
   // 아이디에 맞는 게시글 읽어오기
-  const { data: notice } = useNoticeDetail(concatNoticeId);
+  const { data: notice } = useNoticeDetail(noticeId);
   // 파일 수정하기
   const noticeUpdate = useNoticeUpdate();
 
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const [deleteFiles, setDeleteFiles] = useState([]); // 삭제한 파일 들
   const [addFiles, setAddFiles] = useState([]); // 새로 추가한 파일
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
     if (notice) {
+      setTitle(notice.notice.title);
+      setContent(notice.notice.content);
       setFiles([...notice.files]);
     }
   }, [notice]);
@@ -45,21 +37,18 @@ export default function TeacherUpdateNotice() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const vtitle = e.currentTarget.title.value; // value Title
-    const vcontent = e.currentTarget.content.value; // value Content
-
     const fd = new FormData();
-    fd.append('title', vtitle);
-    fd.append('content', vcontent);
+    fd.append('title', title);
+    fd.append('content', content);
     fd.append('files_deleted', deleteFiles.join(','));
 
     addFiles.forEach((f) => fd.append('file', f));
 
-    if (vtitle.length === 0) alert('제목을 입력해주세요');
-    else if (vcontent.length === 0) alert('내용을 입력해주세요');
+    if (title.length === 0) alert('제목을 입력해주세요');
+    else if (content.length === 0) alert('내용을 입력해주세요');
     else {
       noticeUpdate.mutate(
-        { noticeId: concatNoticeId, body: fd },
+        { noticeId, body: fd },
         {
           onSuccess: () => {
             navigate(`/teacher/class/${courseid}/notice`);
@@ -90,10 +79,10 @@ export default function TeacherUpdateNotice() {
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2} sx={{ mt: 3, width: '60vw' }}>
           <Grid item xs={12}>
-            <TextField name="title" label="제목" fullWidth defaultValue={notice?.notice.title} />
+            <TextField label="제목" value={title} onChange={(e) => setTitle(e.target.value)} fullWidth />
           </Grid>
           <Grid item xs={12}>
-            <TextField name="content" label="내용" fullWidth multiline rows={14} defaultValue={notice?.notice.content} />
+            <TextField label="내용" value={content} onChange={(e) => setContent(e.target.value)} fullWidth multiline rows={14} />
           </Grid>
           <Grid item xs={12}>
             <Button component="label" role={undefined} tabIndex={-1} startIcon={<AttachFile />}>
