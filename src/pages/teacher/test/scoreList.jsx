@@ -4,6 +4,7 @@ import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } 
 import SearchIcon from '@mui/icons-material/Search';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
+import { useDeleteExam } from '../../../api/queries/test/useDeleteExam';
 
 // const courses = [
 //   { id: 1, name: '미적분', students: 60 },
@@ -22,11 +23,13 @@ const scores = [
 ];
 
 export default function ScoreList() {
-  const { courseid } = useParams();
+  const { courseid, testid } = useParams();
   const navigate = useNavigate();
   const { lectures } = useUserAuthStore();
 
   const [isEditing, setEditing] = useState([false, false, false, false, false, false]);
+
+  const deleteExam = useDeleteExam(courseid, testid);
 
   const handleEdit = (id) => {
     const editTmp = [...isEditing];
@@ -37,6 +40,10 @@ export default function ScoreList() {
       return null;
     });
     setEditing([...editTmp]);
+  };
+
+  const handleDelete = () => {
+    deleteExam.mutate({}, { onSuccess: () => navigate(`/teacher/class/${courseid}/test`) });
   };
 
   const courseID = Number(courseid);
@@ -121,6 +128,9 @@ export default function ScoreList() {
             </Box>
           </Grid>
           <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
+            <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
+              삭제하기
+            </Button>
             <Button
               size="large"
               variant="contained"

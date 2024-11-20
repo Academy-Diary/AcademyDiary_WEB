@@ -47,6 +47,9 @@ export const PATH_API = {
   // 강사
   // lectures
   GET_LECTURES: (id) => `/lecture?user_id=${id}`,
+  GETEXAMLIST: (lectureId) => `/lecture/${lectureId}/exam`, // 시험 리스트
+  ADDEXAM: (lectureId) => `/lecture/${lectureId}/exam`,
+  DELETEEXAM: (lectureId, testId) => `/lecture/${lectureId}/exam/${testId}`,
 };
 
 export default PATH_API;

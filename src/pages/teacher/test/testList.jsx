@@ -8,6 +8,7 @@ import { useCategory } from '../../../api/queries/test/useCategory';
 import { useUserAuthStore } from '../../../store';
 import { useAddCategory } from '../../../api/queries/test/useAddCategory';
 import { useDeleteCategory } from '../../../api/queries/test/useDeleteCategory';
+import { useGetExamList } from '../../../api/queries/test/useGetExamList';
 
 // const courses = [
 //   { id: 1, name: '미적분', students: 60 },
@@ -24,8 +25,11 @@ export default function TestList() {
   const addCategory = useAddCategory();
   const deleteCategory = useDeleteCategory();
 
-  const courseID = Number(courseid);
-  const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
+  const lectureId = Number(courseid);
+  const lecture = lectures.filter((n) => n.lecture_id === lectureId)[0];
+  const { data: exams } = useGetExamList(lectureId);
+  const examList = exams?.exams;
+  console.log(examList);
 
   const [category, setOriginCategory] = useState([]);
   const [unSelectCategory, setUnCategory] = useState(null); // 선택되지 않은 카테고리
@@ -43,10 +47,10 @@ export default function TestList() {
     }
   }, [categoryT, unSelectCategory]);
 
-  const tests = [
-    { id: 1, name: '쪽지시험 3차', all: 100, avg: 46.2, stdev: 55.3, category: '단원평가', students: '20/50' },
-    { id: 2, name: '6월말 정기평가', all: 100, avg: 60.2, stdev: 23.1, category: '중간고사', students: '50/50' },
-  ];
+  // const tests = [
+  //   { id: 1, name: '쪽지시험 3차', all: 100, avg: 46.2, stdev: 55.3, category: '단원평가', students: '20/50' },
+  //   { id: 2, name: '6월말 정기평가', all: 100, avg: 60.2, stdev: 23.1, category: '중간고사', students: '50/50' },
+  // ];
 
   const handleRowClick = (id) => {
     navigate(`/teacher/class/${lecture.lecture_id}/test/${id}`);
@@ -104,12 +108,11 @@ export default function TestList() {
   };
 
   if (categoryT) {
-    console.log(lecture);
     return (
       <>
         <Title title={`${lecture.lecture_name}`} />
         <Typography align="left">수강생 {lecture.headcount}명</Typography>
-        <TableContainer component={Paper} sx={{ padding: 3 }}>
+        <TableContainer component={Paper} sx={{ padding: 3, maxHeight: '70vh', overflowY: 'auto' }}>
           <Container sx={{ display: 'flex' }}>
             <TextField label="Search" sx={{ mb: 1 }} />
             <IconButton onClick={handleFilterClick}>
@@ -157,26 +160,28 @@ export default function TestList() {
             <TableHead>
               <TableRow>
                 <TableCell>시험 이름</TableCell>
-                <TableCell>총점</TableCell>
+                <TableCell>최고점</TableCell>
                 <TableCell>평균</TableCell>
-                <TableCell>표준편차</TableCell>
+                <TableCell>최저점</TableCell>
                 <TableCell>시험유형</TableCell>
                 <TableCell>응시자수/전체인원</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {tests.map((test) => {
-                if ((selectCategory.length !== 0 && test.category === selectCategory[0].exam_type_name) || selectCategory.length === 0)
+              {examList?.map((exam) => {
+                if ((selectCategory.length !== 0 && exam.exam_type_id === selectCategory[0].exam_type_id) || selectCategory.length === 0)
                   return (
-                    <TableRow key={test.id} onClick={() => handleRowClick(test.id)}>
-                      <TableCell>{test.name}</TableCell>
-                      <TableCell>{test.all}</TableCell>
-                      <TableCell>{test.avg}</TableCell>
-                      <TableCell>{test.stdev}</TableCell>
+                    <TableRow key={exam.exam_id} onClick={() => handleRowClick(exam.exam_id)}>
+                      <TableCell>{exam.exam_name}</TableCell>
+                      <TableCell>{exam.high_score}</TableCell>
+                      <TableCell>{exam.average_score}</TableCell>
+                      <TableCell>{exam.low_score}</TableCell>
                       <TableCell>
-                        <Chip label={test.category} />
+                        <Chip label={category.filter((e) => e.exam_type_id === exam.exam_type_id)[0]?.exam_type_name} />
                       </TableCell>
-                      <TableCell>{test.students}</TableCell>
+                      <TableCell>
+                        {exam.headcount}/{lecture.headcount}
+                      </TableCell>
                     </TableRow>
                   );
                 return null;
