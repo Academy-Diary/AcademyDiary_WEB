@@ -38,7 +38,7 @@ export default function NoticeDetails() {
     navigate('/director/notice');
   };
   const handleClickUpdate = () => {
-    navigate('/director/notice/update');
+    navigate(`/director/notice/update/${noticeId}`);
   };
   const hadleFileDownload = (url, name) => {
     fetch(url, { method: 'get' })

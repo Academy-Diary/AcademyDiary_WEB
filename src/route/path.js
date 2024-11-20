@@ -74,7 +74,7 @@ export const PATH = {
     NOTICE: {
       ROOT: 'notice',
       ADD: 'add',
-      UPDATE: 'update',
+      UPDATE: 'update/:id',
       DETAILS: ':id',
     },
   },
