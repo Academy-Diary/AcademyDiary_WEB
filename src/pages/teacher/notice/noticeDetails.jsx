@@ -6,39 +6,18 @@ import { saveAs } from 'file-saver';
 import { BottomTwoButtons, TitleMedium } from '../../../components';
 import { useNoticeDetail } from '../../../api/queries/notice/useNoticeCRUD';
 
-// const noticeList = [
-//   {
-//     id: 1,
-//     title: '8월 정기고사 안내',
-//     content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...',
-//     date: '2024-07-20',
-//     view: 55,
-//   },
-//   {
-//     id: 2,
-//     title: '7월 정기고사 안내',
-//     content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...',
-//     date: '2024-06-18',
-//     view: 101,
-//   },
-//   { id: 3, title: '6월 정기고사 안내', content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...', date: '2024-05-21', view: 129 },
-//   { id: 4, title: '5월 정기고사 안내', content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...', date: '2024-04-21', view: 129 },
-//   { id: 5, title: '4월 정기고사 안내', content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...', date: '2024-03-21', view: 129 },
-//   { id: 6, title: '3월 정기고사 안내', content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...', date: '2024-02-29', view: 201 },
-// ];
-
 export default function TeacherNoticeDetails() {
-  const { courseid, id } = useParams();
+  const { courseid, id: noticeId } = useParams();
   const navigate = useNavigate();
 
-  const { data: notice, isStale, refetch } = useNoticeDetail(id);
+  const { data: notice, isStale, refetch } = useNoticeDetail(noticeId);
   console.log(isStale);
 
   const handleClickList = () => {
     navigate(`/teacher/class/${courseid}/notice`);
   };
   const handleClickUpdate = () => {
-    navigate(`/teacher/class/${courseid}/notice/update?academy_id=${id.split('&')[0]}&lecture_id=${id.split('&')[1]}&notice_id=${id.split('&')[2]}`);
+    navigate(`/teacher/class/${courseid}/notice/update/${noticeId}`);
   };
   const hadleFileDownload = (url, name) => {
     fetch(url, { method: 'get' })
