@@ -13,13 +13,12 @@ export const useProfileBasic = (userId) =>
       const basicInfo = response.data.data;
 
       basicInfo.birth_date = basicInfo.birth_date.substr(0, 10);
-      // console.log(basicInfo);
+      console.log(basicInfo);
       return basicInfo;
     },
   });
 
 export const useUpdateProfile = (userId) => {
-  const navigate = useNavigate();
   const { updateUser } = useUserAuthStore();
 
   return useMutation({
@@ -29,7 +28,6 @@ export const useUpdateProfile = (userId) => {
     },
     onSuccess: (data) => {
       updateUser(data);
-      navigate('/director/profile');
     },
     onError: (error) => {
       console.log('Error occured at useProfileUpdate: ', error);
@@ -64,3 +62,21 @@ export const useProfileImage = (userId) =>
       return response.data.data.image;
     },
   });
+
+export const useUpdateProfileImage = (userId) => {
+  const navigate = useNavigate();
+
+  return useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.putForm(PATH_API.PROFILE_IMAGE(userId), data, { headers: { 'Content-Type': 'multipart/form-data' } });
+      // console.log(response);
+      return response.data;
+    },
+    onSuccess: () => {
+      navigate('/director/profile');
+    },
+    onError: (error) => {
+      console.log('Error occurred at useUpdateProfileImage:', error);
+    },
+  });
+};

@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton } from '@mui/material';
-import { Close } from '@mui/icons-material';
+import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton, Badge } from '@mui/material';
+import { Close, EditOutlined } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -9,7 +11,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SimpleDialog, SubmitButtons } from '../../../components';
-import { useUpdateProfile } from '../../../api/queries/user/useProfile';
+import { useProfileImage, useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
 import { useUserAuthStore } from '../../../store';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 
@@ -27,6 +29,10 @@ const directorProfile = {
     email: 'tteokip@gmail.com',
   },
 };
+
+const VisuallyHiddenInput = styled('input')({
+  display: 'none',
+});
 
 export default function UpdateProfile() {
   const [passed, setPassed] = useState(false);
@@ -62,9 +68,17 @@ function UpdateProfileForm({ currentInfo }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [imgUrl, setImgUrl] = useState(''); // Avatar 띄우기 용
+  const [imgFile, setImgFile] = useState(null); // 서버에 전송하는 용
 
+  const { data: profileImg } = useProfileImage(user.user_id);
+  const updateProfileImgMutation = useUpdateProfileImage(user.user_id);
   const updateProfileMutation = useUpdateProfile(user.user_id);
   const cancelAccountMutation = useCancelAccount(user.user_id);
+
+  useEffect(() => {
+    if (profileImg) setImgUrl(profileImg);
+  }, [profileImg]);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -82,6 +96,16 @@ function UpdateProfileForm({ currentInfo }) {
     setOpenSnackbar(false);
   };
 
+  const handleChangeImage = (e) => {
+    const file = e.target.files[0];
+    setImgFile(file);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setImgUrl(reader.result);
+    };
+  };
   // 프로필 수정
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -95,7 +119,18 @@ function UpdateProfileForm({ currentInfo }) {
     };
 
     // console.log(submitData);
-    updateProfileMutation.mutate(submitData);
+    updateProfileMutation.mutate(submitData, {
+      onSuccess: () => {
+        // 프로필 이미지 수정
+        const submitData2 = new FormData();
+        submitData2.append('file', imgFile);
+        updateProfileImgMutation.mutate(submitData2, {
+          onSuccess: () => {
+            alert('프로필 수정 성공!');
+          },
+        });
+      },
+    });
   };
 
   // 회원 탈퇴
@@ -118,7 +153,12 @@ function UpdateProfileForm({ currentInfo }) {
           <Typography variant="h6">프로필 수정</Typography>
         </Grid>
         <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Avatar sx={{ width: 100, height: 100 }} />
+          <Button component="label" role={undefined} tabIndex={-1} disableRipple>
+            <Badge anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} badgeContent={<EditOutlined />} tabIndex={-1}>
+              <Avatar src={imgUrl} sx={{ width: 100, height: 100 }} />
+            </Badge>
+            <VisuallyHiddenInput type="file" accept="image/*" onChange={handleChangeImage} />
+          </Button>
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
           <TextField label="이름" name="user_name" defaultValue={user.user_name} required />
