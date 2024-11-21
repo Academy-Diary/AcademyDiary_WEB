@@ -7,6 +7,7 @@ import { Edit } from '@mui/icons-material';
 import { useUserAuthStore } from '../../../store';
 import { CustomLink } from '../../../components';
 import { PATH } from '../../../route/path';
+import { useProfileImage } from '../../../api/queries/user/useProfile';
 
 // 회원 basic info
 // {
@@ -25,6 +26,8 @@ export default function DirectorProfile() {
   const navigate = useNavigate();
   const { user } = useUserAuthStore();
 
+  const { data: imageUrl } = useProfileImage(user.user_id);
+
   const handleClickUpdate = () => {
     navigate('/director/profile/update');
   };
@@ -33,7 +36,7 @@ export default function DirectorProfile() {
     <Container sx={{ width: '50vw', padding: 5 }}>
       <Grid container spacing={5}>
         <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Avatar sx={{ width: 100, height: 100 }} />
+          <Avatar src={imageUrl} sx={{ width: 100, height: 100 }} />
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="h6">{user.user_name} 원장</Typography>

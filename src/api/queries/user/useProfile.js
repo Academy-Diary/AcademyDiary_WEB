@@ -54,3 +54,13 @@ export const useUpdatePassword = (userId) => {
     },
   });
 };
+
+export const useProfileImage = (userId) =>
+  useQuery({
+    queryKey: [QUERY_KEY.PROFILE_IMAGE(userId)],
+    queryFn: async () => {
+      const response = await axiosInstance.get(PATH_API.PROFILE_IMAGE(userId));
+      // console.log(response);
+      return response.data.data.image;
+    },
+  });

@@ -2,7 +2,7 @@ import { SECRET } from '../config/secret';
 
 export const PATH_API = {
   API_DOMAIN: SECRET.server_ip,
-  
+
   // user
   SIGN_IN: '/user/login',
   FIND_ID: '/user/find-id',
@@ -12,6 +12,7 @@ export const PATH_API = {
   SIGN_OUT: '/user/logout',
   REISSUE_TOKEN: '/user/refresh-token',
   PROFILE_BASIC: (userId) => `/user/${userId}/basic-info`,
+  PROFILE_IMAGE: (userId) => `/user/${userId}/image-info`,
   CANCEL_ACCOUNT: (userId) => `/user/${userId}`,
   // register
   REGISTER_ACADEMY: '/registeration/request/academy',
