@@ -1,45 +1,67 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useDeleteExam } from '../../../api/queries/test/useDeleteExam';
-
-// const courses = [
-//   { id: 1, name: '미적분', students: 60 },
-//   { id: 2, name: '확률과통계', students: 30 },
-//   { id: 3, name: '영어', students: 20 },
-//   { id: 4, name: '국어', students: 55 },
-// ];
-
-const scores = [
-  { id: 1, name: '김대성', score: 100 },
-  { id: 2, name: '김민수', score: 35 },
-  { id: 3, name: '김선우', score: 80 },
-  { id: 4, name: '권해담', score: 70 },
-  { id: 5, name: '이태윤', score: 50 },
-  { id: 6, name: '서민석', score: 55 },
-];
+import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
+import { useScoreAdd, useScoreEdit, useScoreList } from '../../../api/queries/test/useScore';
 
 export default function ScoreList() {
   const { courseid, testid } = useParams();
   const navigate = useNavigate();
   const { lectures } = useUserAuthStore();
 
-  const [isEditing, setEditing] = useState([false, false, false, false, false, false]);
+  const [isEditing, setEditing] = useState({});
+
+  const { data: attendees } = useAttendeeList(courseid); // 강의 수강생 목록
+  const { data: scores, refetch: refetchScore } = useScoreList(courseid, testid); // 시험에 대한 점수 목록
+  const useEdit = useScoreEdit(courseid, testid);
+  const useAdd = useScoreAdd(courseid, testid);
 
   const deleteExam = useDeleteExam(courseid, testid);
 
-  const handleEdit = (id) => {
-    const editTmp = [...isEditing];
-    const tmp = scores.map((sc, i) => {
-      if (sc.id === id) {
-        editTmp[i] = !editTmp[i];
+  const handleEdit = (id, aaa) => {
+    if (isEditing[id]) {
+      // 수정완료 버튼 눌렀을 때
+      const score = scores.scoreList.filter((n) => n.user_id === id);
+      console.log('score', score);
+      const vscore = document.getElementsByName(id)[0].value;
+      if (score.length !== 0) {
+        useEdit.mutate(
+          {
+            user_id: id,
+            score: Number(vscore),
+          },
+          {
+            onSuccess: () => {
+              refetchScore();
+              setEditing({ ...isEditing, [`${id}`]: !isEditing[id] });
+            },
+          }
+        );
+      } else {
+        useAdd.mutate(
+          {
+            scoreList: [
+              {
+                user_id: id,
+                score: Number(vscore),
+              },
+            ],
+          },
+          {
+            onSuccess: () => {
+              refetchScore();
+              setEditing({ ...isEditing, [`${id}`]: !isEditing[id] });
+            },
+          }
+        );
       }
-      return null;
-    });
-    setEditing([...editTmp]);
+    } else {
+      setEditing({ ...isEditing, [`${id}`]: !isEditing[id] });
+    }
   };
 
   const handleDelete = () => {
@@ -48,6 +70,18 @@ export default function ScoreList() {
 
   const courseID = Number(courseid);
   const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
+
+  useEffect(() => {
+    if (attendees) {
+      for (let i = 0; i < attendees.length; i += 1) {
+        const id = attendees[i].user_id;
+        setEditing((prev) => ({ ...prev, [`${id}`]: false }));
+      }
+    }
+  }, [attendees]);
+
+  console.log('isEditing', isEditing);
+
   return (
     <Grid container spacing={2} sx={{ width: '80vw' }}>
       <Grid xs={12}>
@@ -102,47 +136,54 @@ export default function ScoreList() {
           </Typography>
         </Box>
       </Grid>
-      {scores.map((score) => (
-        <>
-          <Grid xs={3}>
-            <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-              <Typography sx={{ padding: 2 }}>{score.name}</Typography>
+      {attendees?.map((attendee) => {
+        const score = scores?.scoreList.filter((n) => n.user_id === attendee.user_id)[0];
+        return (
+          <>
+            <Grid xs={3}>
+              <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
+                <Typography sx={{ padding: 2 }}>{attendee.user_name}</Typography>
+              </Box>
+            </Grid>
+            <Grid xs={2}>
+              <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
+                {!isEditing[attendee.user_id] ? (
+                  <Typography sx={{ padding: 2 }}>{score !== undefined ? score.score : 0}</Typography>
+                ) : (
+                  <TextField name={attendee.user_id} sx={{ py: 1 }} defaultValue={score !== undefined ? score.score : 0} size="small" />
+                )}
+              </Box>
+            </Grid>
+            <Grid xs={1}>
+              <Box fullWidth sx={{ backgroundColor: 'lightgray', py: 1.57 }}>
+                {!isEditing[attendee.user_id] ? (
+                  <Button variant="contained" size="small" onClick={(e) => handleEdit(attendee.user_id, e)}>
+                    수정
+                  </Button>
+                ) : (
+                  <Button variant="contained" size="small" onClick={(e) => handleEdit(attendee.user_id, e)}>
+                    수정완료
+                  </Button>
+                )}
+              </Box>
+            </Grid>
+            <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
+              <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
+                삭제하기
+              </Button>
+              <Button
+                size="large"
+                variant="contained"
+                onClick={() => {
+                  navigate('add-score');
+                }}
+              >
+                전체성적입력
+              </Button>
             </Box>
-          </Grid>
-          <Grid xs={2}>
-            <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-              {!isEditing[score.id - 1] ? <Typography sx={{ padding: 2 }}>{score.score}</Typography> : <TextField sx={{ py: 1 }} value={score.score} size="small" />}
-            </Box>
-          </Grid>
-          <Grid xs={1}>
-            <Box fullWidth sx={{ backgroundColor: 'lightgray', py: 1.57 }}>
-              {!isEditing[score.id - 1] ? (
-                <Button variant="contained" size="small" onClick={() => handleEdit(score.id)}>
-                  수정
-                </Button>
-              ) : (
-                <Button variant="contained" size="small" onClick={() => handleEdit(score.id)}>
-                  수정완료
-                </Button>
-              )}
-            </Box>
-          </Grid>
-          <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-            <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
-              삭제하기
-            </Button>
-            <Button
-              size="large"
-              variant="contained"
-              onClick={() => {
-                navigate('add-score');
-              }}
-            >
-              전체성적입력
-            </Button>
-          </Box>
-        </>
-      ))}
+          </>
+        );
+      })}
     </Grid>
   );
 }
