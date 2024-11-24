@@ -3,16 +3,21 @@ import React, { useState } from 'react';
 import { Box, Tabs, Tab, List, ListItemText } from '@mui/material';
 
 import { TitleMedium } from '../../../components';
+import { useUserAuthStore } from '../../../store';
+import { useBillList } from '../../../api/queries/tuitionFees/useBillList';
 
-const unpaidList = [
-  { name: '신짱구', amount: 250000, class: '수학 종합반', due: '2024.01.01~2024.01.31' },
-  { name: '신짱아', amount: 250000, class: '국어 종합반', due: '2024.01.01~2024.01.31' },
-  { name: '흰둥이', amount: 250000, class: '영어 종합반', due: '2024.01.01~2024.01.31' },
-];
-const paidList = [
-  { name: '권해담', amount: 250000, class: '수학 종합반', due: '2024.01.01~2024.01.31' },
-  { name: '이하람', amount: 250000, class: '국어 종합반', due: '2024.01.01~2024.01.31' },
-];
+// const billList = [
+//   {
+//     "bill_id": 0,
+//     "deadline": "2024-11-21",
+//     "amount": 0,
+//     "paid": true,
+//     "user_name": "string",
+//     "class_name": [
+//       "string"
+//     ]
+//   },
+// ];
 
 function TabPanel({ value, index, children }) {
   return <div>{value === index && <Box>{children}</Box>}</div>;
@@ -20,6 +25,10 @@ function TabPanel({ value, index, children }) {
 
 export default function PaymentList() {
   const [tabIndex, setTabIndex] = useState(0);
+
+  const { user } = useUserAuthStore();
+  const { data: paidBills } = useBillList(user.academy_id, true);
+  const { data: unpaidBills } = useBillList(user.academy_id, false);
 
   const handleChangeTab = (e, newVal) => {
     setTabIndex(newVal);
@@ -37,9 +46,9 @@ export default function PaymentList() {
         </Box>
         <TabPanel value={tabIndex} index={0}>
           <List sx={{ maxHeight: '60vh', overflow: 'auto' }}>
-            {unpaidList.map((unpaid) => (
-              <Box key={unpaid.name} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
-                <ListItemText primary={unpaid.name} secondary={`수강반: ${unpaid.class}/ 기간: ${unpaid.due}`} />
+            {unpaidBills?.map((unpaid) => (
+              <Box key={unpaid.bill_id} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
+                <ListItemText primary={unpaid.user_name} secondary={`수강반: ${unpaid.class_name.join(', ')}/ 기간: ${unpaid.deadline.split('T')[0]}`} />
                 <ListItemText align="right" primary={unpaid.amount} secondary="미납" sx={{ mb: 2 }} />
               </Box>
             ))}
@@ -47,10 +56,10 @@ export default function PaymentList() {
         </TabPanel>
         <TabPanel value={tabIndex} index={1}>
           <List sx={{ maxHeight: '60vh', overflow: 'auto' }}>
-            {paidList.map((unpaid) => (
-              <Box key={unpaid.name} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
-                <ListItemText primary={unpaid.name} secondary={`수강반: ${unpaid.class}/ 기간: ${unpaid.due}`} />
-                <ListItemText align="right" primary={unpaid.amount} secondary="납부 완료" sx={{ mb: 2 }} />
+            {paidBills?.map((paid) => (
+              <Box key={paid.bill_id} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
+                <ListItemText primary={paid.user_name} secondary={`수강반: ${paid.class_name.join(', ')}/ 기간: ${paid.deadline.split('T')[0]}`} />
+                <ListItemText align="right" primary={paid.amount} secondary="납부 완료" sx={{ mb: 2 }} />
               </Box>
             ))}
           </List>

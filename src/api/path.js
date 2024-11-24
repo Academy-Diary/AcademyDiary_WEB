@@ -40,6 +40,7 @@ export const PATH_API = {
   MAKE_CLASS: (academyId) => `/expense/${academyId}`,
   UPDATE_CLASS: (academyId, classId) => `/expense/${academyId}/${classId}`,
   DELETE_CLASS: (academyId, classId) => `/expense/${academyId}/${classId}`,
+  BILLLIST: (academyId) => `/bill/${academyId}`,
 
   // 강사
   // lectures

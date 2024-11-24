@@ -19,5 +19,6 @@ export const QUERY_KEY = {
 
   // tuition fees
   CLASSLIST: (academyId) => PATH_API.CLASSLIST(academyId),
+  BILLLIST: (academyId) => PATH_API.BILLLIST(academyId),
 };
 export default QUERY_KEY;
