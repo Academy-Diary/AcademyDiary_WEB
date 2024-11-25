@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, OutlinedInput, Checkbox } from '@mui/material';
 import { Search } from '@mui/icons-material';
@@ -34,6 +34,11 @@ export default function ManageTeachers() {
   const { user } = useUserAuthStore();
   const { data: teachers } = useTeacherList(user.academy_id);
   const deleteTeacherMutation = useDeleteTeacher();
+
+  useEffect(() => {
+    if (teachers && teachers.length === checkedTeachers.length) setAllChecked(true);
+    else setAllChecked(false);
+  }, [teachers, checkedTeachers]);
 
   const handleOpenDialog = () => {
     setOpen(true);
@@ -81,7 +86,7 @@ export default function ManageTeachers() {
           <TableHead>
             <TableRow>
               <TableCell>
-                <Checkbox onClick={handleCheckAll} />
+                <Checkbox checked={allChecked} onClick={handleCheckAll} />
               </TableCell>
               <TableCell>강사 이름</TableCell>
               <TableCell>담당 과목</TableCell>

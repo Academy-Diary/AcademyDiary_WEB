@@ -45,6 +45,15 @@ export const PATH_API = {
   UPDATE_LECTURE: (lectureId) => `/lecture/${lectureId}`,
   UPDATE_ATTENDEES: (lectureId) => `/lecture/${lectureId}/student`,
 
+  // tuition fees
+  CLASSLIST: (academyId) => `/expense/${academyId}`,
+  MAKE_BILL: '/bill',
+  MAKE_CLASS: (academyId) => `/expense/${academyId}`,
+  UPDATE_CLASS: (academyId, classId) => `/expense/${academyId}/${classId}`,
+  DELETE_CLASS: (academyId, classId) => `/expense/${academyId}/${classId}`,
+  BILLLIST: (academyId) => `/bill/${academyId}`,
+  UPDATE_PAID: (academyId) => `/bill/${academyId}/pay`,
+
   // 강사
   // lectures
   GET_LECTURES: (id) => `/lecture?user_id=${id}`,

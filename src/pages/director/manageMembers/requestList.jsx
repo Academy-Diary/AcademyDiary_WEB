@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Typography, List, ListItem, ListItemText, Button, Grid, ListItemButton, ListItemIcon, Checkbox } from '@mui/material';
 import { SimpleDialog, TitleMedium } from '../../../components';
@@ -50,6 +50,18 @@ export default function RequestList() {
 
   const approveRegisterMutation = useDecideRegisters(true);
   const declineRegisterMutation = useDecideRegisters(false);
+
+  useEffect(() => {
+    // 강사 전체선택 여부 체크
+    if (teacherData && teacherData.length === checkedTeachers.length) setCheckedAllTeacher(true);
+    else setCheckedAllTeacher(false);
+  }, [teacherData, checkedTeachers]);
+
+  useEffect(() => {
+    // 학생 전체선택 여부 체크
+    if (studentData && studentData.length === checkedStudents.length) setCheckedAllStudent(true);
+    else setCheckedAllStudent(false);
+  }, [studentData, checkedStudents]);
 
   const handleOpenApprove = () => {
     setOpenApprove(true);
