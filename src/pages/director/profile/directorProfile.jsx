@@ -7,25 +7,32 @@ import { Edit } from '@mui/icons-material';
 import { useUserAuthStore } from '../../../store';
 import { CustomLink } from '../../../components';
 import { PATH } from '../../../route/path';
-import { useProfileImage } from '../../../api/queries/user/useProfile';
+import { useAcademyInfo, useProfileImage } from '../../../api/queries/user/useProfile';
 
-// 회원 basic info
-// {
-//   "user_id": "string",
+// const user = {
+//   "user_id": "testuser",
 //   "academy_id": "string",
-//   "email": "user@example.com",
-//   "birth_date": "2024-10-11",
+//   "email": "string",
+//   "birth_date": "2024-11-25",
 //   "user_name": "string",
 //   "phone_number": "string",
 //   "role": "string",
-//   "image": "string",
-//   "family": "string"
+//   "uploadProfileImage": "string"
 // }
+
+// const academyInfo = {
+//   academy_id: '1234-5678-9012',
+//   academy_name: '한빛 학원',
+//   academy_email: 'info@hanbitacademy.com',
+//   address: '서울시 강남구 테헤란로 123',
+//   phone_number: '02-1234-5678',
+// };
 
 export default function DirectorProfile() {
   const navigate = useNavigate();
-  const { user } = useUserAuthStore();
+  const { user } = useUserAuthStore(); // 기본 정보
 
+  const { data: academyInfo } = useAcademyInfo(); // 학원 정보
   const { data: imageUrl } = useProfileImage(user.user_id);
 
   const handleClickUpdate = () => {
@@ -55,10 +62,10 @@ export default function DirectorProfile() {
         <Grid item xs={12}>
           <Typography variant="h6">학원 정보</Typography>
           <Box sx={{ p: 2, backgroundColor: 'lightgray' }}>
-            <Typography variant="body1">이름: 떡잎학원</Typography>
-            <Typography variant="body1">전화번호: 010-8282-1111</Typography>
-            <Typography variant="body1">주소: 서울특별시 서초구 서초1동 ...</Typography>
-            <Typography variant="body1">이메일: tteokip@gmail.com</Typography>
+            <Typography variant="body1">이름: {academyInfo?.academy_name}</Typography>
+            <Typography variant="body1">전화번호: {academyInfo?.phone_number}</Typography>
+            <Typography variant="body1">주소: {academyInfo?.address}</Typography>
+            <Typography variant="body1">이메일: {academyInfo?.academy_email}</Typography>
           </Box>
         </Grid>
         <Grid item xs={6}>

@@ -13,6 +13,7 @@ export const PATH_API = {
   REISSUE_TOKEN: '/user/refresh-token',
   PROFILE_BASIC: (userId) => `/user/${userId}/basic-info`,
   PROFILE_IMAGE: (userId) => `/user/${userId}/image-info`,
+  ACADEMY_INFO: '/user/academy-info',
   CANCEL_ACCOUNT: (userId) => `/user/${userId}`,
   // register
   REGISTER_ACADEMY: '/registeration/request/academy',
