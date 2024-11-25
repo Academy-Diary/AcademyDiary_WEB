@@ -35,6 +35,7 @@ export const PATH_API = {
   EXAM_CATEGORY: (academyId) => `/exam-type/academy/${academyId}`,
   ADD_CATEGORY: '/exam-type',
   DELETE_CATEGORY: (examTypeId) => `/exam-type/${examTypeId}`,
+  SCORES: (lectureId, examId) => `/lecture/${lectureId}/exam/${examId}/score`,
 
   // manage lectures
   LECTURELIST: '/lecture',
