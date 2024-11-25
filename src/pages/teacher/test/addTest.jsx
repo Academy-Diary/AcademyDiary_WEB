@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Chip, Container, Grid, Stack, TextField, Typography } from '@mui/material';
 
@@ -8,6 +8,9 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
 
 import { SubmitButtons, Title } from '../../../components';
+import { useAddExam } from '../../../api/queries/test/useAddExam';
+import { useUserAuthStore } from '../../../store';
+import { useCategory } from '../../../api/queries/test/useCategory';
 
 const courses = [
   { id: 1, name: '미적분', students: 60 },
@@ -19,45 +22,72 @@ const courses = [
 export default function AddTest() {
   const { courseid } = useParams();
   const navigate = useNavigate();
+  const { user } = useUserAuthStore();
 
-  const courseID = Number(courseid);
-  const course = courses.filter((n) => n.id === courseID)[0];
+  const lectureId = Number(courseid);
+  const course = courses.filter((n) => n.id === lectureId)[0];
 
-  const [category, setOriginCategory] = useState(['월말 정기 평가', '단원평가', '쪽지시험', '단어시험']);
-  const [selectCategory, setSelCategory] = useState('');
+  const addExam = useAddExam(lectureId);
+  const { data: categoryT } = useCategory(user.academy_id);
+  console.log('category', categoryT);
+
+  const [category, setOriginCategory] = useState([]);
+  const [selectCategory, setSelCategory] = useState([]);
   const [date, setDate] = useState();
 
-  const handleClickCategory = (e) => {
-    if (selectCategory === '') {
-      setSelCategory(e.currentTarget.innerText);
-      setOriginCategory(category.filter((n) => n !== e.currentTarget.innerText));
+  console.log('selectCategory', selectCategory);
+  useEffect(() => {
+    if (categoryT) {
+      setOriginCategory(categoryT);
+    }
+  }, [categoryT]);
+  const handleClickCategory = (cat) => {
+    console.log('cat', cat);
+    if (selectCategory.length === 0) {
+      setSelCategory([cat]);
+      setOriginCategory(category.filter((n) => n.exam_type_id !== cat.exam_type_id));
     } else {
       alert('시험 유형은 하나만 선택이 가능합니다.');
     }
   };
   const handleClickSelCategory = (e) => {
-    setOriginCategory([...category, selectCategory]);
+    setOriginCategory([...category, selectCategory[0]]);
     setSelCategory('');
   };
-  const handleCreate = () => {
-    navigate(`/teacher/class/${course.id}/test`);
+  const handleCreate = (e) => {
+    e.preventDefault();
+
+    const name = e.currentTarget.testname.value;
+    // console.log(date.$y.$M.$D);
+    addExam.mutate(
+      {
+        exam_name: name,
+        exam_type_id: selectCategory[0].exam_type_id.toString(),
+        exam_date: `${date.$y}-${date.$M}-${date.$D}`,
+      },
+      {
+        onSuccess: () => {
+          navigate(`/teacher/class/${course.id}/test`);
+        },
+      }
+    );
   };
 
   return (
     <Container>
       <Title title={course.name} subtitle="시험만들기" />
-      <Stack component="form" spacing={2} useFlexGap sx={{ alignItems: 'center' }}>
+      <Stack component="form" spacing={2} useFlexGap sx={{ alignItems: 'center' }} onSubmit={handleCreate}>
         <TextField required name="testname" label="시험 이름" />
         <Grid sx={[12, { m: 1, p: 1 }]}>
           <Typography variant="h6" align="center">
             시험 유형
           </Typography>
-          {selectCategory !== '' ? <Chip label={selectCategory} onClick={handleClickSelCategory} /> : null}
+          {selectCategory.length !== 0 ? <Chip label={selectCategory[0].exam_type_name} onClick={handleClickSelCategory} /> : null}
         </Grid>
         <Grid container sx={6} justifyContent="center">
           {category.map((cat) => (
             <Grid sx={4}>
-              <Chip label={cat} variant="outlined" sx={{ mx: 1 }} onClick={handleClickCategory} />
+              <Chip label={cat.exam_type_name} variant="outlined" sx={{ mx: 1 }} onClick={() => handleClickCategory(cat)} />
             </Grid>
           ))}
         </Grid>
@@ -69,7 +99,7 @@ export default function AddTest() {
           </LocalizationProvider>
         </Grid>
         <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-          <Button size="large" variant="contained" onClick={handleCreate}>
+          <Button type="submit" size="large" variant="contained">
             시험 생성 완료
           </Button>
         </Box>

@@ -1,14 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Grid, styled, TextField } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Box, Button, Container, Grid, styled, TextField } from '@mui/material';
 import { AttachFile } from '@mui/icons-material';
 
 import { SubmitButtons, TitleMedium } from '../../../components';
-
-// 테스트 데이터
-const oldTitle = '8월 정기고사 안내';
-const oldContent = '안녕하세요. \n1학기 마지막 정기고사 안내입니다. \n...';
+import { useNoticeDetail, useNoticeUpdate } from '../../../api/queries/notice/useNoticeCRUD';
 
 const VisuallyHiddenInput = styled('input')({
   display: 'none',
@@ -16,26 +13,63 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function TeacherUpdateNotice() {
   const navigate = useNavigate();
-  const { courseid } = useParams();
+  const { courseid, id: noticeId } = useParams();
 
-  // ? 뒤의 쿼리 파라미터 읽어오기.
-  const location = useLocation();
-  const queryParameter = new URLSearchParams(location.search);
-  const id = queryParameter.get('id');
+  // 아이디에 맞는 게시글 읽어오기
+  const { data: notice } = useNoticeDetail(noticeId);
+  // 파일 수정하기
+  const noticeUpdate = useNoticeUpdate();
+
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [deleteFiles, setDeleteFiles] = useState([]); // 삭제한 파일 들
+  const [addFiles, setAddFiles] = useState([]); // 새로 추가한 파일
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+    if (notice) {
+      setTitle(notice.notice.title);
+      setContent(notice.notice.content);
+      setFiles([...notice.files]);
+    }
+  }, [notice]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const title = e.currentTarget.title.value;
-    const content = e.currentTarget.content.value;
+    const fd = new FormData();
+    fd.append('title', title);
+    fd.append('content', content);
+    fd.append('files_deleted', deleteFiles.join(','));
+
+    addFiles.forEach((f) => fd.append('file', f));
 
     if (title.length === 0) alert('제목을 입력해주세요');
     else if (content.length === 0) alert('내용을 입력해주세요');
     else {
-      console.log(title);
-      console.log(content);
+      noticeUpdate.mutate(
+        { noticeId, body: fd },
+        {
+          onSuccess: () => {
+            navigate(`/teacher/class/${courseid}/notice`);
+          },
+        }
+      );
+    }
+  };
 
-      navigate(`/teacher/class/${courseid}/notice`);
+  const handleFileDelete = (name) => {
+    setDeleteFiles([...deleteFiles, name]);
+    setAddFiles(addFiles.filter((n) => n.name !== name));
+    setFiles(files.filter((n) => n.name !== name));
+  };
+
+  const handleFileAdd = (e) => {
+    for (let i = 0; i < e.target.files.length; i += 1) {
+      const tmpImage = e.target.files[i];
+
+      setAddFiles((prev) => [...prev, tmpImage]);
+      setFiles((prev) => [...prev, { name: tmpImage.name, url: '' }]);
     }
   };
 
@@ -45,16 +79,21 @@ export default function TeacherUpdateNotice() {
       <Box component="form" onSubmit={handleSubmit}>
         <Grid container spacing={2} sx={{ mt: 3, width: '60vw' }}>
           <Grid item xs={12}>
-            <TextField name="title" label="제목" fullWidth defaultValue={oldTitle} />
+            <TextField label="제목" value={title} onChange={(e) => setTitle(e.target.value)} fullWidth />
           </Grid>
           <Grid item xs={12}>
-            <TextField name="content" label="내용" fullWidth multiline rows={14} defaultValue={oldContent} />
+            <TextField label="내용" value={content} onChange={(e) => setContent(e.target.value)} fullWidth multiline rows={14} />
           </Grid>
           <Grid item xs={12}>
             <Button component="label" role={undefined} tabIndex={-1} startIcon={<AttachFile />}>
               파일 첨부
-              <VisuallyHiddenInput type="file" accept="image/*" onChange={(e) => console.log(e.target.files)} multiple />
+              <VisuallyHiddenInput type="file" onChange={handleFileAdd} multiple />
             </Button>
+            {files.map((file) => (
+              <Container key={file.name}>
+                {file.name} <Button onClick={() => handleFileDelete(file.name)}>삭제</Button>
+              </Container>
+            ))}
           </Grid>
         </Grid>
         <SubmitButtons submitTitle="수정 완료" />

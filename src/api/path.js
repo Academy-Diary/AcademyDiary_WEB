@@ -17,6 +17,11 @@ export const PATH_API = {
   REGISTER_ACADEMY: '/registeration/request/academy',
   REGISTER_TEACHER: '/registeration/request/user',
 
+  // 공지
+  NOTICE_LIST: (lectureId, page, pageSize) => `/notice/list?lecture_id=${lectureId}&page=${page}&page_size=${pageSize}`,
+  NOTICE_RUD: (noticeId) => `/notice/${noticeId}`,
+  NOTICE_CREATE: '/notice/create',
+
   // 원장
   // manage members
   REQUESTLIST: '/registeration/list/user',
@@ -25,6 +30,12 @@ export const PATH_API = {
   DELETE_TEACHER: '/teacher',
   STUDENTLIST: (academyId) => `/student/${academyId}`,
   DELETE_STUDENT: '/student',
+
+  // examination (test)
+  EXAM_CATEGORY: (academyId) => `/exam-type/academy/${academyId}`,
+  ADD_CATEGORY: '/exam-type',
+  DELETE_CATEGORY: (examTypeId) => `/exam-type/${examTypeId}`,
+  SCORES: (lectureId, examId) => `/lecture/${lectureId}/exam/${examId}/score`,
 
   // manage lectures
   LECTURELIST: '/lecture',
@@ -46,6 +57,9 @@ export const PATH_API = {
   // 강사
   // lectures
   GET_LECTURES: (id) => `/lecture?user_id=${id}`,
+  GETEXAMLIST: (lectureId) => `/lecture/${lectureId}/exam`, // 시험 리스트
+  ADDEXAM: (lectureId) => `/lecture/${lectureId}/exam`,
+  DELETEEXAM: (lectureId, testId) => `/lecture/${lectureId}/exam/${testId}`,
 };
 
 export default PATH_API;
