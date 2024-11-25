@@ -1,19 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, List, ListItem, ListItemText } from '@mui/material';
+import { Box, Card, CardContent, Grid, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import { Title, TitleMedium } from '../../components';
 import { useLectureList } from '../../api/queries/lectures/useLectureList';
+import { useNoticeList } from '../../api/queries/notice/useNoticeList';
+
+// const lectures = [
+//   {
+//     academy_id: 'test_academy',
+//     lecture_id: 1,
+//     lecture_name: '한국사',
+//     teacher_id: 'test_teacher',
+//     teacher_name: '권해담',
+//     days: ['TUESDAY', 'THURSDAY'],
+//     headcount: 60,
+//     start_time: '2024-10-16T04:30:00.000Z',
+//     end_time: '2024-10-16T06:00:00.000Z',
+//   },
+// ];
+
+// const notices = {
+//   notice_count: 25,
+//   notice_list: [
+//     {
+//       title: '코로나19로 인한 학원 운영 방침',
+//       content: '코로나19 예방 방침 공지합니다.',
+//       user_id: 'test_chief',
+//       views: 123,
+//       notice_id: 'test_academy&0&5',
+//       created_at: '2024-11-16',
+//       updated_at: '2024-11-17',
+//     },
+//   ],
+// };
 
 export default function DirectorHome() {
   const navigate = useNavigate();
   const [liveLectures, setLiveLectures] = useState(null);
 
   const { data: lectures } = useLectureList();
+  const { data: notices } = useNoticeList(0, 1, 5);
 
+  // 진행중인 강의 필터링
   useEffect(() => {
-    // 진행중인 강의 필터링
     if (lectures) {
       const now = new Date();
       const currentDay = now.toLocaleDateString('en-US', { weekday: 'long' }).toUpperCase(); // 현재 요일
@@ -32,8 +63,8 @@ export default function DirectorHome() {
     }
   }, [lectures]);
 
-  const handleClickNotice = () => {
-    navigate('/director/notice');
+  const handleClickNoticeCard = (noticeId) => {
+    navigate(`/director/notice/${noticeId}`);
   };
 
   return (
@@ -50,8 +81,23 @@ export default function DirectorHome() {
           ))}
         </List>
       </Box>
-      <Box sx={{ mb: 2, px: 2, backgroundColor: 'lightgrey' }} onClick={handleClickNotice}>
+      <Box sx={{ mb: 2, px: 2, pb: 2, backgroundColor: 'lightgrey' }}>
         <TitleMedium title="학원 공지사항" />
+        <Grid container spacing={2}>
+          {notices &&
+            notices.notice_count > 0 &&
+            notices.notice_list.slice(0, 2).map((notice) => (
+              <Grid item xs={6} key={notice.notice_id}>
+                <Card sx={{ width: 400, height: 200 }} onClick={() => handleClickNoticeCard(notice.notice_id)}>
+                  <CardContent>
+                    <Typography variant="h6">{notice.title}</Typography>
+                    <Typography sx={{ justifySelf: 'end', mb: 2, fontSize: 14 }}>{`조회수 ${notice.views}명`}</Typography>
+                    <Typography>{notice.content}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+        </Grid>
       </Box>
       <Box sx={{ mb: 2, px: 2, backgroundColor: 'lightgrey' }}>
         <TitleMedium title="최근 등록요청" />
