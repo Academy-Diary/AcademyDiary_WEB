@@ -8,7 +8,7 @@ export const useBillList = (academyId, isPaid) =>
     queryKey: [QUERY_KEY.BILLLIST(academyId), isPaid],
     queryFn: async () => {
       const response = await axiosInstance.get(PATH_API.BILLLIST(academyId), { params: { isPaid } });
-      console.log(response);
+      // console.log(response);
       return response.data.responseBillList;
     },
   });

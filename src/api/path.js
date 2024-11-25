@@ -41,6 +41,7 @@ export const PATH_API = {
   UPDATE_CLASS: (academyId, classId) => `/expense/${academyId}/${classId}`,
   DELETE_CLASS: (academyId, classId) => `/expense/${academyId}/${classId}`,
   BILLLIST: (academyId) => `/bill/${academyId}`,
+  UPDATE_PAID: (academyId) => `/bill/${academyId}/pay`,
 
   // 강사
   // lectures
