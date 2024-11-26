@@ -28,7 +28,7 @@ export const useUpdateProfile = (userId) => {
       return response.data;
     },
     onSuccess: (data) => {
-      updateUser(data);
+      updateUser(data.data);
       navigate('/director/profile');
     },
     onError: (error) => {
