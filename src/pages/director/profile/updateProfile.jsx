@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton, Badge } from '@mui/material';
+import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton, Alert, Badge } from '@mui/material';
 import { Close, EditOutlined } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 
@@ -14,6 +14,7 @@ import { SimpleDialog, SubmitButtons } from '../../../components';
 import { useProfileImage, useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
 import { useUserAuthStore } from '../../../store';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
+import { useCheckPassword } from '../../../api/queries/user/useCheckPw';
 
 const directorProfile = {
   personal: {
@@ -36,17 +37,28 @@ const VisuallyHiddenInput = styled('input')({
 
 export default function UpdateProfile() {
   const [passed, setPassed] = useState(false);
+  const ckpassword = useCheckPassword();
 
-  return <Container sx={{ width: 400, p: 5 }}>{passed ? <UpdateProfileForm currentInfo={directorProfile} /> : <CheckPasswd setPassed={setPassed} />}</Container>;
+  return <Container sx={{ width: 400, p: 5 }}>{passed ? <UpdateProfileForm currentInfo={directorProfile} /> : <CheckPasswd setPassed={setPassed} ckpassword={ckpassword} />}</Container>;
 }
 
-function CheckPasswd({ setPassed }) {
+function CheckPasswd({ setPassed, ckpassword }) {
+  const [hasfailed, setfailed] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const password = e.target.password.value;
-
-    // TODO: if 올바르지 않은 비밀번호일 때 처리
-    setPassed(true);
+    const password1 = e.target.password.value;
+    ckpassword.mutate(
+      {
+        password: password1,
+      },
+      {
+        onSuccess: (data) => {
+          if (data.isMatched) setPassed(true);
+          else setfailed(true);
+        },
+      }
+    );
   };
 
   return (
@@ -54,7 +66,8 @@ function CheckPasswd({ setPassed }) {
       <Typography variant="h6" sx={{ mb: 7 }}>
         비밀번호 확인
       </Typography>
-      <TextField name="password" label="비밀번호" required fullWidth sx={{ my: 1 }} />
+      <TextField name="password" label="비밀번호" required error={hasfailed} fullWidth type="password" sx={{ my: 1 }} />
+      {hasfailed ? <Alert severity="error">잘못된 비밀번호입니다.</Alert> : null}
       <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
         확인
       </Button>
