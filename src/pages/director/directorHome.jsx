@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Card, CardContent, Grid, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Card, CardContent, Divider, Grid, List, ListItem, ListItemText, Typography } from '@mui/material';
 
 import { Title, TitleMedium } from '../../components';
 import { useLectureList } from '../../api/queries/lectures/useLectureList';
 import { useNoticeList } from '../../api/queries/notice/useNoticeList';
+import useRequestList from '../../api/queries/members/useRequestList';
+import { useUserAuthStore } from '../../store';
 
 // const lectures = [
 //   {
@@ -40,8 +42,12 @@ export default function DirectorHome() {
   const navigate = useNavigate();
   const [liveLectures, setLiveLectures] = useState(null);
 
+  const { user } = useUserAuthStore();
+
   const { data: lectures } = useLectureList();
   const { data: notices } = useNoticeList(0, 1, 5);
+  const { data: teacherReqList } = useRequestList('TEACHER', user.academy_id);
+  const { data: studentReqList } = useRequestList('STUDENT', user.academy_id);
 
   // 진행중인 강의 필터링
   useEffect(() => {
@@ -99,8 +105,26 @@ export default function DirectorHome() {
             ))}
         </Grid>
       </Box>
-      <Box sx={{ mb: 2, px: 2, backgroundColor: 'lightgrey' }}>
+      <Box sx={{ mb: 2, px: 2, pb: 4, backgroundColor: 'lightgrey' }}>
         <TitleMedium title="최근 등록요청" />
+        <Grid container spacing={1}>
+          <Grid item xs={6}>
+            <Typography sx={{ mb: 2, fontWeight: 'bold' }}>강사 (담당강의)</Typography>
+            {teacherReqList?.map((teacher) => {
+              const teacherInfo = teacher.user;
+              return <Typography key={teacherInfo.user_id}>{`${teacherInfo.user_name} (${teacherInfo.lectures.join(', ')})`}</Typography>;
+            })}
+          </Grid>
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <Grid item xs={5}>
+            <Typography sx={{ mb: 2, fontWeight: 'bold' }}>학생 (학부모)</Typography>
+            {studentReqList?.map((student) => {
+              const studentInfo = student.user;
+              const parentInfo = studentInfo.parent;
+              return <Typography key={studentInfo.user_id}>{`${studentInfo.user_name} (${parentInfo ? parentInfo.user_name : ''})`}</Typography>;
+            })}
+          </Grid>
+        </Grid>
       </Box>
     </>
   );
