@@ -24,7 +24,7 @@ const UserAuthStore = (set) => ({
   logout: () => set({ isLoggedIn: false, user: null, lectures: [] }),
   updateUser: (userData) =>
     set((state) => ({
-      user: { ...state.user, ...userData.data },
+      user: { ...state.user, ...userData },
     })),
   lecture: (lecture) => set({ lectures: lecture }),
 });
