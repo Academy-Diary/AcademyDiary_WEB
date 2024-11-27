@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton, Alert } from '@mui/material';
-import { Close } from '@mui/icons-material';
+import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton, Alert, Badge } from '@mui/material';
+import { Close, EditOutlined } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -9,31 +12,21 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SimpleDialog, SubmitButtons } from '../../../components';
-import { useUpdateProfile } from '../../../api/queries/user/useProfile';
+import { useProfileImage, useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
+import { useAcademyInfo, useUpdateAcademyInfo } from '../../../api/queries/user/useAcademyInfo';
 import { useUserAuthStore } from '../../../store';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 import { useCheckPassword } from '../../../api/queries/user/useCheckPw';
 
-const directorProfile = {
-  personal: {
-    name: '권지옹',
-    birthdate: '1963-10-24',
-    phone: '010-9393-2929',
-    email: 'geedragon@gmail.com',
-  },
-  academy: {
-    name: '떡잎학원',
-    phone: '010-8282-1111',
-    address: '서울특별시 서초구 서초1동 ...',
-    email: 'tteokip@gmail.com',
-  },
-};
+const VisuallyHiddenInput = styled('input')({
+  display: 'none',
+});
 
 export default function UpdateProfile() {
   const [passed, setPassed] = useState(false);
   const ckpassword = useCheckPassword();
 
-  return <Container sx={{ width: 400, p: 5 }}>{passed ? <UpdateProfileForm currentInfo={directorProfile} /> : <CheckPasswd setPassed={setPassed} ckpassword={ckpassword} />}</Container>;
+  return <Container sx={{ width: 400, p: 5 }}>{passed ? <UpdateProfileForm /> : <CheckPasswd setPassed={setPassed} ckpassword={ckpassword} />}</Container>;
 }
 
 function CheckPasswd({ setPassed, ckpassword }) {
@@ -69,15 +62,25 @@ function CheckPasswd({ setPassed, ckpassword }) {
   );
 }
 
-function UpdateProfileForm({ currentInfo }) {
+function UpdateProfileForm() {
+  const navigate = useNavigate();
   const { user } = useUserAuthStore();
   const [date, setDate] = useState(dayjs(user.birth_date));
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [imgUrl, setImgUrl] = useState(''); // Avatar 띄우기 용
 
+  const { data: profileImg } = useProfileImage(user.user_id);
+  const { data: academyInfo } = useAcademyInfo();
   const updateProfileMutation = useUpdateProfile(user.user_id);
+  const updateAcademyMutation = useUpdateAcademyInfo();
+  const updateProfileImgMutation = useUpdateProfileImage(user.user_id);
   const cancelAccountMutation = useCancelAccount(user.user_id);
+
+  useEffect(() => {
+    if (profileImg) setImgUrl(profileImg);
+  }, [profileImg]);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -95,7 +98,33 @@ function UpdateProfileForm({ currentInfo }) {
     setOpenSnackbar(false);
   };
 
-  // 프로필 수정
+  // 프로필 이미지 수정
+  const handleChangeImage = (e) => {
+    const file = e.target.files[0];
+    // console.log(file);
+
+    const submitData = new FormData();
+    submitData.append('file', file);
+    updateProfileImgMutation.mutate(submitData, {
+      onSuccess: () => {
+        alert('프로필 이미지 수정 성공!');
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          setImgUrl(reader.result);
+        };
+      },
+      onError: () => {
+        alert('프로필 이미지 수정 실패!');
+      },
+    });
+
+    e.target.value = ''; // input value 초기화
+  };
+
+  // 기본정보 및 학원정보 수정
+  // TODO: 두개 분리
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -108,7 +137,24 @@ function UpdateProfileForm({ currentInfo }) {
     };
 
     // console.log(submitData);
-    updateProfileMutation.mutate(submitData);
+    updateProfileMutation.mutate(submitData, {
+      onSuccess: () => {
+        // 학원정보 수정
+        const submitData2 = {
+          academy_name: data.get('academy_name'),
+          academy_email: data.get('academy_email'),
+          address: data.get('academy_address'),
+          phone_number: data.get('academy_phone'),
+        };
+        // console.log(submitData2);
+        updateAcademyMutation.mutate(submitData2, {
+          onSuccess: () => {
+            alert('프로필 수정 성공!');
+            navigate('/director/profile');
+          },
+        });
+      },
+    });
   };
 
   // 회원 탈퇴
@@ -131,7 +177,12 @@ function UpdateProfileForm({ currentInfo }) {
           <Typography variant="h6">프로필 수정</Typography>
         </Grid>
         <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Avatar sx={{ width: 100, height: 100 }} />
+          <Button component="label" role={undefined} tabIndex={-1} disableRipple>
+            <Badge anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} badgeContent={<EditOutlined />} tabIndex={-1}>
+              <Avatar src={imgUrl} sx={{ width: 100, height: 100 }} />
+            </Badge>
+            <VisuallyHiddenInput type="file" accept="image/*" onChange={handleChangeImage} />
+          </Button>
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
           <TextField label="이름" name="user_name" defaultValue={user.user_name} required />
@@ -152,10 +203,10 @@ function UpdateProfileForm({ currentInfo }) {
           <Typography variant="h6" sx={{ mb: 2 }}>
             학원 정보
           </Typography>
-          <TextField label="이름" defaultValue={currentInfo.academy.name} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="전화번호" defaultValue={currentInfo.academy.phone} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="주소" defaultValue={currentInfo.academy.address} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="이메일" defaultValue={currentInfo.academy.email} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="이름" name="academy_name" defaultValue={academyInfo?.academy_name} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="전화번호" name="academy_phone" defaultValue={academyInfo?.phone_number} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="주소" name="academy_address" defaultValue={academyInfo?.address} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="이메일" name="academy_email" defaultValue={academyInfo?.academy_email} required fullWidth sx={{ mb: 2 }} />
         </Grid>
       </Grid>
       <Button sx={{ mt: 3 }} onClick={handleOpenDialog}>

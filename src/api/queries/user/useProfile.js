@@ -10,16 +10,12 @@ export const useProfileBasic = (userId) =>
     queryKey: [QUERY_KEY.PROFILE_BASIC(userId)],
     queryFn: async () => {
       const response = await axiosInstance.get(PATH_API.PROFILE_BASIC(userId));
-      const basicInfo = response.data.data;
-
-      basicInfo.birth_date = basicInfo.birth_date.substr(0, 10);
-      // console.log(basicInfo);
-      return basicInfo;
+      // console.log(response);
+      return response.data.data;
     },
   });
 
 export const useUpdateProfile = (userId) => {
-  const navigate = useNavigate();
   const { updateUser } = useUserAuthStore();
 
   return useMutation({
@@ -29,7 +25,6 @@ export const useUpdateProfile = (userId) => {
     },
     onSuccess: (data) => {
       updateUser(data.data);
-      navigate('/director/profile');
     },
     onError: (error) => {
       console.log('Error occured at useProfileUpdate: ', error);
@@ -54,3 +49,25 @@ export const useUpdatePassword = (userId) => {
     },
   });
 };
+
+export const useProfileImage = (userId) =>
+  useQuery({
+    queryKey: [QUERY_KEY.PROFILE_IMAGE(userId)],
+    queryFn: async () => {
+      const response = await axiosInstance.get(PATH_API.PROFILE_IMAGE(userId));
+      // console.log(response);
+      return response.data.data.image;
+    },
+  });
+
+export const useUpdateProfileImage = (userId) =>
+  useMutation({
+    mutationFn: async (data) => {
+      const response = await axiosInstance.putForm(PATH_API.PROFILE_IMAGE(userId), data, { headers: { 'Content-Type': 'multipart/form-data' } });
+      // console.log(response);
+      return response.data;
+    },
+    onError: (error) => {
+      console.log('Error occurred at useUpdateProfileImage:', error);
+    },
+  });

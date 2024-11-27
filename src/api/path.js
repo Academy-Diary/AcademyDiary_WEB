@@ -12,6 +12,8 @@ export const PATH_API = {
   SIGN_OUT: '/user/logout',
   REISSUE_TOKEN: '/user/refresh-token',
   PROFILE_BASIC: (userId) => `/user/${userId}/basic-info`,
+  PROFILE_IMAGE: (userId) => `/user/${userId}/image-info`,
+  ACADEMY_INFO: '/user/academy-info',
   CANCEL_ACCOUNT: (userId) => `/user/${userId}`,
   CHECK_PW: '/user/check-password',
   // register

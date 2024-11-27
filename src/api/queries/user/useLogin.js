@@ -24,10 +24,8 @@ export const useLogin = (options) => {
 
       const { user, accessToken } = data;
       setSession(accessToken);
-      user.birth_date = user.birth_date.substr(0, 10);
       login({ ...user, userStatus: data.userStatus });
 
-      const hasRegistered = data.user.academy_id !== null;
       if (data.user.role === 'CHIEF') {
         navigate(PATH.DIRECTOR.ROOT);
       } else if (data.user.role === 'TEACHER') {
