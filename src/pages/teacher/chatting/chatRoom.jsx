@@ -165,7 +165,7 @@ export default function ChatRoom() {
             : parents?.map((parent) => (
                 <Box key={parent.parent_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(parent.parent_id)}>
                   <Typography variant="h6" textAlign="left" pl="10px">
-                    {parent.parent_name}
+                    {parent.parent_name} ({parent.student_name}&apos;s parent)
                   </Typography>
                 </Box>
               ))}
@@ -173,7 +173,7 @@ export default function ChatRoom() {
         <Grid item md={9} sx={{ height: '80vh' }}>
           <Box sx={{ width: '100%', height: '100%', backgroundColor: '#b9b9b9', ml: '10px' }}>
             <Typography variant="h4" sx={{ padding: '10px' }}>
-              {selectRole === 'STUDENT' ? nowSelect.user_name : nowSelect.parent_name}
+              {selectRole === 'STUDENT' ? nowSelect.user_name : `${nowSelect.parent_name}`}
             </Typography>
             <Stack alignItems="center">
               <Box sx={{ width: '90%', height: '65vh', backgroundColor: '#ffffff', overflowY: 'auto', overflowX: 'hidden' }}>
