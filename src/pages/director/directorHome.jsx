@@ -59,11 +59,7 @@ export default function DirectorHome() {
       const currentTime = now.toTimeString().slice(0, 5); // 현재 시간 (HH:mm 형식)
 
       const filteredLectures = lectures.filter((lecture) => {
-        const { days, start_time: st, end_time: et } = lecture;
-        // TODO: 형식 변환 제거
-        const startTime = st.split('T')[1].slice(0, 5);
-        const endTime = et.split('T')[1].slice(0, 5);
-
+        const { days, start_time: startTime, end_time: endTime } = lecture;
         return days.includes(currentDay) && currentTime >= startTime && currentTime <= endTime;
       });
 
