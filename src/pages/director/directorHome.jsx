@@ -112,19 +112,21 @@ export default function DirectorHome() {
         <Grid container spacing={1}>
           <Grid item xs={6}>
             <Typography sx={{ mb: 2, fontWeight: 'bold' }}>강사 (담당강의)</Typography>
-            {teacherReqList?.map((teacher) => {
-              const teacherInfo = teacher.user;
-              return <Typography key={teacherInfo.user_id}>{`${teacherInfo.user_name} (${teacherInfo.lectures.join(', ')})`}</Typography>;
-            })}
+            {teacherReqList &&
+              teacherReqList.slice(0, 3).map((teacher) => {
+                const teacherInfo = teacher.user;
+                return <Typography key={teacherInfo.user_id}>{`${teacherInfo.user_name} (${teacherInfo.lectures.join(', ')})`}</Typography>;
+              })}
           </Grid>
           <Divider orientation="vertical" variant="middle" flexItem />
           <Grid item xs={5}>
             <Typography sx={{ mb: 2, fontWeight: 'bold' }}>학생 (학부모)</Typography>
-            {studentReqList?.map((student) => {
-              const studentInfo = student.user;
-              const parentInfo = studentInfo.parent;
-              return <Typography key={studentInfo.user_id}>{`${studentInfo.user_name} (${parentInfo ? parentInfo.user_name : ''})`}</Typography>;
-            })}
+            {studentReqList &&
+              studentReqList.slice(0, 3).map((student) => {
+                const studentInfo = student.user;
+                const parentInfo = studentInfo.parent;
+                return <Typography key={studentInfo.user_id}>{`${studentInfo.user_name} (${parentInfo ? parentInfo.user_name : ''})`}</Typography>;
+              })}
           </Grid>
         </Grid>
       </Box>
