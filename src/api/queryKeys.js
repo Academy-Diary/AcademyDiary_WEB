@@ -23,6 +23,8 @@ export const QUERY_KEY = {
   // manage lectures
   LECTURELIST: PATH_API.LECTURELIST,
   ATTENDEELIST: (lectureId) => PATH_API.ATTENDEELIST(lectureId),
+  ATTENDEE_PARENTLIST: (lectureId) => PATH_API.ATTENDEE_PARENTLIST(lectureId),
+
 
   // tuition fees
   CLASSLIST: (academyId) => PATH_API.CLASSLIST(academyId),

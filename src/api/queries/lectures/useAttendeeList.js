@@ -12,3 +12,12 @@ export const useAttendeeList = (lectureId) =>
       return response.data.data;
     },
   });
+
+export const useAttendeeParentList = (lectureId) =>
+  useQuery({
+    queryKey: [QUERY_KEY.ATTENDEE_PARENTLIST(lectureId)],
+    queryFn: async () => {
+      const response = await axiosInstance.get(PATH_API.ATTENDEE_PARENTLIST(lectureId));
+      return response.data.data;
+    },
+  });
