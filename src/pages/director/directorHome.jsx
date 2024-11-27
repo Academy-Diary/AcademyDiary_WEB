@@ -8,6 +8,7 @@ import { useLectureList } from '../../api/queries/lectures/useLectureList';
 import { useNoticeList } from '../../api/queries/notice/useNoticeList';
 import useRequestList from '../../api/queries/members/useRequestList';
 import { useUserAuthStore } from '../../store';
+import { useAcademyInfo } from '../../api/queries/user/useAcademyInfo';
 
 // const lectures = [
 //   {
@@ -44,6 +45,7 @@ export default function DirectorHome() {
 
   const { user } = useUserAuthStore();
 
+  const { data: academyInfo } = useAcademyInfo();
   const { data: lectures } = useLectureList();
   const { data: notices } = useNoticeList(0, 1, 5);
   const { data: teacherReqList } = useRequestList('TEACHER', user.academy_id);
@@ -75,7 +77,7 @@ export default function DirectorHome() {
 
   return (
     <>
-      <Title title="떡잎학원" subtitle="학생 수: 98명" />
+      <Title title={academyInfo?.academy_name} subtitle={`학생 수: ${academyInfo?.headcount}명`} />
       <Box sx={{ mb: 2, px: 2, backgroundColor: 'lightgrey' }}>
         <TitleMedium title="진행중인 강의" />
         <List>
