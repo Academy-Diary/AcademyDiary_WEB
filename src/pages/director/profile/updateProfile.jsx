@@ -34,6 +34,7 @@ function CheckPasswd({ setPassed, ckpassword }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setPassed(true);
     const password1 = e.target.password.value;
     ckpassword.mutate(
       {

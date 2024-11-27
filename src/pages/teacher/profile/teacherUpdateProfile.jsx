@@ -58,7 +58,7 @@ function CheckPasswd({ setPassed, ckpassword }) {
 function UpdateProfileForm({ currentInfo }) {
   const navigate = useNavigate();
   const { user } = useUserAuthStore();
-  const [date, setDate] = useState(dayjs(currentInfo.birth_date.split('T')[0]));
+  const [date, setDate] = useState(dayjs(currentInfo.birth_date));
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');

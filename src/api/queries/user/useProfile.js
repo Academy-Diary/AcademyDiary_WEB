@@ -10,11 +10,8 @@ export const useProfileBasic = (userId) =>
     queryKey: [QUERY_KEY.PROFILE_BASIC(userId)],
     queryFn: async () => {
       const response = await axiosInstance.get(PATH_API.PROFILE_BASIC(userId));
-      const basicInfo = response.data.data;
-
-      basicInfo.birth_date = basicInfo.birth_date.substr(0, 10);
-      console.log(basicInfo);
-      return basicInfo;
+      // console.log(response);
+      return response.data.data;
     },
   });
 
