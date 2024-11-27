@@ -4,7 +4,7 @@ import { AssignmentInd } from '@mui/icons-material';
 import socket from '../../../components/socket';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
-import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
+import { useAttendeeList, useAttendeeParentList } from '../../../api/queries/lectures/useAttendeeList';
 
 // const students = [
 //   { id: 1, name: '김대성' },
@@ -19,9 +19,11 @@ export default function ChatRoom() {
   const { user, lectures } = useUserAuthStore();
   const [nowMessage, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  // const [students, setStudents ] = useState();
   const [selectLectureId, setLectureSelect] = useState(lectures[0].lecture_id);
   const [selectRole, setRoleSelect] = useState('STUDENT');
   const { data: students } = useAttendeeList(selectLectureId);
+  const { data: parents } = useAttendeeParentList(selectLectureId);
   const [nowSelect, setSelect] = useState({ user_id: 0, user_name: '학생 선택' });
 
   useEffect(() => {
@@ -37,43 +39,74 @@ export default function ChatRoom() {
   }, [user.user_id]);
 
   const handleNameClick = (id) => {
-    const selectedStudent = students.find((n) => n.user_id === id);
+    console.log(selectRole);
+    if (selectRole === 'STUDENT') {
+      const selectedStudent = students.find((n) => n.user_id === id);
 
-    console.log(id);
+      console.log(id);
 
-    // 현재 선택된 방과 다른 방을 클릭한 경우만 실행
-    if (nowSelect.user_id !== selectedStudent.user_id) {
-      // 기존 방을 나가기
-      socket.emit('leave room', { roomId: nowSelect.user_id, userId: user.user_id });
+      // 현재 선택된 방과 다른 방을 클릭한 경우만 실행
+      if (nowSelect.user_id !== selectedStudent.user_id) {
+        // 기존 방을 나가기
+        socket.emit('leave room', { roomId: nowSelect.user_id, userId: user.user_id });
 
-      // 새로운 방에 조인
-      socket.emit('create or join room', { roomId: selectedStudent.user_id, userId: user.user_id });
+        // 새로운 방에 조인
+        socket.emit('create or join room', { roomId: selectedStudent.user_id, userId: user.user_id });
 
-      // 새로운 방의 이전 메시지 요청
-      socket.emit('get messages', { roomId: selectedStudent.user_id });
+        // 새로운 방의 이전 메시지 요청
+        socket.emit('get messages', { roomId: selectedStudent.user_id });
 
-      // 서버에서 수신한 메시지 업데이트
-      socket.on('all messages', (msgs) => {
-        const formattedMessages = msgs.map((msg) => ({
-          ...msg,
-          myMessage: msg.userId === user.user_id,
-        }));
-        setMessages(formattedMessages);
-      });
+        // 서버에서 수신한 메시지 업데이트
+        socket.on('all messages', (msgs) => {
+          const formattedMessages = msgs.map((msg) => ({
+            ...msg,
+            myMessage: msg.userId === user.user_id,
+          }));
+          setMessages(formattedMessages);
+        });
 
-      // 선택된 방 상태 업데이트
-      setSelect(selectedStudent);
+        // 선택된 방 상태 업데이트
+        setSelect(selectedStudent);
+      }
+    } else {
+      const selectedStudent = parents.find((n) => n.parent_id === id);
+
+      console.log('parent', selectedStudent);
+
+      // 현재 선택된 방과 다른 방을 클릭한 경우만 실행
+      if (nowSelect.parent_id !== selectedStudent.parent_id) {
+        // 기존 방을 나가기
+        socket.emit('leave room', { roomId: nowSelect.parent_id, userId: user.user_id });
+
+        // 새로운 방에 조인
+        socket.emit('create or join room', { roomId: selectedStudent.parent_id, userId: user.user_id });
+
+        // 새로운 방의 이전 메시지 요청
+        socket.emit('get messages', { roomId: selectedStudent.parent_id });
+
+        // 서버에서 수신한 메시지 업데이트
+        socket.on('all messages', (msgs) => {
+          const formattedMessages = msgs.map((msg) => ({
+            ...msg,
+            myMessage: msg.userId === user.user_id,
+          }));
+          setMessages(formattedMessages);
+        });
+
+        // 선택된 방 상태 업데이트
+        setSelect(selectedStudent);
+      }
     }
   };
 
   const sendMessage = (e) => {
-    if (nowSelect.user_id === 0) {
+    if (nowSelect.user_id === 0 || nowSelect.parent_id === 0) {
       alert('채팅을 보낼 학생을 선택하세요');
       return;
     }
     if (e.keyCode === 13 && nowMessage.trim() !== '') {
       const messageData = {
-        roomId: nowSelect.user_id,
+        roomId: selectRole === 'STUDENT' ? nowSelect.user_id : nowSelect.parent_id,
         message: nowMessage,
         userId: user.user_id,
         time: new Date().toLocaleTimeString(),
@@ -96,6 +129,8 @@ export default function ChatRoom() {
 
   const handleRoleSelect = (e) => {
     setRoleSelect(e.target.value);
+    // 메세지 리스트 삭제
+    setMessages([]);
   };
 
   return (
@@ -119,25 +154,35 @@ export default function ChatRoom() {
               </RadioGroup>
             </FormControl>
           </Grid>
-          {students?.map((student) => (
-            <Box key={student.user_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(student.user_id)}>
-              <Typography variant="h6" textAlign="left" pl="10px">
-                {student.user_name}
-              </Typography>
-            </Box>
-          ))}
+          {selectRole === 'STUDENT'
+            ? students?.map((student) => (
+                <Box key={student.user_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(student.user_id)}>
+                  <Typography variant="h6" textAlign="left" pl="10px">
+                    {student.user_name}
+                  </Typography>
+                </Box>
+              ))
+            : parents?.map((parent) => (
+                <Box key={parent.parent_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(parent.parent_id)}>
+                  <Typography variant="h6" textAlign="left" pl="10px">
+                    {parent.parent_name}
+                  </Typography>
+                </Box>
+              ))}
         </Grid>
         <Grid item md={9} sx={{ height: '80vh' }}>
           <Box sx={{ width: '100%', height: '100%', backgroundColor: '#b9b9b9', ml: '10px' }}>
             <Typography variant="h4" sx={{ padding: '10px' }}>
-              {nowSelect.user_name}
+              {selectRole === 'STUDENT' ? nowSelect.user_name : nowSelect.parent_name}
             </Typography>
             <Stack alignItems="center">
               <Box sx={{ width: '90%', height: '65vh', backgroundColor: '#ffffff', overflowY: 'auto', overflowX: 'hidden' }}>
                 <Stack sx={{ padding: '5px' }}>
-                  {messages.map((message, index) => (
-                    <MessageBox key={`${message.time}-${Math.random()}`} name={nowSelect.name} msg={message.message} myMessage={message.myMessage} time={message.time} />
-                  ))}
+                  {messages.map((message, index) => {
+                    if (selectRole === 'STUDENT')
+                      return <MessageBox key={`${message.time}-${Math.random()}`} name={nowSelect.user_name} msg={message.message} myMessage={message.myMessage} time={message.time} />;
+                    return <MessageBox key={`${message.time}-${Math.random()}`} name={nowSelect.parent_name} msg={message.message} myMessage={message.myMessage} time={message.time} />;
+                  })}
                 </Stack>
               </Box>
               <TextField

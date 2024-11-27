@@ -29,6 +29,7 @@ export const PATH_API = {
   // manage lectures
   LECTURELIST: '/lecture',
   ATTENDEELIST: (lectureId) => `/lecture/${lectureId}/student`,
+  ATTENDEE_PARENTLIST: (lectureId) => `/lecture/${lectureId}/parent`,
   ADD_LECTURE: '/lecture',
   DELETE_LECTURE: (lectureId) => `/lecture/${lectureId}`,
   UPDATE_LECTURE: (lectureId) => `/lecture/${lectureId}`,
