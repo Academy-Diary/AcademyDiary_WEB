@@ -19,7 +19,6 @@ export const useProfileBasic = (userId) =>
   });
 
 export const useUpdateProfile = (userId) => {
-  const navigate = useNavigate();
   const { updateUser } = useUserAuthStore();
 
   return useMutation({
@@ -29,7 +28,6 @@ export const useUpdateProfile = (userId) => {
     },
     onSuccess: (data) => {
       updateUser(data.data);
-      navigate('/director/profile');
     },
     onError: (error) => {
       console.log('Error occured at useProfileUpdate: ', error);

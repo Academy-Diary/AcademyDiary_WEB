@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton, Alert, Badge } from '@mui/material';
 import { Close, EditOutlined } from '@mui/icons-material';
@@ -62,6 +63,7 @@ function CheckPasswd({ setPassed, ckpassword }) {
 }
 
 function UpdateProfileForm() {
+  const navigate = useNavigate();
   const { user } = useUserAuthStore();
   const [date, setDate] = useState(dayjs(user.birth_date));
   const [openDialog, setOpenDialog] = useState(false);
@@ -121,6 +123,8 @@ function UpdateProfileForm() {
     e.target.value = ''; // input value 초기화
   };
 
+  // 기본정보 및 학원정보 수정
+  // TODO: 두개 분리
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -136,14 +140,19 @@ function UpdateProfileForm() {
     updateProfileMutation.mutate(submitData, {
       onSuccess: () => {
         // 학원정보 수정
-        const submitData3 = {
+        const submitData2 = {
           academy_name: data.get('academy_name'),
           academy_email: data.get('academy_email'),
           address: data.get('academy_address'),
           phone_number: data.get('academy_phone'),
         };
-        // console.log(submitData3);
-        updateAcademyMutation.mutate(submitData3);
+        // console.log(submitData2);
+        updateAcademyMutation.mutate(submitData2, {
+          onSuccess: () => {
+            alert('프로필 수정 성공!');
+            navigate('/director/profile');
+          },
+        });
       },
     });
   };
