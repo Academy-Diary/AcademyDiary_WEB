@@ -7,7 +7,8 @@ import { Edit } from '@mui/icons-material';
 import { useUserAuthStore } from '../../../store';
 import { CustomLink } from '../../../components';
 import { PATH } from '../../../route/path';
-import { useAcademyInfo, useProfileImage } from '../../../api/queries/user/useProfile';
+import { useProfileImage } from '../../../api/queries/user/useProfile';
+import { useAcademyInfo } from '../../../api/queries/user/useAcademyInfo';
 
 // const user = {
 //   "user_id": "testuser",

@@ -18,16 +18,6 @@ export const useProfileBasic = (userId) =>
     },
   });
 
-export const useAcademyInfo = () =>
-  useQuery({
-    queryKey: [QUERY_KEY.ACADEMY_INFO],
-    queryFn: async () => {
-      const response = await axiosInstance.get(PATH_API.ACADEMY_INFO);
-      // console.log(response);
-      return response.data.data;
-    },
-  });
-
 export const useUpdateProfile = (userId) => {
   const navigate = useNavigate();
   const { updateUser } = useUserAuthStore();

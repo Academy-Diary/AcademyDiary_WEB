@@ -12,24 +12,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SimpleDialog, SubmitButtons } from '../../../components';
 import { useProfileImage, useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
+import { useAcademyInfo, useUpdateAcademyInfo } from '../../../api/queries/user/useAcademyInfo';
 import { useUserAuthStore } from '../../../store';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 import { useCheckPassword } from '../../../api/queries/user/useCheckPw';
-
-const directorProfile = {
-  personal: {
-    name: '권지옹',
-    birthdate: '1963-10-24',
-    phone: '010-9393-2929',
-    email: 'geedragon@gmail.com',
-  },
-  academy: {
-    name: '떡잎학원',
-    phone: '010-8282-1111',
-    address: '서울특별시 서초구 서초1동 ...',
-    email: 'tteokip@gmail.com',
-  },
-};
 
 const VisuallyHiddenInput = styled('input')({
   display: 'none',
@@ -39,7 +25,7 @@ export default function UpdateProfile() {
   const [passed, setPassed] = useState(false);
   const ckpassword = useCheckPassword();
 
-  return <Container sx={{ width: 400, p: 5 }}>{passed ? <UpdateProfileForm currentInfo={directorProfile} /> : <CheckPasswd setPassed={setPassed} ckpassword={ckpassword} />}</Container>;
+  return <Container sx={{ width: 400, p: 5 }}>{passed ? <UpdateProfileForm /> : <CheckPasswd setPassed={setPassed} ckpassword={ckpassword} />}</Container>;
 }
 
 function CheckPasswd({ setPassed, ckpassword }) {
@@ -75,7 +61,7 @@ function CheckPasswd({ setPassed, ckpassword }) {
   );
 }
 
-function UpdateProfileForm({ currentInfo }) {
+function UpdateProfileForm() {
   const { user } = useUserAuthStore();
   const [date, setDate] = useState(dayjs(user.birth_date));
   const [openDialog, setOpenDialog] = useState(false);
@@ -85,8 +71,10 @@ function UpdateProfileForm({ currentInfo }) {
   const [imgFile, setImgFile] = useState(null); // 서버에 전송하는 용
 
   const { data: profileImg } = useProfileImage(user.user_id);
-  const updateProfileImgMutation = useUpdateProfileImage(user.user_id);
+  const { data: academyInfo } = useAcademyInfo();
   const updateProfileMutation = useUpdateProfile(user.user_id);
+  const updateAcademyMutation = useUpdateAcademyInfo();
+  const updateProfileImgMutation = useUpdateProfileImage(user.user_id);
   const cancelAccountMutation = useCancelAccount(user.user_id);
 
   useEffect(() => {
@@ -142,6 +130,16 @@ function UpdateProfileForm({ currentInfo }) {
             alert('프로필 수정 성공!');
           },
         });
+
+        // 학원정보 수정
+        const submitData3 = {
+          academy_name: data.get('academy_name'),
+          academy_email: data.get('academy_email'),
+          address: data.get('academy_address'),
+          phone_number: data.get('academy_phone'),
+        };
+        // console.log(submitData3);
+        updateAcademyMutation.mutate(submitData3);
       },
     });
   };
@@ -192,10 +190,10 @@ function UpdateProfileForm({ currentInfo }) {
           <Typography variant="h6" sx={{ mb: 2 }}>
             학원 정보
           </Typography>
-          <TextField label="이름" defaultValue={currentInfo.academy.name} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="전화번호" defaultValue={currentInfo.academy.phone} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="주소" defaultValue={currentInfo.academy.address} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="이메일" defaultValue={currentInfo.academy.email} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="이름" name="academy_name" defaultValue={academyInfo?.academy_name} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="전화번호" name="academy_phone" defaultValue={academyInfo?.phone_number} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="주소" name="academy_address" defaultValue={academyInfo?.address} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="이메일" name="academy_email" defaultValue={academyInfo?.academy_email} required fullWidth sx={{ mb: 2 }} />
         </Grid>
       </Grid>
       <Button sx={{ mt: 3 }} onClick={handleOpenDialog}>
