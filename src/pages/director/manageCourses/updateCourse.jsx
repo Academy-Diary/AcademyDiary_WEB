@@ -56,9 +56,11 @@ export default function UpdateCourse() {
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
   useEffect(() => {
-    setRight(attendees ?? []);
-    const attIds = attendees?.map((a) => a.user_id);
-    setLeft(students?.filter((s) => !attIds?.includes(s.user_id)));
+    if (students) {
+      setRight(attendees ?? []);
+      const attIds = attendees?.map((a) => a.user_id) ?? [];
+      setLeft(students.filter((s) => !attIds.includes(s.user_id)));
+    }
   }, [attendees, students]);
 
   const handleOpenDialog = () => {
