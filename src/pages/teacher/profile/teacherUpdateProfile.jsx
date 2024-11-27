@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Avatar, Box, Button, Container, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import { Alert, Avatar, Box, Button, Container, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -12,21 +12,33 @@ import { useUserAuthStore } from '../../../store';
 import { SubmitButtons } from '../../../components';
 import { useUpdateProfile } from '../../../api/queries/user/useProfile';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
+import { useCheckPassword } from '../../../api/queries/user/useCheckPw';
 
 export default function TeacherUpdateProfile() {
   const { user } = useUserAuthStore();
   const [passed, setPassed] = useState(false);
+  const ckpassword = useCheckPassword();
 
-  return <Container sx={{ width: 400, p: 5 }}>{passed ? <UpdateProfileForm currentInfo={user} /> : <CheckPasswd setPassed={setPassed} />}</Container>;
+  return <Container sx={{ width: 400, p: 5 }}>{passed ? <UpdateProfileForm currentInfo={user} /> : <CheckPasswd setPassed={setPassed} ckpassword={ckpassword} />}</Container>;
 }
 
-function CheckPasswd({ setPassed }) {
+function CheckPasswd({ setPassed, ckpassword }) {
+  const [hasfailed, setfailed] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const password1 = e.target.password1.value;
-
-    // TODO: if 올바르지 않은 비밀번호일 때 처리.
-    setPassed(true);
+    ckpassword.mutate(
+      {
+        password: password1,
+      },
+      {
+        onSuccess: (data) => {
+          if (data.isMatched) setPassed(true);
+          else setfailed(true);
+        },
+      }
+    );
   };
 
   return (
@@ -34,7 +46,8 @@ function CheckPasswd({ setPassed }) {
       <Typography variant="h6" sx={{ mb: 7 }}>
         비밀번호 확인
       </Typography>
-      <TextField name="password1" label="비밀번호" required fullWidth type="password" sx={{ my: 1 }} />
+      <TextField name="password1" label="비밀번호" required error={hasfailed} fullWidth type="password" sx={{ my: 1 }} />
+      {hasfailed ? <Alert severity="error">잘못된 비밀번호입니다.</Alert> : null}
       <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
         확인
       </Button>
@@ -45,7 +58,7 @@ function CheckPasswd({ setPassed }) {
 function UpdateProfileForm({ currentInfo }) {
   const navigate = useNavigate();
   const { user } = useUserAuthStore();
-  const [date, setDate] = useState(dayjs(currentInfo.birth_date.split('T')[0]));
+  const [date, setDate] = useState(dayjs(currentInfo.birth_date));
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
