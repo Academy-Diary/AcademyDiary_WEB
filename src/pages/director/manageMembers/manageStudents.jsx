@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Typography, TableContainer, Paper, Table, TableHead, TableBody, TableRow, TableCell, Button, OutlinedInput, Checkbox } from '@mui/material';
 import { Search } from '@mui/icons-material';
@@ -32,6 +32,11 @@ export default function ManageStudents() {
   const { data: students } = useStudentList(user.academy_id);
   const deleteStudentMutation = useDeleteStudent();
 
+  useEffect(() => {
+    if (students && students.length === checkedStudents.length) setAllChecked(true);
+    else setAllChecked(false);
+  }, [students, checkedStudents]);
+
   const handleCloseDialog = () => {
     setOpen(false);
   };
@@ -45,7 +50,7 @@ export default function ManageStudents() {
     setCheckedStudents(allChecked ? [] : students);
     setAllChecked(!allChecked);
   };
-  const handleCheckTeacher = (student) => {
+  const handleCheckStudent = (student) => {
     const currentIdx = checkedStudents.indexOf(student);
     const newChecked = [...checkedStudents];
 
@@ -75,7 +80,7 @@ export default function ManageStudents() {
           <TableHead>
             <TableRow>
               <TableCell>
-                <Checkbox onClick={handleCheckAll} />
+                <Checkbox checked={allChecked} onClick={handleCheckAll} />
               </TableCell>
               <TableCell>학생 이름</TableCell>
               <TableCell>학생 연락처</TableCell>
@@ -90,7 +95,7 @@ export default function ManageStudents() {
               return student.user_name.includes(searchInput) || parent?.user_name.includes(searchInput) ? (
                 <TableRow key={student.user_id}>
                   <TableCell>
-                    <Checkbox checked={checkedStudents.indexOf(student) !== -1} onClick={() => handleCheckTeacher(student)} />
+                    <Checkbox checked={checkedStudents.indexOf(student) !== -1} onClick={() => handleCheckStudent(student)} />
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {student.user_name}

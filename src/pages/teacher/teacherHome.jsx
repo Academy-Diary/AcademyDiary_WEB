@@ -3,7 +3,8 @@ import { Box, Divider, Grid, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Title } from '../../components';
 import { useUserAuthStore } from '../../store';
-import { useLectures } from '../../api/queries/lectures/useLectures';
+import { useLectures } from '../../api/queries/user/useLectures';
+import { useNoticeList } from '../../api/queries/notice/useNoticeList';
 
 // const lectures = [
 //   { name: '수학1', time: '14:00~16:00', students: 40 },
@@ -11,27 +12,28 @@ import { useLectures } from '../../api/queries/lectures/useLectures';
 //   { name: '미적분', time: '19:00~21:00', students: 33 },
 //  ];
 
-const noticeList = [
-  {
-    id: 1,
-    title: '8월 정기고사 안내',
-    content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...',
-    date: '2024-07-20',
-    view: 55,
-  },
-  {
-    id: 2,
-    title: '7월 정기고사 안내',
-    content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...',
-    date: '2024-06-18',
-    view: 101,
-  },
-];
+// const noticeList = [
+//   {
+//     id: 1,
+//     title: '8월 정기고사 안내',
+//     content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...',
+//     date: '2024-07-20',
+//     view: 55,
+//   },
+//   {
+//     id: 2,
+//     title: '7월 정기고사 안내',
+//     content: '안녕하세요. \n이번달 정기고사 안내드립니다. \n...',
+//     date: '2024-06-18',
+//     view: 101,
+//   },
+// ];
 
 export default function TeacherHome() {
   const { user, lectures } = useUserAuthStore();
   const navigate = useNavigate();
   const { refetch } = useLectures();
+  const { data: noticeList } = useNoticeList(0, 1, 5);
   if (lectures.length === 0) refetch();
   const handleLectureClick = (id) => {
     navigate(`/teacher/class/${id}`);
@@ -83,15 +85,15 @@ export default function TeacherHome() {
               <Typography variant="h5" fontWeight="bold">
                 학원 공지 사항
               </Typography>
-              {noticeList.map((notice) => (
-                <Box sx={{ width: '100%', bgcolor: '#ffffff', padding: '5px', marginY: '10px' }} onClick={() => handleNoticeClick(notice.id)}>
+              {noticeList?.notice_list.map((notice) => (
+                <Box sx={{ width: '100%', bgcolor: '#ffffff', padding: '5px', marginY: '10px' }} onClick={() => handleNoticeClick(notice.notice_id)}>
                   <Stack spacing={2}>
                     <Grid container justifyContent="space-between">
                       <Typography variant="subtitle1" fontWeight="bold">
                         {notice.title}
                       </Typography>
                       <Typography variant="subtitle1" fontWeight="bold">
-                        조회수 : {notice.view}
+                        조회수 : {notice.views}
                       </Typography>
                     </Grid>
                     <Typography variant="overline" sx={{ width: '100%', maxHeight: '100px', overflowY: 'hidden' }}>

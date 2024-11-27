@@ -35,7 +35,7 @@ function Notice({
 
   const handleClickUpdate = () => {
     handleClose();
-    navigate(`${updateURL}?id=${anchorEl?.value}`);
+    navigate(`${updateURL}/${anchorEl?.value}`);
   };
 
   const handleCloseDialog = () => {
@@ -66,19 +66,19 @@ function Notice({
           </TableHead>
           <TableBody>
             {notices.map((notice) => (
-              <TableRow key={`${notice.title}_${notice.date}`}>
+              <TableRow key={`${notice.notice_id}`}>
                 <TableCell>
                   {role === 'teacher' && courseid !== undefined ? (
-                    <Link to={`/${role}/class/${courseid}/notice/${notice.id}`}>{notice.title}</Link>
+                    <Link to={`/${role}/class/${courseid}/notice/${notice.notice_id}`}>{notice.title}</Link>
                   ) : (
-                    <Link to={`/${role}/notice/${notice.id}`}>{notice.title}</Link>
+                    <Link to={`/${role}/notice/${notice.notice_id}`}>{notice.title}</Link>
                   )}
                 </TableCell>
-                <TableCell align="right">{notice.date}</TableCell>
-                <TableCell align="right">{notice.view}</TableCell>
+                <TableCell align="right">{notice.created_at}</TableCell>
+                <TableCell align="right">{notice.views}</TableCell>
                 {!editable ? null : (
                   <TableCell align="right">
-                    <IconButton onClick={handleClickMore} value={notice.id}>
+                    <IconButton onClick={handleClickMore} value={notice.notice_id}>
                       <MoreVert />
                     </IconButton>
                   </TableCell>

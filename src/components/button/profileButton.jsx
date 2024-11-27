@@ -6,6 +6,7 @@ import { AccountBoxRounded, LogoutRounded } from '@mui/icons-material';
 
 import useLogout from '../../api/queries/user/useLogout';
 import { useUserAuthStore } from '../../store';
+import { useProfileImage } from '../../api/queries/user/useProfile';
 
 /**
  * 마우스 오버 시 프로필 보기, 로그아웃 메뉴가 펼쳐지는 프로필 버튼
@@ -15,6 +16,8 @@ export default function ProfileButton({ position }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const { user } = useUserAuthStore();
   const logoutMutation = useLogout();
+
+  const { data: imageUrl } = useProfileImage(user.user_id);
 
   const handleMouseOver = (event) => {
     setAnchorEl(event.currentTarget);
@@ -31,8 +34,7 @@ export default function ProfileButton({ position }) {
   return (
     <>
       <IconButton onMouseOver={handleMouseOver}>
-        {/* TODO: 실제 프로필 이미지로 변경  */}
-        <Avatar />
+        <Avatar src={imageUrl} />
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <Box sx={{ paddingX: 2 }}>

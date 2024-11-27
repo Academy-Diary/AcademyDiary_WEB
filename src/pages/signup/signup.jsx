@@ -68,6 +68,7 @@ function SelectPosition({ handleSelect }) {
 function SignupForm({ position, setStatus, setName }) {
   const [showPassword, setShowPassword] = useState(false);
   const [userId, setUserId] = useState('');
+  const [birthDate, setBirthDate] = useState(null);
   const [duplicated, setDuplicated] = useState(false);
   const [checkedDup, setCheckedDup] = useState(false); // 중복체크 여부
 
@@ -109,7 +110,7 @@ function SignupForm({ position, setStatus, setName }) {
         user_id: data.get('userid'),
         password: data.get('password'),
         user_name: data.get('name'),
-        birth_date: new Date(data.get('birthdate')).toISOString(),
+        birth_date: birthDate.toISOString(),
         email: data.get('email'),
         phone_number: data.get('phonenumber'),
         role: position,
@@ -193,7 +194,7 @@ function SignupForm({ position, setStatus, setName }) {
               id="password2"
             />
           </Grid>
-          <PersonalInfo title="개인 정보" />
+          <PersonalInfo title="개인 정보" birthDate={birthDate} setBirthDate={setBirthDate} />
         </Grid>
         <Button type="submit" fullWidth variant="contained" size="large" sx={{ mt: 3 }}>
           가입하기
@@ -210,9 +211,7 @@ function SignupForm({ position, setStatus, setName }) {
   );
 }
 
-function PersonalInfo({ title }) {
-  const [value, setValue] = useState(null);
-
+function PersonalInfo({ title, birthDate, setBirthDate }) {
   return (
     <>
       <Grid item xs={12} mt={2}>
@@ -224,7 +223,7 @@ function PersonalInfo({ title }) {
       <Grid item xs={12}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={['DatePicker']}>
-            <DatePicker label="생년월일" name="birthdate" maxDate={dayjs()} value={value} onChange={(newValue) => setValue(newValue)} />
+            <DatePicker label="생년월일" name="birthdate" maxDate={dayjs()} value={birthDate} onChange={(newValue) => setBirthDate(newValue)} />
           </DemoContainer>
         </LocalizationProvider>
       </Grid>
