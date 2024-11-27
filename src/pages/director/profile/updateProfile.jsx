@@ -68,7 +68,6 @@ function UpdateProfileForm() {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [imgUrl, setImgUrl] = useState(''); // Avatar 띄우기 용
-  const [imgFile, setImgFile] = useState(null); // 서버에 전송하는 용
 
   const { data: profileImg } = useProfileImage(user.user_id);
   const { data: academyInfo } = useAcademyInfo();
@@ -97,17 +96,31 @@ function UpdateProfileForm() {
     setOpenSnackbar(false);
   };
 
+  // 프로필 이미지 수정
   const handleChangeImage = (e) => {
     const file = e.target.files[0];
-    setImgFile(file);
+    // console.log(file);
 
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setImgUrl(reader.result);
-    };
+    const submitData = new FormData();
+    submitData.append('file', file);
+    updateProfileImgMutation.mutate(submitData, {
+      onSuccess: () => {
+        alert('프로필 이미지 수정 성공!');
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          setImgUrl(reader.result);
+        };
+      },
+      onError: () => {
+        alert('프로필 이미지 수정 실패!');
+      },
+    });
+
+    e.target.value = ''; // input value 초기화
   };
-  // 프로필 수정
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -122,15 +135,6 @@ function UpdateProfileForm() {
     // console.log(submitData);
     updateProfileMutation.mutate(submitData, {
       onSuccess: () => {
-        // 프로필 이미지 수정
-        const submitData2 = new FormData();
-        submitData2.append('file', imgFile);
-        updateProfileImgMutation.mutate(submitData2, {
-          onSuccess: () => {
-            alert('프로필 수정 성공!');
-          },
-        });
-
         // 학원정보 수정
         const submitData3 = {
           academy_name: data.get('academy_name'),

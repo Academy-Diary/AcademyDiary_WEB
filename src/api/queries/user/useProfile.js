@@ -65,20 +65,14 @@ export const useProfileImage = (userId) =>
     },
   });
 
-export const useUpdateProfileImage = (userId) => {
-  const navigate = useNavigate();
-
-  return useMutation({
+export const useUpdateProfileImage = (userId) =>
+  useMutation({
     mutationFn: async (data) => {
       const response = await axiosInstance.putForm(PATH_API.PROFILE_IMAGE(userId), data, { headers: { 'Content-Type': 'multipart/form-data' } });
       // console.log(response);
       return response.data;
     },
-    onSuccess: () => {
-      navigate('/director/profile');
-    },
     onError: (error) => {
       console.log('Error occurred at useUpdateProfileImage:', error);
     },
   });
-};
