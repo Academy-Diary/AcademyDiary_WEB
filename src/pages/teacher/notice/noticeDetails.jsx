@@ -46,7 +46,14 @@ export default function TeacherNoticeDetails() {
         </Grid>
         <Grid item xs={12}>
           <Paper variant="outlined" sx={{ height: 350, padding: 2, overflow: 'auto' }}>
-            <Typography>{notice?.notice.content}</Typography>
+            <Typography>
+              {notice?.notice.content.split('\n').map((line) => (
+                <span key={line}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </Typography>
           </Paper>
         </Grid>
         <Grid item xs={12}>

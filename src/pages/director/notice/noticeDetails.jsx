@@ -67,7 +67,14 @@ export default function NoticeDetails() {
         </Grid>
         <Grid item xs={12}>
           <Paper variant="outlined" sx={{ height: 350, padding: 2, overflow: 'auto' }}>
-            <Typography>{data?.notice.content}</Typography>
+            <Typography>
+              {data?.notice.content.split('\n').map((line) => (
+                <span key={line}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </Typography>
           </Paper>
         </Grid>
         <Grid item xs={12}>
