@@ -77,16 +77,18 @@ export default function NoticeDetails() {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={12}>
-          <Typography>첨부파일</Typography>
-          <Paper variant="outlined" sx={{ height: 100, padding: 2, overflow: 'auto' }}>
-            {data?.files.map((file) => (
-              <Button variant="text" size="small" onClick={() => hadleFileDownload(file.url, file.name)}>
-                {file.name}
-              </Button>
-            ))}
-          </Paper>
-        </Grid>
+        {data?.files.length > 0 && (
+          <Grid item xs={12}>
+            <Typography>첨부파일</Typography>
+            <Paper variant="outlined" sx={{ height: 100, padding: 2, overflow: 'auto' }}>
+              {data?.files.map((file) => (
+                <Button variant="text" size="small" onClick={() => hadleFileDownload(file.url, file.name)}>
+                  {file.name}
+                </Button>
+              ))}
+            </Paper>
+          </Grid>
+        )}
       </Grid>
       <BottomTwoButtons first="목록으로" second="수정하기" onClickFirst={handleClickBefore} onClickSecond={handleClickUpdate} />
     </>
