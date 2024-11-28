@@ -4,9 +4,9 @@ import { PATH_API } from '../../path';
 
 export const useUpdateLecture = (lectureId) =>
   useMutation({
-    mutationFn: async () => {
-      const response = await axiosInstance.put(PATH_API.UPDATE_LECTURE(lectureId));
-      //   console.log(response);
+    mutationFn: async (data) => {
+      const response = await axiosInstance.put(PATH_API.UPDATE_LECTURE(lectureId), data);
+      // console.log(response);
       return response.data;
     },
     onError: (error) => {

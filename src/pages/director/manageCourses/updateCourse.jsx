@@ -56,9 +56,11 @@ export default function UpdateCourse() {
   const [left, setLeft] = useState([]);
   const [right, setRight] = useState([]);
   useEffect(() => {
-    setRight(attendees);
-    const attIds = attendees?.map((a) => a.user_id);
-    setLeft(students?.filter((s) => !attIds?.includes(s.user_id)));
+    if (students) {
+      setRight(attendees ?? []);
+      const attIds = attendees?.map((a) => a.user_id) ?? [];
+      setLeft(students.filter((s) => !attIds.includes(s.user_id)));
+    }
   }, [attendees, students]);
 
   const handleOpenDialog = () => {
@@ -98,11 +100,15 @@ export default function UpdateCourse() {
     // 강의 기본정보 수정
     updateLectureMutation.mutate(submitData, {
       onSuccess: () => {
-        const oldAttendeeIds = attendees.map((a) => a.user_id);
-        const newAttendeeIds = right.map((s) => s.user_id);
+        const oldAttendeeIds = attendees?.map((a) => a.user_id) ?? []; // 기존 수강생
+        const newAttendeeIds = right.map((s) => s.user_id); // 새로 선택한 수강생
         const intersection = newAttendeeIds.filter((id) => oldAttendeeIds.includes(id)); // 교집합
 
-        if (newAttendeeIds.length !== intersection.length) {
+        if (oldAttendeeIds.length === newAttendeeIds.length && newAttendeeIds.length === intersection.length) {
+          // 수강생 변경 없는 경우
+          alert('강의 수정 성공!');
+          navigate('/director/manage-courses/');
+        } else {
           // 강의 수강생 수정
           updateAttendeesMutation.mutate(newAttendeeIds, {
             onSuccess: () => {
@@ -110,9 +116,6 @@ export default function UpdateCourse() {
               navigate('/director/manage-courses/');
             },
           });
-        } else {
-          alert('강의 수정 성공!');
-          navigate('/director/manage-courses/');
         }
       },
       onError: () => {
