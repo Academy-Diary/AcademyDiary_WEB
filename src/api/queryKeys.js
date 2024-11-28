@@ -25,7 +25,6 @@ export const QUERY_KEY = {
   ATTENDEELIST: (lectureId) => PATH_API.ATTENDEELIST(lectureId),
   ATTENDEE_PARENTLIST: (lectureId) => PATH_API.ATTENDEE_PARENTLIST(lectureId),
 
-
   // tuition fees
   CLASSLIST: (academyId) => PATH_API.CLASSLIST(academyId),
   BILLLIST: (academyId) => PATH_API.BILLLIST(academyId),
