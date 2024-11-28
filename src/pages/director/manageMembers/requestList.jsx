@@ -45,8 +45,8 @@ export default function RequestList() {
   const [openApprove, setOpenApprove] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
 
-  const { data: teacherData } = useRequestList('TEACHER', user.academy_id);
-  const { data: studentData } = useRequestList('STUDENT', user.academy_id);
+  const { data: teacherData, refetch: refetchTeacher } = useRequestList('TEACHER', user.academy_id);
+  const { data: studentData, refetch: refetchStudent } = useRequestList('STUDENT', user.academy_id);
 
   const approveRegisterMutation = useDecideRegisters(true);
   const declineRegisterMutation = useDecideRegisters(false);
@@ -119,6 +119,8 @@ export default function RequestList() {
       onSuccess: () => {
         handleCloseApprove();
         alert('등록 요청 승인 성공!');
+        if (selected.role === '강사') refetchTeacher();
+        else if (selected.role === '학생') refetchStudent();
       },
     });
   };
@@ -128,6 +130,8 @@ export default function RequestList() {
       onSuccess: () => {
         handleCloseDecline();
         alert('등록 요청 거절 성공!');
+        if (selected.role === '강사') refetchTeacher();
+        else if (selected.role === '학생') refetchStudent();
       },
     });
   };
