@@ -154,14 +154,13 @@ export default function RequestList() {
             {teacherIsSuccess
               ? teacherData.map((teacher) => {
                   const teacherInfo = teacher.user;
-                  const lecturesName = teacherInfo.lectures.map((obj) => obj.lecture_name);
 
                   return (
                     <ListItemButton key={teacherInfo.user_id} onClick={() => handleClickTeacher(teacher)}>
                       <ListItemIcon>
                         <Checkbox checked={checkedTeachers.indexOf(teacher) !== -1} />
                       </ListItemIcon>
-                      <ListItemText primary={teacherInfo.user_name} secondary={`과목: ${lecturesName.join(', ')}`} />
+                      <ListItemText primary={teacherInfo.user_name} />
                     </ListItemButton>
                   );
                 })
