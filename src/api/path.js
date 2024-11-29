@@ -65,6 +65,9 @@ export const PATH_API = {
   GETQUIZLIST: (lectureId, quizId) => `/lecture/${lectureId}/exam?exam_type_id=${quizId}`,
   ADDEXAM: (lectureId) => `/lecture/${lectureId}/exam`,
   DELETEEXAM: (lectureId, testId) => `/lecture/${lectureId}/exam/${testId}`,
+
+  // quiz
+  CREATEQUIZ: '/quiz/create',
 };
 
 export default PATH_API;
