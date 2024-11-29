@@ -29,8 +29,6 @@ export default function AddScore() {
   const { lectures } = useUserAuthStore();
   const { state: examInfo } = useLocation();
 
-  const [isEditing, setEditing] = useState([false, false, false, false, false, false]);
-
   const { data: students } = useAttendeeList(courseid);
   const useAdd = useScoreAdd(courseid, testid);
 

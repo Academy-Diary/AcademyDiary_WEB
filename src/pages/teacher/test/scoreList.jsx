@@ -27,7 +27,7 @@ export default function ScoreList() {
     if (isEditing[id]) {
       // 수정완료 버튼 눌렀을 때
       const score = scores.scoreList.filter((n) => n.user_id === id);
-      console.log('score', score);
+
       const vscore = document.getElementsByName(id)[0].value;
       if (score.length !== 0) {
         useEdit.mutate(
@@ -69,6 +69,10 @@ export default function ScoreList() {
     deleteExam.mutate({}, { onSuccess: () => navigate(`/teacher/class/${courseid}/test`) });
   };
 
+  const handleAddScore = () => {
+    navigate('add-score', { state: examInfo });
+  };
+
   const courseID = Number(courseid);
   const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
 
@@ -80,8 +84,6 @@ export default function ScoreList() {
       }
     }
   }, [attendees]);
-
-  console.log('isEditing', isEditing);
 
   return (
     <Grid container spacing={2} sx={{ width: '80vw' }}>
@@ -172,13 +174,7 @@ export default function ScoreList() {
               <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
                 삭제하기
               </Button>
-              <Button
-                size="large"
-                variant="contained"
-                onClick={() => {
-                  navigate('add-score', { state: examInfo });
-                }}
-              >
+              <Button size="large" variant="contained" onClick={handleAddScore}>
                 전체성적입력
               </Button>
             </Box>
