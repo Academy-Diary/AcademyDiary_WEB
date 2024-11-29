@@ -5,14 +5,17 @@ import { AddButton, Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useCategory } from '../../../api/queries/test/useCategory';
 import { useQuizList } from '../../../api/queries/test/useGetExamList';
+import { useDeleteExam } from '../../../api/queries/test/useDeleteExam';
 
 export default function QuizHome() {
   const params = useParams();
   const { user, lectures } = useUserAuthStore();
 
-  const { data: category } = useCategory(user.academy_id);
   const [quizId, setQuizId] = useState('');
+
+  const { data: category } = useCategory(user.academy_id);
   const { data, refetch: quizRefetch } = useQuizList(Number(params.courseid), quizId);
+  const deleteExam = useDeleteExam(Number(params.courseid));
   const quizs = data?.exams;
 
   const lecture = lectures.filter((n) => n.lecture_id === Number(params.courseid))[0];
@@ -23,6 +26,13 @@ export default function QuizHome() {
   };
   const handleAdd = () => {
     navigate('add');
+  };
+  const handleDelete = (id) => {
+    deleteExam.mutate(id, {
+      onSuccess: () => {
+        quizRefetch();
+      },
+    });
   };
 
   useEffect(() => {
@@ -53,7 +63,7 @@ export default function QuizHome() {
                   <Button variant="contained" fullWidth disableElevation size="small" onClick={() => handleDetail(test.exam_id)}>
                     문제보기
                   </Button>
-                  <Button variant="outlined" fullWidth disableElevation size="small" onClick={() => console.log(`DELETE ${test.exam_id}`)} color="error" sx={{ mt: '5px' }}>
+                  <Button variant="outlined" fullWidth disableElevation size="small" onClick={() => handleDelete(test.exam_id)} color="error" sx={{ mt: '5px' }}>
                     삭제
                   </Button>
                 </Grid>
