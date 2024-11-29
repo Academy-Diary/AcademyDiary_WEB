@@ -62,6 +62,7 @@ export const PATH_API = {
   // lectures
   GET_LECTURES: (id) => `/lecture?user_id=${id}`,
   GETEXAMLIST: (lectureId) => `/lecture/${lectureId}/exam`, // 시험 리스트
+  GETQUIZLIST: (lectureId, quizId) => `/lecture/${lectureId}/exam?exam_type_id=${quizId}`,
   ADDEXAM: (lectureId) => `/lecture/${lectureId}/exam`,
   DELETEEXAM: (lectureId, testId) => `/lecture/${lectureId}/exam/${testId}`,
 };

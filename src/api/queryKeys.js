@@ -18,13 +18,13 @@ export const QUERY_KEY = {
   // examination (test)
   EXAM_CATEGORY: (academyId) => PATH_API.EXAM_CATEGORY(academyId),
   GETEXAMLIST: (lectureId) => PATH_API.GETEXAMLIST(lectureId),
+  GETQUIZLIST: (lectureId, categoryId) => PATH_API.GETQUIZLIST(lectureId, categoryId),
   SCORELIST: (lectureId, academyId) => PATH_API.SCORES(lectureId, academyId),
 
   // manage lectures
   LECTURELIST: PATH_API.LECTURELIST,
   ATTENDEELIST: (lectureId) => PATH_API.ATTENDEELIST(lectureId),
   ATTENDEE_PARENTLIST: (lectureId) => PATH_API.ATTENDEE_PARENTLIST(lectureId),
-
 
   // tuition fees
   CLASSLIST: (academyId) => PATH_API.CLASSLIST(academyId),
