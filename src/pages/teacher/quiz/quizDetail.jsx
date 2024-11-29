@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
-import { useQuizProblem } from '../../../api/queries/quiz/useQuiz';
+import { useQuizInfo, useQuizProblem } from '../../../api/queries/quiz/useQuiz';
 
 export default function QuizDetail() {
   const params = useParams();
@@ -13,7 +13,9 @@ export default function QuizDetail() {
   const [betweenQuiz, setBetweenQuiz] = useState(false); // 다음, 이전 버튼 눌렀을 때 문제가 로딩되기 전 렌더링 되는 것을 방지.
   const lecture = lectures.filter((n) => n.lecture_id === Number(params.courseid))[0];
 
+  const { data: quizInfo } = useQuizInfo(Number(params.quizid));
   const { data: quiz, refetch: quizRefetch } = useQuizProblem(Number(params.quizid), quizNum);
+
   useEffect(() => {
     if (quiz) {
       setBetweenQuiz(false);
@@ -40,7 +42,7 @@ export default function QuizDetail() {
       <Grid md={6} sx={{ padding: '20px' }}>
         {/* 왼쪽 절반 */}
         <Title title={`${lecture.lecture_name} 퀴즈`} />
-        <Typography variant="subtitle1">ai가 20개의 문제를 생성합니다.</Typography>
+        <Typography variant="subtitle1">ai가 5개의 문제를 생성합니다.</Typography>
         <Grid container mt={5}>
           <Grid md={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Typography variant="h6" fullWidth>
@@ -48,7 +50,7 @@ export default function QuizDetail() {
             </Typography>
           </Grid>
           <Grid md={8}>
-            <TextField variant="outlined" value="퀴즈 제목" required fullWidth disabled />
+            <TextField variant="outlined" value={quizInfo?.title} required fullWidth disabled />
           </Grid>
         </Grid>
         <Grid container mt={5}>
@@ -58,7 +60,7 @@ export default function QuizDetail() {
             </Typography>
           </Grid>
           <Grid md={8}>
-            <TextField variant="outlined" value="등비수열과 등차수열에 관련된 퀴즈입니다." disabled fullWidth multiline rows={6} />
+            <TextField variant="outlined" value={quizInfo?.comment} disabled fullWidth multiline rows={6} />
           </Grid>
         </Grid>
         <Grid container mt={5}>
@@ -68,7 +70,7 @@ export default function QuizDetail() {
             </Typography>
           </Grid>
           <Grid md={8}>
-            <TextField variant="outlined" value="등비수열, 등차수열" disabled fullWidth multiline rows={6} />
+            <TextField variant="outlined" value={quizInfo?.keyword} disabled fullWidth multiline rows={6} />
           </Grid>
         </Grid>
       </Grid>

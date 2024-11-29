@@ -19,6 +19,7 @@ export const QUERY_KEY = {
   EXAM_CATEGORY: (academyId) => PATH_API.EXAM_CATEGORY(academyId),
   GETEXAMLIST: (lectureId) => PATH_API.GETEXAMLIST(lectureId),
   GETQUIZLIST: (lectureId, categoryId) => PATH_API.GETQUIZLIST(lectureId, categoryId),
+  QUIZINFO: (examId) => PATH_API.QUIZINFO(examId),
   SCORELIST: (lectureId, academyId) => PATH_API.SCORES(lectureId, academyId),
 
   // manage lectures

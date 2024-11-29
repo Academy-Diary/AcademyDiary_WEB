@@ -69,6 +69,7 @@ export const PATH_API = {
   // quiz
   CREATEQUIZ: '/quiz/create',
   QUIZDETAIL: (examId, quizNum) => `/quiz/${examId}/${quizNum}`,
+  QUIZINFO: (examId) => `/quiz/${examId}`
 };
 
 export default PATH_API;
