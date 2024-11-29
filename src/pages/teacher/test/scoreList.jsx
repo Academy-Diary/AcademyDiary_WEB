@@ -20,7 +20,7 @@ export default function ScoreList() {
   const useEdit = useScoreEdit(courseid, testid);
   const useAdd = useScoreAdd(courseid, testid);
 
-  const deleteExam = useDeleteExam(courseid, testid);
+  const deleteExam = useDeleteExam(courseid);
 
   const handleEdit = (id, aaa) => {
     if (isEditing[id]) {
@@ -65,7 +65,7 @@ export default function ScoreList() {
   };
 
   const handleDelete = () => {
-    deleteExam.mutate({}, { onSuccess: () => navigate(`/teacher/class/${courseid}/test`) });
+    deleteExam.mutate(testid, { onSuccess: () => navigate(`/teacher/class/${courseid}/test`) });
   };
 
   const courseID = Number(courseid);
