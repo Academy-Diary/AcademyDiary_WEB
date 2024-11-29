@@ -76,8 +76,8 @@ export default function QuizDetail() {
       </Grid>
       <Grid md={6} sx={{ bgcolor: '#ababab', padding: '20px' }}>
         {/* 오른쪽 절반 */}
-        <Title title="퀴즈 제목" />
-        <Typography variant="subtitle1">퀴즈에 대한 안내사항 란입니다.</Typography>
+        <Title title={quizInfo?.title} />
+        <Typography variant="subtitle1">{quizNum + 1}번 문제, 정답, 해설입니다.</Typography>
         <Box sx={{ width: '100%', height: '400px', border: '1px solid #000000', padding: '5px' }}>
           {quiz != null && !betweenQuiz ? (
             <>

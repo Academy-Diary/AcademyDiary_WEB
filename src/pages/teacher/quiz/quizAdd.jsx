@@ -44,7 +44,7 @@ export default function QuizDetail() {
         <Grid md={6} sx={{ padding: '20px' }}>
           {/* 왼쪽 절반 */}
           <Title title={`${lecture.lecture_name} 퀴즈`} />
-          <Typography variant="subtitle1">ai가 20개의 문제를 생성합니다.</Typography>
+          <Typography variant="subtitle1">ai가 5개의 문제를 생성합니다.</Typography>
           <Grid container mt={5}>
             <Grid md={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Typography variant="h6" fullWidth>
