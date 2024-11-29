@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { BottomTwoButtons, Title } from '../../../components';
@@ -27,6 +27,7 @@ export default function AddScore() {
   const { courseid, testid } = useParams();
   const navigate = useNavigate();
   const { lectures } = useUserAuthStore();
+  const { state: examInfo } = useLocation();
 
   const [isEditing, setEditing] = useState([false, false, false, false, false, false]);
 
@@ -42,7 +43,7 @@ export default function AddScore() {
       </Grid>
       <Grid xs={12}>
         <Typography fullWidth variant="h6">
-          문제수 : 20, 총점 : 100, 평균: 70, 표준오차 : 35, 수강인원 : {lecture.headcount}명
+          시행일: {examInfo.exam_date.split('T')[0]}, 최고점: {examInfo.high_score}, 평균: {examInfo.average_score}, 최저점: {examInfo.low_score}
         </Typography>
       </Grid>
       <Grid xs={3} sx={{ my: 2 }}>

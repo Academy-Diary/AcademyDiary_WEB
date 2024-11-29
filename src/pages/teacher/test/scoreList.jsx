@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Title } from '../../../components';
@@ -14,6 +14,7 @@ export default function ScoreList() {
   const { lectures } = useUserAuthStore();
 
   const [isEditing, setEditing] = useState({});
+  const { state: examInfo } = useLocation();
 
   const { data: attendees } = useAttendeeList(courseid); // 강의 수강생 목록
   const { data: scores, refetch: refetchScore } = useScoreList(courseid, testid); // 시험에 대한 점수 목록
@@ -89,7 +90,7 @@ export default function ScoreList() {
       </Grid>
       <Grid xs={8}>
         <Typography fullWidth variant="h6">
-          문제수 : 20, 총점 : 100, 평균: 70, 표준오차 : 35, 수강인원 : {lecture.headcount}명
+          시행일: {examInfo.exam_date.split('T')[0]}, 최고점: {examInfo.high_score}, 평균: {examInfo.average_score}, 최저점: {examInfo.low_score}
         </Typography>
       </Grid>
       <Grid xs={4}>
@@ -175,7 +176,7 @@ export default function ScoreList() {
                 size="large"
                 variant="contained"
                 onClick={() => {
-                  navigate('add-score');
+                  navigate('add-score', { state: examInfo });
                 }}
               >
                 전체성적입력
