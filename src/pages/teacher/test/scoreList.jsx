@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Title } from '../../../components';
@@ -12,6 +12,7 @@ export default function ScoreList() {
   const { courseid, testid } = useParams();
   const navigate = useNavigate();
   const { lectures } = useUserAuthStore();
+  const { state: isQuiz } = useLocation();
 
   const [isEditing, setEditing] = useState({});
 
@@ -155,31 +156,41 @@ export default function ScoreList() {
               </Box>
             </Grid>
             <Grid xs={1}>
-              <Box fullWidth sx={{ backgroundColor: 'lightgray', py: 1.57 }}>
-                {!isEditing[attendee.user_id] ? (
-                  <Button variant="contained" size="small" onClick={(e) => handleEdit(attendee.user_id, e)}>
+              {!isQuiz ? (
+                <Box fullWidth sx={{ backgroundColor: 'lightgray', py: 1.57 }}>
+                  {!isEditing[attendee.user_id] ? (
+                    <Button variant="contained" size="small" onClick={(e) => handleEdit(attendee.user_id, e)}>
+                      수정
+                    </Button>
+                  ) : (
+                    <Button variant="contained" size="small" onClick={(e) => handleEdit(attendee.user_id, e)}>
+                      수정완료
+                    </Button>
+                  )}
+                </Box>
+              ) : (
+                <Box fullWidth sx={{ backgroundColor: 'lightgray', py: 1.57 }}>
+                  <Button variant="contained" size="small" disabled>
                     수정
                   </Button>
-                ) : (
-                  <Button variant="contained" size="small" onClick={(e) => handleEdit(attendee.user_id, e)}>
-                    수정완료
-                  </Button>
-                )}
-              </Box>
+                </Box>
+              )}
             </Grid>
             <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
               <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
                 삭제하기
               </Button>
-              <Button
-                size="large"
-                variant="contained"
-                onClick={() => {
-                  navigate('add-score');
-                }}
-              >
-                전체성적입력
-              </Button>
+              {!isQuiz ? (
+                <Button
+                  size="large"
+                  variant="contained"
+                  onClick={() => {
+                    navigate('add-score');
+                  }}
+                >
+                  전체성적입력
+                </Button>
+              ) : null}
             </Box>
           </>
         );
