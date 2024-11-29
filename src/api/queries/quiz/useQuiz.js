@@ -13,6 +13,7 @@ export const useQuizCreate = () =>
 
 export const useQuizProblem = (examId, quizNum) =>
   useQuery({
+    queryKey: [QUERY_KEY.QUIZDETAIL(examId, quizNum)],
     queryFn: async () => {
       const response = await axiosInstance.get(PATH_API.QUIZDETAIL(examId, quizNum));
       return response.data;
@@ -20,10 +21,10 @@ export const useQuizProblem = (examId, quizNum) =>
   });
 
 export const useQuizInfo = (examId) =>
-    useQuery({
-        queryKey: [QUERY_KEY.QUIZINFO(examId)],
-        queryFn: async () => {
-            const response = await axiosInstance.get(PATH_API.QUIZINFO(examId));
-            return response.data.data;
-        }
-    })
+  useQuery({
+    queryKey: [QUERY_KEY.QUIZINFO(examId)],
+    queryFn: async () => {
+      const response = await axiosInstance.get(PATH_API.QUIZINFO(examId));
+      return response.data.data;
+    },
+  });
