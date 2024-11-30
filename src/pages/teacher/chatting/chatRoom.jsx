@@ -5,6 +5,7 @@ import socket from '../../../components/socket';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useAttendeeList, useAttendeeParentList } from '../../../api/queries/lectures/useAttendeeList';
+import { useProfileImage } from '../../../api/queries/user/useProfile';
 
 // const students = [
 //   { id: 1, name: '김대성' },
@@ -205,9 +206,17 @@ export default function ChatRoom() {
 
 function MessageBox({ name, msg, myMessage, time }) {
   const { user } = useUserAuthStore();
+  const { data: profileImg } = useProfileImage(user.user_id);
+
+  const [imgUrl, setImgUrl] = useState('');
+
+  useState(() => {
+    if (profileImg) setImgUrl(profileImg);
+  }, [profileImg]);
+
   return myMessage ? (
     <Grid container sx={{ margin: '10px' }}>
-      <Avatar sx={{ width: 40, height: 40 }} />
+      <Avatar src={imgUrl} sx={{ width: 40, height: 40 }} />
       <Grid item sx={{ marginLeft: '5px' }}>
         <Grid container sx={{ width: '10vw', justifyContent: 'space-between' }}>
           <Typography variant="subtitle2" color="#10ba23" fontWeight="bold">
