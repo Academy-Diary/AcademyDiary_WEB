@@ -12,7 +12,7 @@ export default function ScoreList() {
   const { courseid, testid } = useParams();
   const navigate = useNavigate();
   const { lectures } = useUserAuthStore();
-  const {state: location} = useLocation();
+  const { state: location } = useLocation();
   const isQuiz = location.quiz;
   const examInfo = location.info;
 

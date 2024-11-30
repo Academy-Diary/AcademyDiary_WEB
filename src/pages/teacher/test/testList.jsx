@@ -53,7 +53,7 @@ export default function TestList() {
   // ];
 
   const handleRowClick = (id, isQuiz) => {
-    navigate(`/teacher/class/${lecture.lecture_id}/test/${id}`, { state: {info: exams.exams.filter((n) => n.exam_id === id)[0], quiz: isQuiz} });
+    navigate(`/teacher/class/${lecture.lecture_id}/test/${id}`, { state: { info: exams.exams.filter((n) => n.exam_id === id)[0], quiz: isQuiz } });
   };
 
   const handleFilterClick = (e) => {
