@@ -31,7 +31,7 @@ export default function ManageCourses() {
 
   const { setLecture } = useLectureStore();
 
-  const { data: lectures, refetch } = useLectureList();
+  const { data: lectures, isSuccess, refetch } = useLectureList();
   const deleteLectureMutation = useDeleteLecture();
 
   const handleClickAdd = () => {
@@ -66,28 +66,30 @@ export default function ManageCourses() {
     <>
       <TitleMedium title="강의 목록" />
       <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
-        {lectures?.map((lecture) => (
-          <ListItem key={lecture.lecture_id} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
-            <ListItemText primary={lecture.lecture_name} secondary={lecture.teacher_name} />
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <ListItemText align="right" secondary={`수강 인원: ${lecture.headcount}`} sx={{ mb: 2 }} />
-              <ButtonGroup size="small">
-                <Button variant="outlined" onClick={() => handleClickDetails(lecture)}>
-                  강의 상세
-                </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    handleOpenDialog();
-                    setSelected(lecture);
-                  }}
-                >
-                  폐강하기
-                </Button>
-              </ButtonGroup>
-            </Box>
-          </ListItem>
-        ))}
+        {isSuccess
+          ? lectures.map((lecture) => (
+              <ListItem key={lecture.lecture_id} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
+                <ListItemText primary={lecture.lecture_name} secondary={lecture.teacher_name} />
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <ListItemText align="right" secondary={`수강 인원: ${lecture.headcount}`} sx={{ mb: 2 }} />
+                  <ButtonGroup size="small">
+                    <Button variant="outlined" onClick={() => handleClickDetails(lecture)}>
+                      강의 상세
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        handleOpenDialog();
+                        setSelected(lecture);
+                      }}
+                    >
+                      폐강하기
+                    </Button>
+                  </ButtonGroup>
+                </Box>
+              </ListItem>
+            ))
+          : []}
       </List>
       <AddButton title="새 강의 생성" onClick={handleClickAdd} />
       {selected && (
