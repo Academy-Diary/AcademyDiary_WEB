@@ -104,14 +104,22 @@ export default function RequestList() {
   };
 
   const handleClickApprove = (role) => {
-    handleOpenApprove();
-    if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
-    else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
+    if ((role === '강사' && checkedTeachers.length > 0) || (role === '학생' && checkedStudents.length > 0)) {
+      handleOpenApprove();
+      if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
+      else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
+    } else {
+      alert('승인할 요청을 선택해주세요!');
+    }
   };
   const handleClickDecline = (role) => {
-    handleOpenDecline();
-    if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
-    else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
+    if ((role === '강사' && checkedTeachers.length > 0) || (role === '학생' && checkedStudents.length > 0)) {
+      handleOpenDecline();
+      if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
+      else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
+    } else {
+      alert('거절할 요청을 선택해주세요!');
+    }
   };
   const initialize = () => {
     // 상태 초기화 및 데이터 리패치
