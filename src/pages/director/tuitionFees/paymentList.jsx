@@ -32,8 +32,8 @@ export default function PaymentList() {
   const [allChecked, setAllChecked] = useState(false);
 
   const { user } = useUserAuthStore();
-  const { data: paidBills } = useBillList(user.academy_id, true);
-  const { data: unpaidBills } = useBillList(user.academy_id, false);
+  const { data: paidBills, refetch: refetchPaid } = useBillList(user.academy_id, true);
+  const { data: unpaidBills, refetch: refetchUnpaid } = useBillList(user.academy_id, false);
   const updatePaidMutation = useUpdatePaid(user.academy_id);
 
   useEffect(() => {
@@ -62,10 +62,15 @@ export default function PaymentList() {
     setCheckedBills(allChecked ? [] : unpaidBills);
     setAllChecked(!allChecked);
   };
+
   const handleUpdatePaid = () => {
     const billIds = checkedBills.map((bill) => bill.bill_id);
     updatePaidMutation.mutate(billIds, {
       onSuccess: () => {
+        setCheckedBills([]);
+        refetchPaid();
+        refetchUnpaid();
+
         alert('납부완료 처리 성공!');
         handleCloseDialog();
       },
