@@ -63,6 +63,10 @@ export default function PaymentList() {
     setAllChecked(!allChecked);
   };
 
+  const handleClickUpdate = () => {
+    if (unpaidBills && checkedBills.length > 0) setOpen(true);
+    else alert('납부 완료 처리할 청구서를 선택해주세요!');
+  };
   const handleUpdatePaid = () => {
     const billIds = checkedBills.map((bill) => bill.bill_id);
     updatePaidMutation.mutate(billIds, {
@@ -95,7 +99,7 @@ export default function PaymentList() {
             <Button variant="contained" onClick={handleCheckAll}>
               {allChecked ? '전체해제' : '전체선택'}
             </Button>
-            <Button variant="contained" onClick={() => setOpen(true)}>
+            <Button variant="contained" onClick={handleClickUpdate}>
               납부 완료
             </Button>
           </Box>
