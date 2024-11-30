@@ -1,31 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup, TextField, Typography } from '@mui/material';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
-
-// const courses = [
-//   { id: 1, name: '미적분', students: 60 },
-//   { id: 2, name: '확률과통계', students: 30 },
-//   { id: 3, name: '영어', students: 20 },
-//   { id: 4, name: '국어', students: 55 },
-// ];
-const tests = [
-  { id: 1, name: '단원평가1' },
-  { id: 2, name: '단원평가2' },
-  { id: 3, name: '단원평가3' },
-  { id: 4, name: '단원평가4' },
-];
+import { useQuizInfo, useQuizProblem } from '../../../api/queries/quiz/useQuiz';
 
 export default function QuizDetail() {
   const params = useParams();
   const navigate = useNavigate();
   const { lectures } = useUserAuthStore();
+  const [quizNum, setQuizNum] = useState(0);
+  const [betweenQuiz, setBetweenQuiz] = useState(false); // 다음, 이전 버튼 눌렀을 때 문제가 로딩되기 전 렌더링 되는 것을 방지.
   const lecture = lectures.filter((n) => n.lecture_id === Number(params.courseid))[0];
-  const test = tests.filter((n) => n.id === Number(params.quizid))[0];
 
-  const handleEnd = () => {
-    navigate(-1);
+  const { data: quizInfo } = useQuizInfo(Number(params.quizid));
+  const { data: quiz, refetch: quizRefetch } = useQuizProblem(Number(params.quizid), quizNum);
+
+  useEffect(() => {
+    if (quiz) {
+      setBetweenQuiz(false);
+    }
+  }, [quiz]);
+  quizRefetch();
+
+  const handleNext = () => {
+    if (quizNum + 1 < 5) {
+      setBetweenQuiz(true);
+      setQuizNum(quizNum + 1);
+    } else alert('퀴즈 문제의 끝입니다.');
+  };
+
+  const handleBefore = () => {
+    if (quizNum - 1 >= 0) {
+      setBetweenQuiz(true);
+      setQuizNum(quizNum - 1);
+    } else alert('첫 문제입니다.');
   };
 
   return (
@@ -33,7 +42,7 @@ export default function QuizDetail() {
       <Grid md={6} sx={{ padding: '20px' }}>
         {/* 왼쪽 절반 */}
         <Title title={`${lecture.lecture_name} 퀴즈`} />
-        <Typography variant="subtitle1">ai가 20개의 문제를 생성합니다.</Typography>
+        <Typography variant="subtitle1">ai가 5개의 문제를 생성합니다.</Typography>
         <Grid container mt={5}>
           <Grid md={4} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Typography variant="h6" fullWidth>
@@ -41,7 +50,7 @@ export default function QuizDetail() {
             </Typography>
           </Grid>
           <Grid md={8}>
-            <TextField variant="outlined" value={test.name} required fullWidth disabled />
+            <TextField variant="outlined" value={quizInfo?.title} required fullWidth disabled />
           </Grid>
         </Grid>
         <Grid container mt={5}>
@@ -51,7 +60,7 @@ export default function QuizDetail() {
             </Typography>
           </Grid>
           <Grid md={8}>
-            <TextField variant="outlined" value="등비수열과 등차수열에 관련된 퀴즈입니다." disabled fullWidth multiline rows={6} />
+            <TextField variant="outlined" value={quizInfo?.comment} disabled fullWidth multiline rows={6} />
           </Grid>
         </Grid>
         <Grid container mt={5}>
@@ -61,21 +70,44 @@ export default function QuizDetail() {
             </Typography>
           </Grid>
           <Grid md={8}>
-            <TextField variant="outlined" value="등비수열, 등차수열" disabled fullWidth multiline rows={6} />
+            <TextField variant="outlined" value={quizInfo?.keyword} disabled fullWidth multiline rows={6} />
           </Grid>
         </Grid>
       </Grid>
       <Grid md={6} sx={{ bgcolor: '#ababab', padding: '20px' }}>
         {/* 오른쪽 절반 */}
-        <Title title={`${test.name}`} />
-        <Typography variant="subtitle1">퀴즈에 대한 안내사항 란입니다.</Typography>
-        <Box sx={{ width: '100%', height: '400px', border: '1px solid #000000' }}>생성된 문제가 표시되는 칸 입니다.</Box>
-        <Grid container justifyContent="right" mt={10}>
-          <Button variant="contained" onClick={handleEnd}>
-            퀴즈 생성 완료
+        <Title title={quizInfo?.title} />
+        <Typography variant="subtitle1">{quizNum + 1}번 문제, 정답, 해설입니다.</Typography>
+        <Box sx={{ width: '100%', height: '400px', border: '1px solid #000000', padding: '5px' }}>
+          {quiz != null && !betweenQuiz ? (
+            <>
+              <Typography variant="h5">
+                {quizNum + 1}. {quiz[quizNum].question}
+              </Typography>
+              <RadioGroup defaultValue={Object.values(quiz[quizNum].answer)[0]}>
+                {quiz[quizNum].options.map((option) => (
+                  <FormControlLabel value={option} disabled control={<Radio />} label={option} />
+                ))}
+              </RadioGroup>
+
+              <Typography variant="subtitle1">{quiz[quizNum].explanation}</Typography>
+            </>
+          ) : null}
+        </Box>
+        <Grid container justifyContent="space-between" mt={10}>
+          <Button variant="contained" onClick={handleBefore}>
+            이전 문제
+          </Button>
+          <Button variant="contained" onClick={handleNext}>
+            다음 문제
           </Button>
         </Grid>
       </Grid>
+      <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
+        <Button size="large" variant="contained" onClick={() => navigate(-1)}>
+          퀴즈 목록으로 돌아가기
+        </Button>
+      </Box>
     </Grid>
   );
 }

@@ -52,8 +52,8 @@ export default function TestList() {
   //   { id: 2, name: '6월말 정기평가', all: 100, avg: 60.2, stdev: 23.1, category: '중간고사', students: '50/50' },
   // ];
 
-  const handleRowClick = (id) => {
-    navigate(`/teacher/class/${lecture.lecture_id}/test/${id}`, { state: exams.exams.filter((n) => n.exam_id === id)[0] });
+  const handleRowClick = (id, isQuiz) => {
+    navigate(`/teacher/class/${lecture.lecture_id}/test/${id}`, { state: {info: exams.exams.filter((n) => n.exam_id === id)[0]}, {isQuiz: isQuiz} });
   };
 
   const handleFilterClick = (e) => {
@@ -169,21 +169,23 @@ export default function TestList() {
             </TableHead>
             <TableBody>
               {examList?.map((exam) => {
-                if ((selectCategory.length !== 0 && exam.exam_type_id === selectCategory[0].exam_type_id) || selectCategory.length === 0)
+                if ((selectCategory.length !== 0 && exam.exam_type_id === selectCategory[0].exam_type_id) || selectCategory.length === 0) {
+                  const categoryName = category.filter((e) => e.exam_type_id === exam.exam_type_id)[0]?.exam_type_name;
                   return (
-                    <TableRow key={exam.exam_id} onClick={() => handleRowClick(exam.exam_id)}>
+                    <TableRow key={exam.exam_id} onClick={() => handleRowClick(exam.exam_id, categoryName === '퀴즈')}>
                       <TableCell>{exam.exam_name}</TableCell>
                       <TableCell>{exam.high_score}</TableCell>
                       <TableCell>{exam.average_score}</TableCell>
                       <TableCell>{exam.low_score}</TableCell>
                       <TableCell>
-                        <Chip label={category.filter((e) => e.exam_type_id === exam.exam_type_id)[0]?.exam_type_name} />
+                        <Chip label={categoryName} />
                       </TableCell>
                       <TableCell>
                         {exam.headcount}/{lecture.headcount}
                       </TableCell>
                     </TableRow>
                   );
+                }
                 return null;
               })}
             </TableBody>

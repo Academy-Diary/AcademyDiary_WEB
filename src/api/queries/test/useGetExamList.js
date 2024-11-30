@@ -12,3 +12,12 @@ export const useGetExamList = (lectureId) =>
     },
     refetchOnMount: true,
   });
+
+export const useQuizList = (lectureId, categoryId) =>
+  useQuery({
+    queryKey: [QUERY_KEY.GETQUIZLIST(lectureId, categoryId)],
+    queryFn: async () => {
+      const response = await axiosInstance.get(PATH_API.GETQUIZLIST(lectureId, categoryId));
+      return response.data.data;
+    },
+  });
