@@ -53,8 +53,7 @@ export default function TestList() {
   // ];
 
   const handleRowClick = (id, isQuiz) => {
-    console.log(isQuiz);
-    navigate(`/teacher/class/${lecture.lecture_id}/test/${id}`, { state: isQuiz });
+    navigate(`/teacher/class/${lecture.lecture_id}/test/${id}`, { state: {info: exams.exams.filter((n) => n.exam_id === id)[0]}, {isQuiz: isQuiz} });
   };
 
   const handleFilterClick = (e) => {

@@ -1,18 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { Alert, Avatar, Box, Button, Container, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import { Alert, Avatar, Badge, Box, Button, Container, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { Close } from '@mui/icons-material';
+import { Close, EditOutlined } from '@mui/icons-material';
+import styled from '@emotion/styled';
 
 import { useUserAuthStore } from '../../../store';
 import { SubmitButtons } from '../../../components';
-import { useUpdateProfile } from '../../../api/queries/user/useProfile';
+import { useProfileImage, useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 import { useCheckPassword } from '../../../api/queries/user/useCheckPw';
+
+const VisuallyHiddenInput = styled('input')({
+  display: 'none',
+});
 
 export default function TeacherUpdateProfile() {
   const { user } = useUserAuthStore();
@@ -62,9 +67,16 @@ function UpdateProfileForm({ currentInfo }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [imgUrl, setImgUrl] = useState('');
 
+  const { data: profileImg } = useProfileImage(user.user_id);
   const updateProfileMutation = useUpdateProfile(user.user_id);
+  const updateProfileImgMutation = useUpdateProfileImage(user.user_id);
   const deleteAccountMutation = useCancelAccount(user.user_id);
+
+  useEffect(() => {
+    if (profileImg) setImgUrl(profileImg);
+  }, [profileImg]);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -84,20 +96,40 @@ function UpdateProfileForm({ currentInfo }) {
     e.preventDefault();
 
     // TODO: 프로필 수정 요청
-    const { target } = e;
-    const name = target[0].value;
-    const birth = new Date(target[2].value);
-    const phone = target[5].value;
-    const eMail = target[7].value;
+    const data = new FormData(e.currentTarget);
     const submitData = {
-      user_name: name,
-      phone_number: phone,
-      email: eMail,
-      birth_date: birth.toISOString(),
+      user_name: data.get('user_name'),
+      phone_number: data.get('phone_number'),
+      email: data.get('email'),
+      birth_date: date.toISOString(),
     };
 
-    updateProfileMutation.mutate(submitData, { onSuccess: (data) => navigate('/teacher/profile') });
+    updateProfileMutation.mutate(submitData, { onSuccess: () => navigate('/teacher/profile') });
   };
+
+  const handleChangeImage = (e) => {
+    const file = e.target.files[0];
+
+    const submitData = new FormData();
+    submitData.append('file', file);
+    updateProfileImgMutation.mutate(submitData, {
+      onSuccess: () => {
+        alert('프로필 이미지 수정 성공!');
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          setImgUrl(reader.result);
+        };
+      },
+      onError: () => {
+        alert('프로필 이미지 수정 실패');
+      },
+    });
+
+    e.target.value = '';
+  };
+
   const handleDeleteAccount = () => {
     handleCloseDialog();
 
@@ -117,10 +149,15 @@ function UpdateProfileForm({ currentInfo }) {
           <Typography variant="h6">프로필 수정</Typography>
         </Grid>
         <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Avatar sx={{ width: 100, height: 100 }} />
+          <Button component="label" role={undefined} tabIndex={-1} disableRipple>
+            <Badge anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} badgeContent={<EditOutlined />} tabIndex={-1}>
+              <Avatar src={imgUrl} sx={{ width: 100, height: 100 }} />
+            </Badge>
+            <VisuallyHiddenInput type="file" accept="image/*" onChange={handleChangeImage} />
+          </Button>
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
-          <TextField label="이름" defaultValue={currentInfo.user_name} required />
+          <TextField label="이름" name="user_name" defaultValue={currentInfo.user_name} required />
         </Grid>
         <Grid item xs={12}>
           <Typography variant="h6" sx={{ mb: 2 }}>
@@ -131,8 +168,8 @@ function UpdateProfileForm({ currentInfo }) {
               <DatePicker label="생년월일" maxDate={dayjs()} value={date} onChange={(newValue) => setDate(newValue)} format="YYYY-MM-DD" />
             </DemoContainer>
           </LocalizationProvider>
-          <TextField label="전화번호" defaultValue={currentInfo.phone_number} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="이메일" defaultValue={currentInfo.email} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="전화번호" name="phone_number" defaultValue={currentInfo.phone_number} required fullWidth sx={{ mb: 2 }} />
+          <TextField label="이메일" name="email" defaultValue={currentInfo.email} required fullWidth sx={{ mb: 2 }} />
         </Grid>
         <Button sx={{ mt: 3 }} onClick={handleDeleteAccount}>
           {' '}

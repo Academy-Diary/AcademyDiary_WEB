@@ -54,7 +54,7 @@ function Notice({
 
   return (
     <>
-      <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '60vh', width: '70vw' }}>
+      <TableContainer component={Paper} sx={{ mt: 3, maxHeight: '65vh', width: '70vw' }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
