@@ -32,7 +32,7 @@ export default function ManageTeachers() {
   const [checkedTeachers, setCheckedTeachers] = useState([]);
 
   const { user } = useUserAuthStore();
-  const { data: teachers } = useTeacherList(user.academy_id);
+  const { data: teachers, refetch } = useTeacherList(user.academy_id);
   const deleteTeacherMutation = useDeleteTeacher();
 
   useEffect(() => {
@@ -72,7 +72,10 @@ export default function ManageTeachers() {
   const handleDelete = () => {
     const userIds = checkedTeachers.map((teacher) => teacher.user_id);
     deleteTeacherMutation.mutate(userIds, {
-      onSuccess: handleCloseDialog,
+      onSuccess: () => {
+        handleCloseDialog();
+        refetch();
+      },
     });
   };
 
@@ -95,28 +98,30 @@ export default function ManageTeachers() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {teachers?.map((teacher) => {
-              const lecturesName = teacher.lectures.map((lec) => lec.lecture_name).join('');
+            {teachers
+              ? teachers.map((teacher) => {
+                  const lecturesName = teacher.lectures.map((lec) => lec.lecture_name).join('');
 
-              return teacher.user_name.includes(searchInput) || lecturesName.includes(searchInput) ? (
-                <TableRow key={teacher.user_id}>
-                  <TableCell>
-                    <Checkbox checked={checkedTeachers.indexOf(teacher) !== -1} onClick={() => handleCheckTeacher(teacher)} />
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {teacher.user_name}
-                  </TableCell>
-                  <TableCell>
-                    {teacher.lectures.map((lecture, idx) => {
-                      if (idx < teacher.lectures.length - 1) return `${lecture.lecture_name}, `;
-                      return lecture.lecture_name;
-                    })}
-                  </TableCell>
-                  <TableCell>{teacher.phone_number}</TableCell>
-                  <TableCell>{teacher.email}</TableCell>
-                </TableRow>
-              ) : null;
-            })}
+                  return teacher.user_name.includes(searchInput) || lecturesName.includes(searchInput) ? (
+                    <TableRow key={teacher.user_id}>
+                      <TableCell>
+                        <Checkbox checked={checkedTeachers.indexOf(teacher) !== -1} onClick={() => handleCheckTeacher(teacher)} />
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {teacher.user_name}
+                      </TableCell>
+                      <TableCell>
+                        {teacher.lectures.map((lecture, idx) => {
+                          if (idx < teacher.lectures.length - 1) return `${lecture.lecture_name}, `;
+                          return lecture.lecture_name;
+                        })}
+                      </TableCell>
+                      <TableCell>{teacher.phone_number}</TableCell>
+                      <TableCell>{teacher.email}</TableCell>
+                    </TableRow>
+                  ) : null;
+                })
+              : []}
           </TableBody>
         </Table>
       </TableContainer>
