@@ -32,8 +32,8 @@ export default function PaymentList() {
   const [allChecked, setAllChecked] = useState(false);
 
   const { user } = useUserAuthStore();
-  const { data: paidBills, refetch: refetchPaid } = useBillList(user.academy_id, true);
-  const { data: unpaidBills, refetch: refetchUnpaid } = useBillList(user.academy_id, false);
+  const { data: paidBills, isSuccess: paidIsSuccess, refetch: refetchPaid } = useBillList(user.academy_id, true);
+  const { data: unpaidBills, isSuccess: unpaidIsSuccess, refetch: refetchUnpaid } = useBillList(user.academy_id, false);
   const updatePaidMutation = useUpdatePaid(user.academy_id);
 
   useEffect(() => {
@@ -104,23 +104,27 @@ export default function PaymentList() {
             </Button>
           </Box>
           <List sx={{ maxHeight: '60vh', overflow: 'auto' }}>
-            {unpaidBills?.map((unpaid) => (
-              <Box key={unpaid.bill_id} onClick={() => handleCheckBill(unpaid)} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
-                <Checkbox checked={checkedBills.indexOf(unpaid) !== -1} />
-                <ListItemText primary={unpaid.user_name} secondary={`수강반: ${unpaid.class_name.join(', ')}/ 기간: ${unpaid.deadline.split('T')[0]}`} />
-                <ListItemText align="right" primary={unpaid.amount} secondary="미납" sx={{ mb: 2 }} />
-              </Box>
-            ))}
+            {unpaidIsSuccess
+              ? unpaidBills.map((unpaid) => (
+                  <Box key={unpaid.bill_id} onClick={() => handleCheckBill(unpaid)} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
+                    <Checkbox checked={checkedBills.indexOf(unpaid) !== -1} />
+                    <ListItemText primary={unpaid.user_name} secondary={`수강반: ${unpaid.class_name.join(', ')}/ 기간: ${unpaid.deadline.split('T')[0]}`} />
+                    <ListItemText align="right" primary={unpaid.amount} secondary="미납" sx={{ mb: 2 }} />
+                  </Box>
+                ))
+              : []}
           </List>
         </TabPanel>
         <TabPanel value={tabIndex} index={1}>
           <List sx={{ maxHeight: '60vh', overflow: 'auto' }}>
-            {paidBills?.map((paid) => (
-              <Box key={paid.bill_id} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
-                <ListItemText primary={paid.user_name} secondary={`수강반: ${paid.class_name.join(', ')}/ 기간: ${paid.deadline.split('T')[0]}`} />
-                <ListItemText align="right" primary={paid.amount} secondary="납부 완료" sx={{ mb: 2 }} />
-              </Box>
-            ))}
+            {paidIsSuccess
+              ? paidBills.map((paid) => (
+                  <Box key={paid.bill_id} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
+                    <ListItemText primary={paid.user_name} secondary={`수강반: ${paid.class_name.join(', ')}/ 기간: ${paid.deadline.split('T')[0]}`} />
+                    <ListItemText align="right" primary={paid.amount} secondary="납부 완료" sx={{ mb: 2 }} />
+                  </Box>
+                ))
+              : []}
           </List>
         </TabPanel>
         <SimpleDialog
