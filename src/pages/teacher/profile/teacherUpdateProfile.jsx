@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Alert, Avatar, Badge, Box, Button, Container, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -11,7 +11,7 @@ import styled from '@emotion/styled';
 
 import { useUserAuthStore } from '../../../store';
 import { SubmitButtons } from '../../../components';
-import { useProfileImage, useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
+import { useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 import { useCheckPassword } from '../../../api/queries/user/useCheckPw';
 
@@ -62,21 +62,15 @@ function CheckPasswd({ setPassed, ckpassword }) {
 
 function UpdateProfileForm({ currentInfo }) {
   const navigate = useNavigate();
-  const { user } = useUserAuthStore();
+  const { user, profileImg, updateProfileImg } = useUserAuthStore();
   const [date, setDate] = useState(dayjs(currentInfo.birth_date));
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [imgUrl, setImgUrl] = useState('');
 
-  const { data: profileImg } = useProfileImage(user.user_id);
   const updateProfileMutation = useUpdateProfile(user.user_id);
   const updateProfileImgMutation = useUpdateProfileImage(user.user_id);
   const deleteAccountMutation = useCancelAccount(user.user_id);
-
-  useEffect(() => {
-    if (profileImg) setImgUrl(profileImg);
-  }, [profileImg]);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -113,14 +107,9 @@ function UpdateProfileForm({ currentInfo }) {
     const submitData = new FormData();
     submitData.append('file', file);
     updateProfileImgMutation.mutate(submitData, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         alert('프로필 이미지 수정 성공!');
-
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-          setImgUrl(reader.result);
-        };
+        updateProfileImg(`${data.image}?timestamp=${new Date().getTime()}`);
       },
       onError: () => {
         alert('프로필 이미지 수정 실패');
@@ -151,7 +140,7 @@ function UpdateProfileForm({ currentInfo }) {
         <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button component="label" role={undefined} tabIndex={-1} disableRipple>
             <Badge anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} badgeContent={<EditOutlined />} tabIndex={-1}>
-              <Avatar src={imgUrl} sx={{ width: 100, height: 100 }} />
+              <Avatar src={profileImg} sx={{ width: 100, height: 100 }} />
             </Badge>
             <VisuallyHiddenInput type="file" accept="image/*" onChange={handleChangeImage} />
           </Button>
