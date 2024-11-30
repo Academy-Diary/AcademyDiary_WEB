@@ -16,7 +16,7 @@ export default function ReactQueryProviders({ children }) {
           refetchOnMount: true, // 새로운 컴포넌트 마운트가 발생한 경우
           refetchOnReconnect: true, // 네트워크 재연결이 발생한 경우
           staleTime: 0, // 데이터가 fresh -> stale 되는 시간
-          gcTime: 0, // 캐시된 데이터가 얼마나 오랫동안 메모리에 유지될 것인지
+          // gcTime: 0, // 캐시된 데이터가 얼마나 오랫동안 메모리에 유지될 것인지
           retry: 0, // API 요청 실패시 재시도 하는 횟수
         },
       },
