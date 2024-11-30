@@ -13,7 +13,7 @@ export default function ScoreList() {
   const navigate = useNavigate();
   const { lectures } = useUserAuthStore();
   const {state: location} = useLocation();
-  const isQuiz = location.isQuiz;
+  const isQuiz = location.quiz;
   const examInfo = location.info;
 
   const [isEditing, setEditing] = useState({});
