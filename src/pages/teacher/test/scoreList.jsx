@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Title } from '../../../components';
@@ -14,6 +14,7 @@ export default function ScoreList() {
   const { lectures } = useUserAuthStore();
 
   const [isEditing, setEditing] = useState({});
+  const { state: examInfo } = useLocation();
 
   const { data: attendees } = useAttendeeList(courseid); // 강의 수강생 목록
   const { data: scores, refetch: refetchScore } = useScoreList(courseid, testid); // 시험에 대한 점수 목록
@@ -26,7 +27,7 @@ export default function ScoreList() {
     if (isEditing[id]) {
       // 수정완료 버튼 눌렀을 때
       const score = scores.scoreList.filter((n) => n.user_id === id);
-      console.log('score', score);
+
       const vscore = document.getElementsByName(id)[0].value;
       if (score.length !== 0) {
         useEdit.mutate(
@@ -68,6 +69,10 @@ export default function ScoreList() {
     deleteExam.mutate({}, { onSuccess: () => navigate(`/teacher/class/${courseid}/test`) });
   };
 
+  const handleAddScore = () => {
+    navigate('add-score', { state: examInfo });
+  };
+
   const courseID = Number(courseid);
   const lecture = lectures.filter((n) => n.lecture_id === courseID)[0];
 
@@ -80,8 +85,6 @@ export default function ScoreList() {
     }
   }, [attendees]);
 
-  console.log('isEditing', isEditing);
-
   return (
     <Grid container spacing={2} sx={{ width: '80vw' }}>
       <Grid xs={12}>
@@ -89,7 +92,7 @@ export default function ScoreList() {
       </Grid>
       <Grid xs={8}>
         <Typography fullWidth variant="h6">
-          문제수 : 20, 총점 : 100, 평균: 70, 표준오차 : 35, 수강인원 : {lecture.headcount}명
+          시행일: {examInfo.exam_date.split('T')[0]}, 최고점: {examInfo.high_score}, 평균: {examInfo.average_score}, 최저점: {examInfo.low_score}
         </Typography>
       </Grid>
       <Grid xs={4}>
@@ -171,13 +174,7 @@ export default function ScoreList() {
               <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
                 삭제하기
               </Button>
-              <Button
-                size="large"
-                variant="contained"
-                onClick={() => {
-                  navigate('add-score');
-                }}
-              >
+              <Button size="large" variant="contained" onClick={handleAddScore}>
                 전체성적입력
               </Button>
             </Box>
