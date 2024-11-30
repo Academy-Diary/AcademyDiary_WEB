@@ -29,7 +29,7 @@ export default function ManageStudents() {
   const [checkedStudents, setCheckedStudents] = useState([]);
 
   const { user } = useUserAuthStore();
-  const { data: students, refetch } = useStudentList(user.academy_id);
+  const { data: students, isSuccess, refetch } = useStudentList(user.academy_id);
   const deleteStudentMutation = useDeleteStudent();
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function ManageStudents() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {students
+            {isSuccess
               ? students.map((student) => {
                   const { parent } = student;
 

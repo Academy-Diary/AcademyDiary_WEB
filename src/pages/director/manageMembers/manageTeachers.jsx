@@ -32,7 +32,7 @@ export default function ManageTeachers() {
   const [checkedTeachers, setCheckedTeachers] = useState([]);
 
   const { user } = useUserAuthStore();
-  const { data: teachers, refetch } = useTeacherList(user.academy_id);
+  const { data: teachers, isSuccess, refetch } = useTeacherList(user.academy_id);
   const deleteTeacherMutation = useDeleteTeacher();
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function ManageTeachers() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {teachers
+            {isSuccess
               ? teachers.map((teacher) => {
                   const lecturesName = teacher.lectures.map((lec) => lec.lecture_name).join('');
 
