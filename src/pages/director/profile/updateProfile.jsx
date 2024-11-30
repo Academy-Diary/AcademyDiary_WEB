@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Box, Button, Container, TextField, Typography, Grid, Avatar, Snackbar, IconButton, Alert, Badge } from '@mui/material';
@@ -12,7 +12,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import { SimpleDialog, SubmitButtons } from '../../../components';
-import { useProfileImage, useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
+import { useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
 import { useAcademyInfo, useUpdateAcademyInfo } from '../../../api/queries/user/useAcademyInfo';
 import { useUserAuthStore } from '../../../store';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
@@ -64,23 +64,17 @@ function CheckPasswd({ setPassed, ckpassword }) {
 
 function UpdateProfileForm() {
   const navigate = useNavigate();
-  const { user } = useUserAuthStore();
+  const { user, profileImg, updateProfileImg } = useUserAuthStore();
   const [date, setDate] = useState(dayjs(user.birth_date));
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
-  const [imgUrl, setImgUrl] = useState(''); // Avatar 띄우기 용
 
-  const { data: profileImg } = useProfileImage(user.user_id);
   const { data: academyInfo, refetch: refetchAcademyInfo } = useAcademyInfo();
   const updateProfileMutation = useUpdateProfile(user.user_id);
   const updateAcademyMutation = useUpdateAcademyInfo();
   const updateProfileImgMutation = useUpdateProfileImage(user.user_id);
   const cancelAccountMutation = useCancelAccount(user.user_id);
-
-  useEffect(() => {
-    if (profileImg) setImgUrl(profileImg);
-  }, [profileImg]);
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -106,14 +100,9 @@ function UpdateProfileForm() {
     const submitData = new FormData();
     submitData.append('file', file);
     updateProfileImgMutation.mutate(submitData, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         alert('프로필 이미지 수정 성공!');
-
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onloadend = () => {
-          setImgUrl(reader.result);
-        };
+        updateProfileImg(`${data.image}?timestamp=${new Date().getTime()}`);
       },
       onError: () => {
         alert('프로필 이미지 수정 실패!');
@@ -180,7 +169,7 @@ function UpdateProfileForm() {
         <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button component="label" role={undefined} tabIndex={-1} disableRipple>
             <Badge anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} badgeContent={<EditOutlined />} tabIndex={-1}>
-              <Avatar src={imgUrl} sx={{ width: 100, height: 100 }} />
+              <Avatar src={profileImg} sx={{ width: 100, height: 100 }} />
             </Badge>
             <VisuallyHiddenInput type="file" accept="image/*" onChange={handleChangeImage} />
           </Button>
