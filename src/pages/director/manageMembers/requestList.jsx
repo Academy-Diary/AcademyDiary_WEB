@@ -113,14 +113,25 @@ export default function RequestList() {
     if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
     else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
   };
+  const initialize = () => {
+    // 상태 초기화 및 데이터 리패치
+    setSelected(null);
+
+    if (selected.role === '강사') {
+      setCheckedTeachers([]);
+      refetchTeacher();
+    } else if (selected.role === '학생') {
+      setCheckedStudents([]);
+      refetchStudent();
+    }
+  };
   const handleApprove = () => {
     const userIds = selected.selectedUser.map((data) => data.user.user_id);
     approveRegisterMutation.mutate(userIds, {
       onSuccess: () => {
         handleCloseApprove();
         alert('등록 요청 승인 성공!');
-        if (selected.role === '강사') refetchTeacher();
-        else if (selected.role === '학생') refetchStudent();
+        initialize();
       },
     });
   };
@@ -130,8 +141,7 @@ export default function RequestList() {
       onSuccess: () => {
         handleCloseDecline();
         alert('등록 요청 거절 성공!');
-        if (selected.role === '강사') refetchTeacher();
-        else if (selected.role === '학생') refetchStudent();
+        initialize();
       },
     });
   };

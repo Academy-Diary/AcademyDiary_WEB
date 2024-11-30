@@ -74,6 +74,7 @@ export default function ManageTeachers() {
     deleteTeacherMutation.mutate(userIds, {
       onSuccess: () => {
         handleCloseDialog();
+        setCheckedTeachers([]);
         refetch();
       },
     });

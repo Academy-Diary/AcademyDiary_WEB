@@ -68,6 +68,7 @@ export default function ManageStudents() {
     deleteStudentMutation.mutate(userIds, {
       onSuccess: () => {
         handleCloseDialog();
+        setCheckedStudents([]);
         refetch();
       },
     });
