@@ -7,6 +7,7 @@ import { TitleMedium, SubmitButtons } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useTeacherList } from '../../../api/queries/members/useTeacherList';
 import { useAddLecture } from '../../../api/queries/lectures/useAddLecture';
+import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 
 const time = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
@@ -20,7 +21,7 @@ export default function AddCourse() {
 
   const { user } = useUserAuthStore();
   const { data: teachers } = useTeacherList(user.academy_id);
-
+  const { refetch: refetchLectures } = useLectureList();
   const addLectureMutation = useAddLecture();
 
   const handleChangeTeacher = (e) => {
@@ -53,6 +54,7 @@ export default function AddCourse() {
 
     addLectureMutation.mutate(submitData, {
       onSuccess: () => {
+        refetchLectures();
         alert('강의 생성 성공!');
         navigate('/director/manage-courses');
       },

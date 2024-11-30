@@ -7,6 +7,9 @@ import { AttachFile } from '@mui/icons-material';
 
 import { TitleMedium, SubmitButtons } from '../../../components';
 import { useNoticeDetail, useNoticeUpdate } from '../../../api/queries/notice/useNoticeCRUD';
+import { useNoticeList } from '../../../api/queries/notice/useNoticeList';
+
+const PAGE_SIZE = 6;
 
 const VisuallyHiddenInput = styled('input')({
   display: 'none',
@@ -23,6 +26,7 @@ export default function UpdateNotice() {
   const [addFiles, setAddFiles] = useState([]); // 새로 추가한 파일들
 
   const { data: noticeData } = useNoticeDetail(noticeId);
+  const { refetch: refetchNotices } = useNoticeList(0, 1, PAGE_SIZE); // lectureId, page, pageSize
   const updateNoticeMutation = useNoticeUpdate();
 
   useEffect(() => {
@@ -69,6 +73,7 @@ export default function UpdateNotice() {
         },
         {
           onSuccess: () => {
+            refetchNotices();
             alert('공지 수정 성공!');
             navigate('/director/notice');
           },

@@ -72,7 +72,7 @@ function UpdateProfileForm() {
   const [imgUrl, setImgUrl] = useState(''); // Avatar 띄우기 용
 
   const { data: profileImg } = useProfileImage(user.user_id);
-  const { data: academyInfo } = useAcademyInfo();
+  const { data: academyInfo, refetch: refetchAcademyInfo } = useAcademyInfo();
   const updateProfileMutation = useUpdateProfile(user.user_id);
   const updateAcademyMutation = useUpdateAcademyInfo();
   const updateProfileImgMutation = useUpdateProfileImage(user.user_id);
@@ -149,6 +149,7 @@ function UpdateProfileForm() {
         // console.log(submitData2);
         updateAcademyMutation.mutate(submitData2, {
           onSuccess: () => {
+            refetchAcademyInfo();
             alert('프로필 수정 성공!');
             navigate('/director/profile');
           },

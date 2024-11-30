@@ -41,7 +41,7 @@ import { useAcademyInfo } from '../../api/queries/user/useAcademyInfo';
 
 export default function DirectorHome() {
   const navigate = useNavigate();
-  const [liveLectures, setLiveLectures] = useState(null);
+  const [liveLectures, setLiveLectures] = useState([]);
 
   const { user } = useUserAuthStore();
 
@@ -77,7 +77,7 @@ export default function DirectorHome() {
       <Box sx={{ mb: 2, px: 2, backgroundColor: 'lightgrey' }}>
         <TitleMedium title="진행중인 강의" />
         <List>
-          {liveLectures?.map((lecture) => (
+          {liveLectures.map((lecture) => (
             <ListItem key={lecture.lecture_id}>
               <ListItemText primary={`${lecture.lecture_name} (${lecture.teacher_name})`} secondary={`강의 시간: ${lecture.start_time}~${lecture.end_time}`} />
               <ListItemText primary={`수강생: ${lecture.headcount}명`} />

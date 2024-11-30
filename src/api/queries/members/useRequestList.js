@@ -9,8 +9,7 @@ const useRequestList = (role, academyId) =>
     queryFn: async () => {
       const response = await axiosInstance.get(PATH_API.REQUESTLIST, { params: { role, academy_id: academyId } });
       // console.log(response.data.data.formattedResult);
-      if (response.status === 200) return response.data.data.formattedResult;
-      return [];
+      return response.data.data.formattedResult;
     },
   });
 

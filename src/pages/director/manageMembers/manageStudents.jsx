@@ -29,7 +29,7 @@ export default function ManageStudents() {
   const [checkedStudents, setCheckedStudents] = useState([]);
 
   const { user } = useUserAuthStore();
-  const { data: students } = useStudentList(user.academy_id);
+  const { data: students, isSuccess, refetch } = useStudentList(user.academy_id);
   const deleteStudentMutation = useDeleteStudent();
 
   useEffect(() => {
@@ -62,11 +62,16 @@ export default function ManageStudents() {
 
   const handleClickDelete = () => {
     if (checkedStudents && checkedStudents.length > 0) setOpen(true);
+    else alert('삭제할 학생을 선택해주세요!');
   };
   const handleDelete = () => {
     const userIds = checkedStudents.map((student) => student.user_id);
     deleteStudentMutation.mutate(userIds, {
-      onSuccess: handleCloseDialog,
+      onSuccess: () => {
+        handleCloseDialog();
+        setCheckedStudents([]);
+        refetch();
+      },
     });
   };
 
@@ -89,23 +94,25 @@ export default function ManageStudents() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {students?.map((student) => {
-              const { parent } = student;
+            {isSuccess
+              ? students.map((student) => {
+                  const { parent } = student;
 
-              return student.user_name.includes(searchInput) || parent?.user_name.includes(searchInput) ? (
-                <TableRow key={student.user_id}>
-                  <TableCell>
-                    <Checkbox checked={checkedStudents.indexOf(student) !== -1} onClick={() => handleCheckStudent(student)} />
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    {student.user_name}
-                  </TableCell>
-                  <TableCell>{student.phone_number}</TableCell>
-                  <TableCell>{parent?.user_name}</TableCell>
-                  <TableCell>{parent?.phone_number}</TableCell>
-                </TableRow>
-              ) : null;
-            })}
+                  return student.user_name.includes(searchInput) || parent?.user_name.includes(searchInput) ? (
+                    <TableRow key={student.user_id}>
+                      <TableCell>
+                        <Checkbox checked={checkedStudents.indexOf(student) !== -1} onClick={() => handleCheckStudent(student)} />
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        {student.user_name}
+                      </TableCell>
+                      <TableCell>{student.phone_number}</TableCell>
+                      <TableCell>{parent?.user_name}</TableCell>
+                      <TableCell>{parent?.phone_number}</TableCell>
+                    </TableRow>
+                  ) : null;
+                })
+              : []}
           </TableBody>
         </Table>
       </TableContainer>

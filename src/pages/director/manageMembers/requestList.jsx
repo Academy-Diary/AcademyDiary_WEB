@@ -45,8 +45,8 @@ export default function RequestList() {
   const [openApprove, setOpenApprove] = useState(false);
   const [openDecline, setOpenDecline] = useState(false);
 
-  const { data: teacherData } = useRequestList('TEACHER', user.academy_id);
-  const { data: studentData } = useRequestList('STUDENT', user.academy_id);
+  const { data: teacherData, isSuccess: teacherIsSuccess, refetch: refetchTeacher } = useRequestList('TEACHER', user.academy_id);
+  const { data: studentData, isSuccess: studentIsSuccess, refetch: refetchStudent } = useRequestList('STUDENT', user.academy_id);
 
   const approveRegisterMutation = useDecideRegisters(true);
   const declineRegisterMutation = useDecideRegisters(false);
@@ -104,14 +104,34 @@ export default function RequestList() {
   };
 
   const handleClickApprove = (role) => {
-    handleOpenApprove();
-    if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
-    else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
+    if ((role === '강사' && checkedTeachers.length > 0) || (role === '학생' && checkedStudents.length > 0)) {
+      handleOpenApprove();
+      if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
+      else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
+    } else {
+      alert('승인할 요청을 선택해주세요!');
+    }
   };
   const handleClickDecline = (role) => {
-    handleOpenDecline();
-    if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
-    else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
+    if ((role === '강사' && checkedTeachers.length > 0) || (role === '학생' && checkedStudents.length > 0)) {
+      handleOpenDecline();
+      if (role === '강사') setSelected({ selectedUser: checkedTeachers, role });
+      else if (role === '학생') setSelected({ selectedUser: checkedStudents, role });
+    } else {
+      alert('거절할 요청을 선택해주세요!');
+    }
+  };
+  const initialize = () => {
+    // 상태 초기화 및 데이터 리패치
+    setSelected(null);
+
+    if (selected.role === '강사') {
+      setCheckedTeachers([]);
+      refetchTeacher();
+    } else if (selected.role === '학생') {
+      setCheckedStudents([]);
+      refetchStudent();
+    }
   };
   const handleApprove = () => {
     const userIds = selected.selectedUser.map((data) => data.user.user_id);
@@ -119,6 +139,7 @@ export default function RequestList() {
       onSuccess: () => {
         handleCloseApprove();
         alert('등록 요청 승인 성공!');
+        initialize();
       },
     });
   };
@@ -128,6 +149,7 @@ export default function RequestList() {
       onSuccess: () => {
         handleCloseDecline();
         alert('등록 요청 거절 성공!');
+        initialize();
       },
     });
   };
@@ -147,20 +169,20 @@ export default function RequestList() {
               </ListItemIcon>
               <ListItemText primary="전체 선택" />
             </ListItem>
-            {teacherData?.length > 0 &&
-              teacherData?.map((teacher) => {
-                const teacherInfo = teacher.user;
-                const lecturesName = teacherInfo.lectures.map((obj) => obj.lecture_name);
+            {teacherIsSuccess
+              ? teacherData.map((teacher) => {
+                  const teacherInfo = teacher.user;
 
-                return (
-                  <ListItemButton key={teacherInfo.user_id} onClick={() => handleClickTeacher(teacher)}>
-                    <ListItemIcon>
-                      <Checkbox checked={checkedTeachers.indexOf(teacher) !== -1} />
-                    </ListItemIcon>
-                    <ListItemText primary={teacherInfo.user_name} secondary={`과목: ${lecturesName.join(', ')}`} />
-                  </ListItemButton>
-                );
-              })}
+                  return (
+                    <ListItemButton key={teacherInfo.user_id} onClick={() => handleClickTeacher(teacher)}>
+                      <ListItemIcon>
+                        <Checkbox checked={checkedTeachers.indexOf(teacher) !== -1} />
+                      </ListItemIcon>
+                      <ListItemText primary={teacherInfo.user_name} />
+                    </ListItemButton>
+                  );
+                })
+              : []}
           </List>
           <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove('강사')}>
             승인
@@ -180,20 +202,21 @@ export default function RequestList() {
               </ListItemIcon>
               <ListItemText primary="전체 선택" />
             </ListItem>
-            {studentData?.length > 0 &&
-              studentData?.map((student) => {
-                const studentInfo = student.user;
-                const parentName = studentInfo.parent ? studentInfo.parent.user_name : '';
+            {studentIsSuccess
+              ? studentData.map((student) => {
+                  const studentInfo = student.user;
+                  const parentName = studentInfo.parent ? studentInfo.parent.user_name : '';
 
-                return (
-                  <ListItemButton key={studentInfo.user_id} onClick={() => handleClickStudent(student)} disableRipple>
-                    <ListItemIcon>
-                      <Checkbox checked={checkedStudents.indexOf(student) !== -1} />
-                    </ListItemIcon>
-                    <ListItemText primary={studentInfo.user_name} secondary={`학부모: ${parentName}`} />
-                  </ListItemButton>
-                );
-              })}
+                  return (
+                    <ListItemButton key={studentInfo.user_id} onClick={() => handleClickStudent(student)} disableRipple>
+                      <ListItemIcon>
+                        <Checkbox checked={checkedStudents.indexOf(student) !== -1} />
+                      </ListItemIcon>
+                      <ListItemText primary={studentInfo.user_name} secondary={`학부모: ${parentName}`} />
+                    </ListItemButton>
+                  );
+                })
+              : []}
           </List>
           <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove('학생')}>
             승인

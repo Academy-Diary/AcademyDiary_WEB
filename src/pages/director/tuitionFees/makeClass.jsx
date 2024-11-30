@@ -30,6 +30,7 @@ function DialogForm({ type, open, handleCloseFormDialog, selected }) {
   const title = type === 'add' ? '수강반 추가' : '수강반 수정';
 
   const { user } = useUserAuthStore();
+  const { refetch } = useClassList(user.academy_id);
   const makeClassMutation = useMakeClass(user.academy_id);
   const updateClassMutation = useUpdateClass(user.academy_id, selected.class_id);
 
@@ -48,6 +49,7 @@ function DialogForm({ type, open, handleCloseFormDialog, selected }) {
 
       makeClassMutation.mutate(submitData, {
         onSuccess: () => {
+          refetch();
           alert('수강반 추가 성공!');
           handleCloseFormDialog();
         },
@@ -65,6 +67,7 @@ function DialogForm({ type, open, handleCloseFormDialog, selected }) {
 
       updateClassMutation.mutate(submitData, {
         onSuccess: () => {
+          refetch();
           alert('수강반 수정 성공!');
           handleCloseFormDialog();
         },
@@ -103,7 +106,7 @@ export default function MakeClass() {
   const [selected, setSelected] = useState('');
 
   const { user } = useUserAuthStore();
-  const { data: classes } = useClassList(user.academy_id);
+  const { data: classes, isSuccess, refetch } = useClassList(user.academy_id);
   const deleteClassMutation = useDeleteClass(user.academy_id, selected.class_id);
 
   const handleOpenFormDialog = (type, _class) => {
@@ -127,6 +130,7 @@ export default function MakeClass() {
   const handleDelete = () => {
     deleteClassMutation.mutate('', {
       onSuccess: () => {
+        refetch();
         alert('수강반 삭제 성공!');
         handleCloseDeleteDialog();
       },
@@ -150,28 +154,30 @@ export default function MakeClass() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {classes?.map((c) => (
-              <TableRow key={c.class_id}>
-                <TableCell>{c.class_name}</TableCell>
-                <TableCell align="right">{c.duration}</TableCell>
-                <TableCell align="right">{c.expense}</TableCell>
-                <TableCell sx={{ width: '25%' }}>
-                  <Grid container spacing={1}>
-                    <Grid item xs={4} />
-                    <Grid item xs={4}>
-                      <Button variant="outlined" onClick={() => handleOpenFormDialog('update', c)}>
-                        수정
-                      </Button>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Button variant="contained" onClick={() => handleClickDelete(c)}>
-                        삭제
-                      </Button>
-                    </Grid>
-                  </Grid>
-                </TableCell>
-              </TableRow>
-            ))}
+            {isSuccess
+              ? classes.map((c) => (
+                  <TableRow key={c.class_id}>
+                    <TableCell>{c.class_name}</TableCell>
+                    <TableCell align="right">{c.duration}</TableCell>
+                    <TableCell align="right">{c.expense}</TableCell>
+                    <TableCell sx={{ width: '25%' }}>
+                      <Grid container spacing={1}>
+                        <Grid item xs={4} />
+                        <Grid item xs={4}>
+                          <Button variant="outlined" onClick={() => handleOpenFormDialog('update', c)}>
+                            수정
+                          </Button>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Button variant="contained" onClick={() => handleClickDelete(c)}>
+                            삭제
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : []}
           </TableBody>
         </Table>
       </TableContainer>
