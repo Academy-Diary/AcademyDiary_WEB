@@ -107,11 +107,11 @@ export default function DirectorHome() {
         <TitleMedium title="최근 등록요청" />
         <Grid container spacing={1}>
           <Grid item xs={6}>
-            <Typography sx={{ mb: 2, fontWeight: 'bold' }}>강사 (담당강의)</Typography>
+            <Typography sx={{ mb: 2, fontWeight: 'bold' }}>강사</Typography>
             {teacherReqList &&
               teacherReqList.slice(0, 3).map((teacher) => {
                 const teacherInfo = teacher.user;
-                return <Typography key={teacherInfo.user_id}>{`${teacherInfo.user_name} (${teacherInfo.lectures.join(', ')})`}</Typography>;
+                return <Typography key={teacherInfo.user_id}>{`${teacherInfo.user_name} 강사`}</Typography>;
               })}
           </Grid>
           <Divider orientation="vertical" variant="middle" flexItem />
