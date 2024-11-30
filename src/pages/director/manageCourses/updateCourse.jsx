@@ -31,6 +31,7 @@ import { useUpdateLecture } from '../../../api/queries/lectures/useUpdateLecture
 import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
 import { useStudentList } from '../../../api/queries/members/useStudentList';
 import { useUpdateAttendees } from '../../../api/queries/lectures/useUpdateAttendees';
+import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 
 const time = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
@@ -51,6 +52,7 @@ export default function UpdateCourse() {
 
   const { data: students } = useStudentList(user.academy_id);
   const { data: attendees } = useAttendeeList(lecture.lecture_id);
+  const { refetch: refetchLectures } = useLectureList();
   const updateAttendeesMutation = useUpdateAttendees(lecture.lecture_id);
   // 수강생 등록 TransferList에 넘겨줄 리스트 (왼,오)
   const [left, setLeft] = useState([]);
@@ -84,6 +86,11 @@ export default function UpdateCourse() {
     setEndTime(e.target.value);
   };
 
+  const handleSuccess = () => {
+    refetchLectures();
+    alert('강의 수정 성공!');
+    navigate('/director/manage-courses/');
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -106,14 +113,12 @@ export default function UpdateCourse() {
 
         if (oldAttendeeIds.length === newAttendeeIds.length && newAttendeeIds.length === intersection.length) {
           // 수강생 변경 없는 경우
-          alert('강의 수정 성공!');
-          navigate('/director/manage-courses/');
+          handleSuccess();
         } else {
           // 강의 수강생 수정
           updateAttendeesMutation.mutate(newAttendeeIds, {
             onSuccess: () => {
-              alert('강의 수정 성공!');
-              navigate('/director/manage-courses/');
+              handleSuccess();
             },
           });
         }

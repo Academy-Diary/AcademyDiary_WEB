@@ -31,7 +31,7 @@ export default function ManageCourses() {
 
   const { setLecture } = useLectureStore();
 
-  const { data: lectures } = useLectureList();
+  const { data: lectures, refetch } = useLectureList();
   const deleteLectureMutation = useDeleteLecture();
 
   const handleClickAdd = () => {
@@ -52,6 +52,7 @@ export default function ManageCourses() {
   const handleDeleteLecture = () => {
     deleteLectureMutation.mutate(selected.lecture_id, {
       onSuccess: () => {
+        refetch();
         handleCloseDialog();
         alert('강의 삭제 성공!');
       },
