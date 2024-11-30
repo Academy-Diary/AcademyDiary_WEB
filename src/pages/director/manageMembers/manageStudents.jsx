@@ -62,6 +62,7 @@ export default function ManageStudents() {
 
   const handleClickDelete = () => {
     if (checkedStudents && checkedStudents.length > 0) setOpen(true);
+    else alert('삭제할 학생을 선택해주세요!');
   };
   const handleDelete = () => {
     const userIds = checkedStudents.map((student) => student.user_id);

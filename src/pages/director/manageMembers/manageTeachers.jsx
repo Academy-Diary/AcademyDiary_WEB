@@ -68,6 +68,7 @@ export default function ManageTeachers() {
 
   const handleClickDelete = () => {
     if (checkedTeachers && checkedTeachers.length > 0) handleOpenDialog();
+    else alert('삭제할 강사를 선택해주세요!');
   };
   const handleDelete = () => {
     const userIds = checkedTeachers.map((teacher) => teacher.user_id);
