@@ -58,6 +58,7 @@ export default function DirectorNotice() {
   const handleClickDelete = (id) => {
     deleteNoticeMutation.mutate(id, {
       onSuccess: () => {
+        refetch();
         alert('공지 삭제 성공!');
       },
       onError: () => {
