@@ -18,7 +18,7 @@ export default function Register({ position }) {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="md">
       <Box
         sx={{
           marginTop: 10,
@@ -33,7 +33,7 @@ export default function Register({ position }) {
         {pathname.startsWith(`/${position}/profile`) ? (
           <Outlet />
         ) : (
-          <>
+          <Container maxWidth="xs">
             <Typography variant="h4" align="center">
               Academy Pro
             </Typography>
@@ -41,7 +41,7 @@ export default function Register({ position }) {
             {status === 1 && <RegisterAcademy setStatus={setStatus} />}
             {status === 2 && <RegisterTeacher setStatus={setStatus} />}
             {status === 3 && <AfterRegister />}
-          </>
+          </Container>
         )}
       </Box>
     </Container>
