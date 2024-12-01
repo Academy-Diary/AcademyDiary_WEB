@@ -185,7 +185,7 @@ function RegisterTeacher({ setStatus }) {
   );
 }
 
-function AfterRegister() {
+function AfterRegister({ position }) {
   return (
     <Grid container spacing={3} sx={{ mt: 3 }}>
       <Grid item xs={12}>
@@ -196,7 +196,7 @@ function AfterRegister() {
       <Grid item xs={12}>
         <Typography variant="body1" align="center">
           등록 요청이 완료되었습니다. <br />
-          승인될 때까지 대기해주세요.
+          {position === 'director' ? '관리자 심사 후 승인 여부를 이메일로 전송해드립니다. 승인 후 재로그인해주세요.' : '승인 후 재로그인해주세요.'}
         </Typography>
       </Grid>
     </Grid>

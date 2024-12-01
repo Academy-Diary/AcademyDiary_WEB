@@ -178,7 +178,7 @@ export default function RequestList() {
                       <ListItemIcon>
                         <Checkbox checked={checkedTeachers.indexOf(teacher) !== -1} />
                       </ListItemIcon>
-                      <ListItemText primary={teacherInfo.user_name} />
+                      <ListItemText primary={`${teacherInfo.user_name} 강사`} />
                     </ListItemButton>
                   );
                 })
