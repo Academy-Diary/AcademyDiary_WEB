@@ -31,7 +31,7 @@ export default function TeacherNotice() {
 
   return (
     <>
-      <TitleMedium title={`${academyInfo.academy_name} 공지사항`} />
+      <TitleMedium title={`${academyInfo?.academy_name} 공지사항`} />
       <Notice notices={notices !== undefined ? notices.notice_list : []} editable={false} />
       <Pagination count={notices !== undefined ? Math.trunc(notices.notice_count / 10) + 1 : 1} sx={{ mt: 10 }} page={pageNo} onChange={handleChangePage} />
     </>
