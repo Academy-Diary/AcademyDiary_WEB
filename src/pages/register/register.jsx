@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 
 import { Box, Container, Typography, Button, TextField, Grid, Alert } from '@mui/material';
 import { useUserAuthStore } from '../../store';
@@ -6,6 +7,8 @@ import { useRegisterAcademy, useRegisterTeacher } from '../../api/queries/regist
 import { ProfileButton } from '../../components';
 
 export default function Register({ position }) {
+  const { pathname } = useLocation();
+
   // 0: 요청 버튼, 1: 학원 등록, 2: 강사 등록, 3: 등록요청 완료
   const [status, setStatus] = useState(0);
 
@@ -15,7 +18,7 @@ export default function Register({ position }) {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="md">
       <Box
         sx={{
           marginTop: 10,
@@ -24,16 +27,22 @@ export default function Register({ position }) {
           alignItems: 'center',
         }}
       >
-        <Typography variant="h4" align="center">
-          Academy Pro
-        </Typography>
         <Box sx={{ position: 'fixed', top: 5, right: 5 }}>
           <ProfileButton position={position} />
         </Box>
-        {status === 0 && <BeforeRegister position={position} handleClick={handleClick} />}
-        {status === 1 && <RegisterAcademy setStatus={setStatus} />}
-        {status === 2 && <RegisterTeacher setStatus={setStatus} />}
-        {status === 3 && <AfterRegister />}
+        {pathname.startsWith(`/${position}/profile`) ? (
+          <Outlet />
+        ) : (
+          <Container maxWidth="xs">
+            <Typography variant="h4" align="center">
+              Academy Pro
+            </Typography>
+            {status === 0 && <BeforeRegister position={position} handleClick={handleClick} />}
+            {status === 1 && <RegisterAcademy setStatus={setStatus} />}
+            {status === 2 && <RegisterTeacher setStatus={setStatus} />}
+            {status === 3 && <AfterRegister />}
+          </Container>
+        )}
       </Box>
     </Container>
   );

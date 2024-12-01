@@ -65,6 +65,8 @@ function CheckPasswd({ setPassed, ckpassword }) {
 function UpdateProfileForm() {
   const navigate = useNavigate();
   const { user, profileImg, updateProfileImg } = useUserAuthStore();
+  const hasRegistered = user.academy_id !== null;
+
   const [date, setDate] = useState(dayjs(user.birth_date));
   const [openDialog, setOpenDialog] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -189,15 +191,17 @@ function UpdateProfileForm() {
           <TextField label="전화번호" name="phone_number" defaultValue={user.phone_number} required fullWidth sx={{ mb: 2 }} />
           <TextField label="이메일" name="email" defaultValue={user.email} required fullWidth sx={{ mb: 2 }} />
         </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            학원 정보
-          </Typography>
-          <TextField label="이름" name="academy_name" defaultValue={academyInfo?.academy_name} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="전화번호" name="academy_phone" defaultValue={academyInfo?.phone_number} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="주소" name="academy_address" defaultValue={academyInfo?.address} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="이메일" name="academy_email" defaultValue={academyInfo?.academy_email} required fullWidth sx={{ mb: 2 }} />
-        </Grid>
+        {hasRegistered && (
+          <Grid item xs={12}>
+            <Typography variant="h6" sx={{ mb: 2 }}>
+              학원 정보
+            </Typography>
+            <TextField label="이름" name="academy_name" defaultValue={academyInfo?.academy_name} required fullWidth sx={{ mb: 2 }} />
+            <TextField label="전화번호" name="academy_phone" defaultValue={academyInfo?.phone_number} required fullWidth sx={{ mb: 2 }} />
+            <TextField label="주소" name="academy_address" defaultValue={academyInfo?.address} required fullWidth sx={{ mb: 2 }} />
+            <TextField label="이메일" name="academy_email" defaultValue={academyInfo?.academy_email} required fullWidth sx={{ mb: 2 }} />
+          </Grid>
+        )}
       </Grid>
       <Button sx={{ mt: 3 }} onClick={handleOpenDialog}>
         회원 탈퇴
