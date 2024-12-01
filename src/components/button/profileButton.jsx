@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { IconButton, Avatar, Menu, MenuItem, Box, Typography, Divider, ListItemIcon } from '@mui/material';
+import { IconButton, Avatar, Menu, MenuItem, Box, Typography, Divider } from '@mui/material';
 import { AccountBoxRounded, LogoutRounded } from '@mui/icons-material';
 
 import useLogout from '../../api/queries/user/useLogout';
@@ -14,10 +14,15 @@ import { useProfileImage } from '../../api/queries/user/useProfile';
 export default function ProfileButton({ position }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
-  const { user } = useUserAuthStore();
+  const { user, profileImg, updateProfileImg } = useUserAuthStore();
   const logoutMutation = useLogout();
 
   const { data: imageUrl } = useProfileImage(user.user_id);
+
+  useEffect(() => {
+    // user auth store에 이미지 url 저장
+    if (imageUrl) updateProfileImg(`${imageUrl}?timestamp=${new Date().getTime()}`);
+  }, [imageUrl, updateProfileImg]);
 
   const handleMouseOver = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,7 +39,7 @@ export default function ProfileButton({ position }) {
   return (
     <>
       <IconButton onMouseOver={handleMouseOver}>
-        <Avatar src={imageUrl} />
+        <Avatar src={profileImg} />
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <Box sx={{ paddingX: 2 }}>

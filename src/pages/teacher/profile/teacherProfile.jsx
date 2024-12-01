@@ -1,30 +1,22 @@
 import { Avatar, Box, Container, Grid, IconButton, Typography } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import dayjs from 'dayjs';
 import { useUserAuthStore } from '../../../store';
 import { CustomLink, TitleMedium } from '../../../components';
 import { PATH } from '../../../route/path';
-import { useProfileImage } from '../../../api/queries/user/useProfile';
 
 export default function TeacherProfile() {
-  const { user, lectures } = useUserAuthStore();
+  const { user, profileImg, lectures } = useUserAuthStore();
   const navigate = useNavigate();
-  const [imgUrl, setImgUrl] = useState('');
-
-  const { data: profileImg } = useProfileImage(user.user_id);
-
-  useEffect(() => {
-    if (profileImg) setImgUrl(profileImg);
-  }, [profileImg]);
 
   return (
     <Container sx={{ width: '50vw', padding: 5 }}>
       <TitleMedium title="My Profile" />
       <Grid container spacing={5}>
         <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Avatar src={imgUrl} sx={{ width: 100, height: 100 }} />
+          <Avatar src={profileImg} sx={{ width: 100, height: 100 }} />
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
           <Typography variant="h6">{user?.user_name}</Typography>

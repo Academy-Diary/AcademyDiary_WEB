@@ -17,15 +17,17 @@ const UserAuthStore = (set) => ({
   // State
   isLoggedIn: false,
   user: null,
+  profileImg: '',
   lectures: [],
 
   // Actions
   login: (userData) => set({ isLoggedIn: true, user: userData }),
-  logout: () => set({ isLoggedIn: false, user: null, lectures: [] }),
+  logout: () => set({ isLoggedIn: false, user: null, profileImg: '', lectures: [] }),
   updateUser: (userData) =>
     set((state) => ({
       user: { ...state.user, ...userData },
     })),
+  updateProfileImg: (imgUrl) => set({ profileImg: imgUrl }),
   lecture: (lecture) => set({ lectures: lecture }),
 });
 
