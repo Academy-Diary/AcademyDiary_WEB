@@ -23,7 +23,7 @@ export default function TeacherHome() {
 
   return (
     <>
-      <Title title={academyInfo.academy_name} />
+      <Title title={academyInfo?.academy_name} />
       <Grid container>
         <Grid item xs={12} md={4}>
           <Box sx={{ width: '95%', height: '70vh', bgcolor: '#d9d9d9', m: '10px', padding: '10px' }}>
