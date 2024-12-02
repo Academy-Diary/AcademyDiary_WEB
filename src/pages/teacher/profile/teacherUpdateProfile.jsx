@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 
-import { Alert, Avatar, Badge, Box, Button, Container, Grid, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import { Alert, Avatar, Badge, Box, Button, Container, Grid, IconButton, Snackbar, Stack, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { Close, EditOutlined } from '@mui/icons-material';
+import { Close, EditOutlined, Update } from '@mui/icons-material';
 import styled from '@emotion/styled';
 
 import { useUserAuthStore } from '../../../store';
-import { SubmitButtons } from '../../../components';
+import { SubmitButtons, TitleMedium } from '../../../components';
 import { useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 import { useCheckPassword } from '../../../api/queries/user/useCheckPw';
@@ -24,7 +24,13 @@ export default function TeacherUpdateProfile() {
   const [passed, setPassed] = useState(false);
   const ckpassword = useCheckPassword();
 
-  return <Container sx={{ width: 400, p: 5 }}>{passed ? <UpdateProfileForm currentInfo={user} /> : <CheckPasswd setPassed={setPassed} ckpassword={ckpassword} />}</Container>;
+  if (passed) return <UpdateProfileForm currentInfo={user} />;
+
+  return (
+    <Container sx={{ width: 400, p: 5 }}>
+      <CheckPasswd setPassed={setPassed} ckpassword={ckpassword} />;
+    </Container>
+  );
 }
 
 function CheckPasswd({ setPassed, ckpassword }) {
@@ -133,23 +139,21 @@ function UpdateProfileForm({ currentInfo }) {
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
-      <Grid container spacing={5}>
-        <Grid item xs={12}>
-          <Typography variant="h6">프로필 수정</Typography>
-        </Grid>
-        <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Button component="label" role={undefined} tabIndex={-1} disableRipple>
-            <Badge anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} badgeContent={<EditOutlined />} tabIndex={-1}>
-              <Avatar src={profileImg} sx={{ width: 100, height: 100 }} />
+      <TitleMedium title="프로필 수정" />
+      <Grid container spacing={10}>
+        <Grid item xs={4}>
+          <Button component="label" role={undefined} tabIndex={-1} disableRipple sx={{ ml: '25%' }}>
+            <Badge anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} badgeContent={<EditOutlined />} tabIndex={-1} sx={{ color: '#006336' }}>
+              <Avatar src={profileImg} sx={{ width: 160, height: 160 }} />
             </Badge>
             <VisuallyHiddenInput type="file" accept="image/*" onChange={handleChangeImage} />
           </Button>
         </Grid>
-        <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
-          <TextField label="이름" name="user_name" defaultValue={currentInfo.user_name} required />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6" sx={{ mb: 2 }}>
+        <Grid item xs={8}>
+          <Grid item xs={8}>
+            <TextField label="이름" name="user_name" defaultValue={currentInfo.user_name} required />
+          </Grid>
+          <Typography variant="h6" sx={{ mb: 2, mt: 4, fontFamily: 'Pretendard-Regular' }}>
             개인 정보
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -157,25 +161,27 @@ function UpdateProfileForm({ currentInfo }) {
               <DatePicker label="생년월일" maxDate={dayjs()} value={date} onChange={(newValue) => setDate(newValue)} format="YYYY-MM-DD" />
             </DemoContainer>
           </LocalizationProvider>
-          <TextField label="전화번호" name="phone_number" defaultValue={currentInfo.phone_number} required fullWidth sx={{ mb: 2 }} />
-          <TextField label="이메일" name="email" defaultValue={currentInfo.email} required fullWidth sx={{ mb: 2 }} />
+          <Stack>
+            <TextField label="전화번호" name="phone_number" defaultValue={currentInfo.phone_number} required sx={{ mb: 2, width: 230 }} />
+            <TextField label="이메일" name="email" defaultValue={currentInfo.email} required sx={{ mb: 2, width: 230 }} />
+          </Stack>
+          <Button sx={{ mt: 3, color: '#006336', fontFamily: 'Pretendard-Regular' }} onClick={handleDeleteAccount}>
+            {' '}
+            회원탈퇴{' '}
+          </Button>
+          <Snackbar
+            open={openSnackbar}
+            autoHideDuration={5000}
+            onClose={handleCloseSnackbar}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            message={errorMsg}
+            action={
+              <IconButton onClick={handleCloseSnackbar} color="inherit" size="small">
+                <Close fontSize="small" />
+              </IconButton>
+            }
+          />
         </Grid>
-        <Button sx={{ mt: 3 }} onClick={handleDeleteAccount}>
-          {' '}
-          회원탈퇴{' '}
-        </Button>
-        <Snackbar
-          open={openSnackbar}
-          autoHideDuration={5000}
-          onClose={handleCloseSnackbar}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          message={errorMsg}
-          action={
-            <IconButton onClick={handleCloseSnackbar} color="inherit" size="small">
-              <Close fontSize="small" />
-            </IconButton>
-          }
-        />
       </Grid>
       <SubmitButtons submitTitle="수정 완료" />
     </Box>
