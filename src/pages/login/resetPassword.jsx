@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material';
 
-import { TitleMedium, CustomLink } from '../../components';
+import { CustomLink } from '../../components';
 import { PATH } from '../../route/path';
 import useResetPw from '../../api/queries/user/useResetPw';
 
@@ -42,13 +42,15 @@ export default function ResetPassword() {
 
   return (
     <>
-      <TitleMedium title="비밀번호 변경하기" />
+      <Typography variant="h5" align="center" sx={{ mt: 3, mb: 5 }}>
+        비밀번호 변경하기
+      </Typography>
       {sent ? (
         <>
           <Typography variant="body1" align="center">
             입력하신 주소로 메일을 전송하였습니다.
           </Typography>
-          <Button variant="contained" size="large" sx={{ mt: 5 }} href={PATH.LOGIN.ROOT}>
+          <Button variant="contained" size="large" sx={{ mt: 15 }} href={PATH.LOGIN.ROOT} fullWidth>
             로그인하기
           </Button>
         </>
@@ -64,17 +66,17 @@ export default function ResetPassword() {
                 <TextField label="아이디" name="userId" required fullWidth />
               </Grid>
               <Grid item xs={12}>
-                <TextField label="전화번호" name="phonenumber" required fullWidth error={isError} />
+                <TextField label="이메일" name="email" required fullWidth error={isError} />
               </Grid>
               <Grid item xs={12}>
-                <TextField label="이메일" name="email" required fullWidth error={isError} />
+                <TextField label="전화번호" name="phonenumber" required fullWidth error={isError} />
               </Grid>
               {errorMsg.length > 0 && (
                 <Grid item xs={12}>
                   <Alert severity="error">{errorMsg}</Alert>
                 </Grid>
               )}
-              <Grid item xs={12} sx={{ mt: 3 }}>
+              <Grid item xs={12}>
                 <Button type="submit" size="large" variant="contained" fullWidth>
                   이메일 전송하기
                 </Button>
