@@ -15,13 +15,13 @@ import TeacherSideBar from './sidebar/teacherSidebar';
 
 export default function Teacher() {
   return (
-    <Box height="100%">
+    <Box>
       <TeacherHeader />
       <Grid container height="100%">
-        <Grid item xs={2} height="100%">
+        <Grid item xs={1.5} height="100%">
           <TeacherSideBar />
         </Grid>
-        <Grid item xs={10} sx={{ px: 5, py: 5 }}>
+        <Grid item xs={10.5} sx={{ px: 5, py: 5, backgroundColor: 'white', borderTopLeftRadius: 30 }}>
           <Outlet />
         </Grid>
       </Grid>
