@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Button, TextField, Typography, InputAdornment, IconButton, Alert, Grid } from '@mui/material';
+import { Box, Button, TextField, Typography, InputAdornment, IconButton, Alert, Divider } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { useLogin } from '../../api/queries/user/useLogin';
@@ -54,8 +54,8 @@ function Login() {
 
   return (
     <>
-      <Typography variant="h4" align="center" mb={5}>
-        Academy Pro
+      <Typography variant="h4" align="center" sx={{ mb: 5 }}>
+        아카데미 다이어리
       </Typography>
       <Typography variant="h5" align="center" mb={3}>
         로그인
@@ -90,12 +90,12 @@ function Login() {
         <Button type="submit" fullWidth variant="contained" size="large" sx={{ my: 2 }}>
           로그인
         </Button>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <CustomLink to={PATH.SIGNUP} text="회원가입" />
+        <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
           <CustomLink to={PATH.LOGIN.FIND_ID} text="아이디 찾기" />
-        </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-          <CustomLink to={PATH.LOGIN.RESET_PW} text="비밀번호를 잊어버리셨나요?" />
+          <Divider orientation="vertical" flexItem />
+          <CustomLink to={PATH.LOGIN.RESET_PW} text="비밀번호 찾기" />
+          <Divider orientation="vertical" flexItem />
+          <CustomLink to={PATH.SIGNUP} text="회원가입" />
         </Box>
       </Box>
     </>
