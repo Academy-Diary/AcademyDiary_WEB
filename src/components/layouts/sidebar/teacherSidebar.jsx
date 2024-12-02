@@ -20,7 +20,7 @@ export default function TeacherSidebar() {
     setClicked({ ...origin, [`${name}`]: true });
   };
   useEffect(() => {
-    if (pathname === '/teacher') setClicked({ 'My 강의 목록': false, '학생 상담': false, '학원 공지': false });
+    if (pathname === '/teacher' || pathname === '/teacher/profile') setClicked({ 'My 강의 목록': false, '학생 상담': false, '학원 공지': false });
   }, [pathname]);
   return (
     <Box sx={{ backgroundColor: '#DFD3C3', height: '89vh', borderTopRightRadius: 30 }}>
