@@ -1,9 +1,10 @@
 import React from 'react';
 import { Routes, Route, BrowserRouter, Outlet, Navigate } from 'react-router-dom';
-import { Typography, Button } from '@mui/material';
+
 import { PrivateRoute, Director, Teacher } from './components';
 import {
   StartPage,
+  FirstPage,
   Login,
   SignUp,
   Register,
@@ -146,22 +147,6 @@ function App() {
         </Routes>
       </BrowserRouter>
     </div>
-  );
-}
-
-function FirstPage() {
-  return (
-    <>
-      <Typography variant="h4" align="center" sx={{ mt: 5, mb: 30 }}>
-        Academy Pro
-      </Typography>
-      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/login">
-        로그인
-      </Button>
-      <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/signup">
-        회원가입
-      </Button>
-    </>
   );
 }
 

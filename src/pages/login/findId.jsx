@@ -38,11 +38,13 @@ export default function FindId() {
 
   return (
     <>
-      <TitleMedium title="아이디 찾기" />
+      <Typography variant="h5" align="center" sx={{ mt: 3, mb: 7 }}>
+        아이디 찾기
+      </Typography>
       {found ? (
         <Grid container spacing={5} sx={{ mt: 5 }}>
-          <Grid item xs={6}>
-            <Typography variant="body2">ID: {userId}</Typography>
+          <Grid item xs={12}>
+            <TextField value={userId} fullWidth disabled />
           </Grid>
           <Grid item xs={12}>
             <Button variant="contained" size="large" fullWidth href={PATH.LOGIN.ROOT}>
@@ -63,7 +65,7 @@ export default function FindId() {
               {isError && <Alert severity="error">{errorMsg}</Alert>}
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" variant="contained" size="large" fullWidth sx={{ mt: 3 }}>
+              <Button type="submit" variant="contained" size="large" fullWidth>
                 찾기
               </Button>
             </Grid>

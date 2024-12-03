@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Container, Link, Grid, TextField, InputAdornment, IconButton, Alert } from '@mui/material';
+import { Box, Button, Typography, Link, Grid, TextField, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -7,6 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useCheckDuplicate, useSignup } from '../../api/queries/user/useSignup';
+import { LogoTitle } from '../../components';
 
 export default function SignUp() {
   // 0: 선택화면, 1: 회원가입화면 2: 완료화면
@@ -21,9 +22,7 @@ export default function SignUp() {
 
   return (
     <>
-      <Typography variant="h4" align="center" mb={5}>
-        Academy Pro
-      </Typography>
+      <LogoTitle mb={3} />
       {status === 0 && <SelectPosition handleSelect={handleSelect} />}
       {status === 1 && <SignupForm position={position} setStatus={setStatus} setName={setName} />}
       {status === 2 && <Succeed name={name} position={position} />}
@@ -34,7 +33,7 @@ export default function SignUp() {
 function SelectPosition({ handleSelect }) {
   return (
     <>
-      <Typography variant="h5" align="center" mb={30}>
+      <Typography variant="h5" align="center" mb={20}>
         회원가입
       </Typography>
       <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth onClick={() => handleSelect('CHIEF')}>
@@ -134,8 +133,8 @@ function SignupForm({ position, setStatus, setName }) {
 
   return (
     <Box>
-      <Typography variant="h5" align="center" mb={1}>
-        회원가입
+      <Typography variant="h6" align="center" mb={1}>
+        {position === 'CHIEF' ? '학원 대표 ' : '강사 '}회원가입
       </Typography>
       <Typography variant="body1" align="center" mb={10}>
         {position === 'director' && '학원 대표'}
