@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
 import { Box, Container, Typography, Button, TextField, Grid, Alert } from '@mui/material';
+
 import { useUserAuthStore } from '../../store';
 import { useRegisterAcademy, useRegisterTeacher } from '../../api/queries/register/useRegister';
 import { ProfileButton } from '../../components';
+import Colors from '../../styles/colors';
 
 export default function Register({ position }) {
   const { pathname } = useLocation();
@@ -18,33 +20,57 @@ export default function Register({ position }) {
   };
 
   return (
-    <Container component="main" maxWidth="md">
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        height: '100vh',
+        backgroundColor: Colors.Beige,
+      }}
+    >
       <Box
         sx={{
-          marginTop: 10,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
+          width: '80%',
+          height: '95%',
+          position: 'absolute',
+          bottom: 0,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          backgroundColor: Colors.White,
+          borderTopLeftRadius: 10,
+          borderTopRightRadius: 10,
         }}
-      >
-        <Box sx={{ position: 'fixed', top: 5, right: 5 }}>
-          <ProfileButton position={position} />
+      />
+      <Container component="main" maxWidth="md">
+        <Box
+          sx={{
+            paddingTop: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            zIndex: 1, // 내용이 배경 위로 올라오도록 설정
+            position: 'relative', // zIndex를 적용하려면 필요
+          }}
+        >
+          <Box sx={{ position: 'fixed', top: 5, right: 5 }}>
+            <ProfileButton position={position} />
+          </Box>
+          {pathname.startsWith(`/${position}/profile`) ? (
+            <Outlet />
+          ) : (
+            <Container maxWidth="xs">
+              <Typography variant="h4" align="center">
+                아카데미 다이어리
+              </Typography>
+              {status === 0 && <BeforeRegister position={position} handleClick={handleClick} />}
+              {status === 1 && <RegisterAcademy setStatus={setStatus} />}
+              {status === 2 && <RegisterTeacher setStatus={setStatus} />}
+              {status === 3 && <AfterRegister />}
+            </Container>
+          )}
         </Box>
-        {pathname.startsWith(`/${position}/profile`) ? (
-          <Outlet />
-        ) : (
-          <Container maxWidth="xs">
-            <Typography variant="h4" align="center">
-              Academy Pro
-            </Typography>
-            {status === 0 && <BeforeRegister position={position} handleClick={handleClick} />}
-            {status === 1 && <RegisterAcademy setStatus={setStatus} />}
-            {status === 2 && <RegisterTeacher setStatus={setStatus} />}
-            {status === 3 && <AfterRegister />}
-          </Container>
-        )}
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 }
 
@@ -54,14 +80,14 @@ function BeforeRegister({ position, handleClick }) {
   return (
     <Box mt={10} sx={{ width: '100%' }}>
       {position === 'director' && (
-        <Typography variant="h5" align="center" mb={20}>
+        <Typography variant="body1" align="center" mb={20}>
           {user.user_name}(원장)님,
           <br />
           학원을 등록해주세요.
         </Typography>
       )}
       {position === 'teacher' && (
-        <Typography variant="h5" align="center" mb={20}>
+        <Typography variant="body1" align="center" mb={20}>
           {user.user_name}(강사)님,
           <br />
           근무하고 계신 학원에 강사 등록을 요청하세요.
