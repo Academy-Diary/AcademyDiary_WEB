@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 
@@ -38,23 +38,31 @@ export default function LecturePage() {
       <Typography align="left">{`수강생 ${lecture.headcount}명`}</Typography>
       <Grid container spacing={2} sx={{ mt: 3, width: '80vw' }}>
         <Grid item xs={6}>
-          <Container maxWidth="md" sx={{ height: 200 }} onClick={handleGraphClick}>
-            <Typography>전체성적</Typography>
+          <Container maxWidth="md" sx={{ height: 200, border: '1px solid #000000', borderRadius: 3 }} onClick={handleGraphClick}>
+            <Box sx={{ padding: 1, position: 'absolute', top: '290px', backgroundColor: '#ffffff' }}>
+              <Typography sx={{ fontFamily: 'Pretendard-Regular' }}>전체성적</Typography>
+            </Box>
           </Container>
         </Grid>
         <Grid item xs={6}>
-          <Container maxWidth="md" sx={{ height: 200 }} onClick={handleNoticeClick}>
-            <Typography>과목공지게시판</Typography>
+          <Container maxWidth="md" sx={{ height: 200, border: '1px solid #000000', borderRadius: 3 }} onClick={handleNoticeClick}>
+            <Box sx={{ padding: 1, position: 'absolute', top: '290px', backgroundColor: '#ffffff' }}>
+              <Typography sx={{ fontFamily: 'Pretendard-Regular' }}>과목공지게시판</Typography>
+            </Box>
           </Container>
         </Grid>
         <Grid item xs={6}>
-          <Container maxWidth="md" sx={{ height: 200 }} onClick={handleQuizClick}>
-            <Typography>퀴즈</Typography>
+          <Container maxWidth="md" sx={{ height: 200, border: '1px solid #000000', borderRadius: 3 }} onClick={handleQuizClick}>
+            <Box sx={{ padding: 1, position: 'absolute', top: 506, backgroundColor: '#ffffff' }}>
+              <Typography sx={{ fontFamily: 'Pretendard-Regular' }}>퀴즈</Typography>
+            </Box>
           </Container>
         </Grid>
         <Grid item xs={6}>
-          <Container maxWidth="md" sx={{ height: 200 }} onClick={handleGradeClick}>
-            <Typography>성적관리</Typography>
+          <Container maxWidth="md" sx={{ height: 200, border: '1px solid #000000', borderRadius: 3 }} onClick={handleGradeClick}>
+            <Box sx={{ padding: 1, position: 'absolute', top: 506, backgroundColor: '#ffffff' }}>
+              <Typography>성적관리</Typography>
+            </Box>
           </Container>
         </Grid>
       </Grid>

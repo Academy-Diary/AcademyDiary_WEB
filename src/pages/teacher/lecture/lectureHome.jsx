@@ -25,14 +25,14 @@ export default function LectureHome() {
         {lectures.map((lecture) => (
           <ListItem
             key={lecture.lecture_id}
-            sx={{ height: 120, marginY: 2, backgroundColor: 'lightgrey' }}
+            sx={{ height: 64, marginY: 2, backgroundColor: '#EEEEEE' }}
             onClick={() => {
               handleClickDetails(lecture);
             }}
           >
             <ListItemText primary={lecture.lecture_name} />
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <ListItemText align="right" secondary={`수강 인원: ${lecture.headcount}`} sx={{ mb: 2 }} />
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <ListItemText align="right" secondary={`수강 인원 : ${lecture.headcount}`} sx={{ mb: 2 }} />
             </Box>
           </ListItem>
         ))}
