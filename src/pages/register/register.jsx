@@ -24,14 +24,14 @@ export default function Register({ position }) {
       sx={{
         position: 'relative',
         width: '100%',
-        height: '100vh',
+        minHeight: '100vh',
         backgroundColor: Colors.Beige,
       }}
     >
       <Box
         sx={{
           width: '80%',
-          height: '95%',
+          minHeight: '95%',
           position: 'absolute',
           bottom: 0,
           left: '50%',
