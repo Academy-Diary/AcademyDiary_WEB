@@ -150,30 +150,30 @@ export default function ChatRoom() {
             <FormControl fullWidth sx={{ alignItems: 'center' }}>
               <FormLabel id="demo-radio-buttons-group-label">학생/학부모 구분</FormLabel>
               <RadioGroup row aria-labelledby="demo-radio-buttons-group-label" defaultValue="STUDENT" name="radio-buttons-group" onChange={handleRoleSelect}>
-                <FormControlLabel value="STUDENT" control={<Radio />} label="학생" />
-                <FormControlLabel value="PARENT" control={<Radio />} label="학부모" />
+                <FormControlLabel value="STUDENT" control={<Radio sx={{ '&.Mui-checked': { color: '#006336' } }} />} label="학생" />
+                <FormControlLabel value="PARENT" control={<Radio sx={{ '&.Mui-checked': { color: '#006336' } }} />} label="학부모" />
               </RadioGroup>
             </FormControl>
           </Grid>
           {selectRole === 'STUDENT'
             ? students?.map((student) => (
-                <Box key={student.user_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(student.user_id)}>
-                  <Typography variant="h6" textAlign="left" pl="10px">
+                <Box key={student.user_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#EEEEEE', pt: '8px' }} onClick={() => handleNameClick(student.user_id)}>
+                  <Typography variant="h6" textAlign="left" pl="10px" fontFamily="Pretendard-Regular">
                     {student.user_name}
                   </Typography>
                 </Box>
               ))
             : parents?.map((parent) => (
-                <Box key={parent.parent_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#b9b9b9', pt: '8px' }} onClick={() => handleNameClick(parent.parent_id)}>
-                  <Typography variant="h6" textAlign="left" pl="10px">
+                <Box key={parent.parent_id} sx={{ width: '95%', height: '50px', margin: '10px', backgroundColor: '#EEEEEE', pt: '8px' }} onClick={() => handleNameClick(parent.parent_id)}>
+                  <Typography variant="h6" textAlign="left" pl="10px" fontFamily="Pretendard-Regular">
                     {parent.parent_name} ({parent.student_name}&apos;s parent)
                   </Typography>
                 </Box>
               ))}
         </Grid>
         <Grid item md={9} sx={{ height: '80vh' }}>
-          <Box sx={{ width: '100%', height: '100%', backgroundColor: '#b9b9b9', ml: '10px' }}>
-            <Typography variant="h4" sx={{ padding: '10px' }}>
+          <Box sx={{ width: '100%', height: '100%', backgroundColor: '#EEEEEE', ml: '10px' }}>
+            <Typography variant="h4" sx={{ padding: '10px' }} fontFamily="Pretendard-Regular">
               {selectRole === 'STUDENT' ? nowSelect.user_name : `${nowSelect.parent_name}`}
             </Typography>
             <Stack alignItems="center">
@@ -219,12 +219,16 @@ function MessageBox({ name, msg, myMessage, time }) {
       <Avatar src={imgUrl} sx={{ width: 40, height: 40 }} />
       <Grid item sx={{ marginLeft: '5px' }}>
         <Grid container sx={{ width: '10vw', justifyContent: 'space-between' }}>
-          <Typography variant="subtitle2" color="#10ba23" fontWeight="bold">
+          <Typography variant="subtitle2" color="#10ba23" fontWeight="bold" fontFamily="Pretendard-Regular">
             {user.user_name}(강사)
           </Typography>
-          <Typography variant="caption">{time}</Typography>
+          <Typography variant="caption" fontFamily="Pretendard-Regular">
+            {time}
+          </Typography>
         </Grid>
-        <Typography variant="body1">{msg}</Typography>
+        <Typography variant="body1" fontFamily="Pretendard-Regular">
+          {msg}
+        </Typography>
       </Grid>
     </Grid>
   ) : (
@@ -234,12 +238,16 @@ function MessageBox({ name, msg, myMessage, time }) {
       </Avatar>
       <Grid item sx={{ marginLeft: '5px' }}>
         <Grid container sx={{ width: '10vw', justifyContent: 'space-between' }}>
-          <Typography variant="subtitle2" color="#102fba" fontWeight="bold">
+          <Typography variant="subtitle2" color="#102fba" fontWeight="bold" fontFamily="Pretendard-Regular">
             {name}
           </Typography>
-          <Typography variant="caption">{time}</Typography>
+          <Typography variant="caption" fontFamily="Pretendard-Regular">
+            {time}
+          </Typography>
         </Grid>
-        <Typography variant="body1">{msg}</Typography>
+        <Typography variant="body1" fontFamily="Pretendard-Regular">
+          {msg}
+        </Typography>
       </Grid>
     </Grid>
   );

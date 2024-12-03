@@ -17,7 +17,7 @@ import React from 'react';
 export default function Title({ title, subtitle, children }) {
   return (
     <Box sx={{ paddingY: 3 }}>
-      <Typography variant="h4" fontWeight="bold">
+      <Typography variant="h4" fontWeight="bold" fontFamily="Pretendard-Regular">
         {title}
       </Typography>
       <Box display="flex" justifyContent="space-between" sx={{ mt: 2 }}>
