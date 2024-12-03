@@ -1,5 +1,8 @@
 import { createTheme } from '@mui/material';
 
+import PretendardBold from './fonts/Pretendard-Bold.woff2';
+import PretendardRegular from './fonts/Pretendard-Regular.woff2';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -9,21 +12,29 @@ const theme = createTheme({
       main: '#FEC749',
     },
   },
-  //   typography: {
-  //     fontFamily: 'Pretendard',
-  //   },
-  //   components: {
-  //     MuiCssBaseline: {
-  //       styleOverrides: `
-  //         @font-face {
-  //             font-family: 'Pretendard-Regular';
-  //             src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-  //             font-weight: 400;
-  //             font-style: normal;
-  //         }
-  //       `,
-  //     },
-  //   },
+  typography: {
+    h4: {
+      fontFamily: 'Pretendard-Bold, system-ui',
+    },
+  },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+          @font-face {
+              font-family: 'Pretendard-Bold';
+              src: url(${PretendardBold}) format('woff');
+              font-weight: 400;
+              font-style: normal;
+          }
+          @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url(${PretendardRegular}) format('woff2');
+            font-weight: 400;
+            font-style: normal;
+          }
+        `,
+    },
+  },
 });
 
 export default theme;
