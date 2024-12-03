@@ -5,7 +5,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { useLogin } from '../../api/queries/user/useLogin';
 import { PATH } from '../../route/path';
-import { CustomLink } from '../../components';
+import { LogoTitle, CustomLink } from '../../components';
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -54,9 +54,7 @@ function Login() {
 
   return (
     <>
-      <Typography variant="h4" align="center" sx={{ mb: 5 }}>
-        아카데미 다이어리
-      </Typography>
+      <LogoTitle mb={5} />
       <Typography variant="h5" align="center" mb={3}>
         로그인
       </Typography>

@@ -7,6 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useCheckDuplicate, useSignup } from '../../api/queries/user/useSignup';
+import { LogoTitle } from '../../components';
 
 export default function SignUp() {
   // 0: 선택화면, 1: 회원가입화면 2: 완료화면
@@ -21,9 +22,7 @@ export default function SignUp() {
 
   return (
     <>
-      <Typography variant="h4" align="center" sx={{ mb: 3 }}>
-        아카데미 다이어리
-      </Typography>
+      <LogoTitle mb={3} />
       {status === 0 && <SelectPosition handleSelect={handleSelect} />}
       {status === 1 && <SignupForm position={position} setStatus={setStatus} setName={setName} />}
       {status === 2 && <Succeed name={name} position={position} />}

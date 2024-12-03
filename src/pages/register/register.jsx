@@ -5,7 +5,7 @@ import { Box, Container, Typography, Button, TextField, Grid, Alert } from '@mui
 
 import { useUserAuthStore } from '../../store';
 import { useRegisterAcademy, useRegisterTeacher } from '../../api/queries/register/useRegister';
-import { ProfileButton } from '../../components';
+import { LogoTitle, ProfileButton } from '../../components';
 import Colors from '../../styles/colors';
 
 export default function Register({ position }) {
@@ -59,9 +59,7 @@ export default function Register({ position }) {
             <Outlet />
           ) : (
             <Container maxWidth="xs">
-              <Typography variant="h4" align="center">
-                아카데미 다이어리
-              </Typography>
+              <LogoTitle />
               {status === 0 && <BeforeRegister position={position} handleClick={handleClick} />}
               {status === 1 && <RegisterAcademy setStatus={setStatus} />}
               {status === 2 && <RegisterTeacher setStatus={setStatus} />}

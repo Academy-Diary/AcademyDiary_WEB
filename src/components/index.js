@@ -3,6 +3,8 @@ export { default as DirectorHeader } from './layouts/header/directorHeader';
 
 export { default as TeacherSideBar } from './layouts/sidebar/teacherSidebar';
 
+export { default as LogoTitle } from './logo/logoTitle';
+
 export { default as Title } from './textLayout/title';
 export { default as TitleMedium } from './textLayout/titleMedium';
 
