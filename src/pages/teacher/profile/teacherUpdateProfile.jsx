@@ -10,7 +10,7 @@ import { Close, EditOutlined, Update } from '@mui/icons-material';
 import styled from '@emotion/styled';
 
 import { useUserAuthStore } from '../../../store';
-import { SubmitButtons, TitleMedium } from '../../../components';
+import { SubmitButtons, Title } from '../../../components';
 import { useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 import { useCheckPassword } from '../../../api/queries/user/useCheckPw';
@@ -139,7 +139,7 @@ function UpdateProfileForm({ currentInfo }) {
 
   return (
     <Box component="form" onSubmit={handleSubmit}>
-      <TitleMedium title="프로필 수정" />
+      <Title title="프로필 수정" />
       <Grid container spacing={10}>
         <Grid item xs={4}>
           <Button component="label" role={undefined} tabIndex={-1} disableRipple sx={{ ml: '25%' }}>

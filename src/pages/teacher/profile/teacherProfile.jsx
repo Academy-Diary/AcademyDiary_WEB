@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import dayjs from 'dayjs';
 import { useUserAuthStore } from '../../../store';
-import { CustomLink, TitleMedium } from '../../../components';
+import { CustomLink, Title } from '../../../components';
 import { PATH } from '../../../route/path';
 
 export default function TeacherProfile() {
@@ -13,7 +13,7 @@ export default function TeacherProfile() {
 
   return (
     <Container sx={{ padding: 5 }}>
-      <TitleMedium title="계정 설정" />
+      <Title title="계정 설정" />
       <Grid container spacing={10}>
         <Grid item xs={4}>
           <Avatar src={profileImg} sx={{ width: 160, height: 160, ml: '25%', border: '1px solid #000000' }} />

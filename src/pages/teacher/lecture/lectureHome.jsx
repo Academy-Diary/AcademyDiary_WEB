@@ -2,7 +2,7 @@ import { React } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, List, ListItem, ListItemText } from '@mui/material';
 import { useUserAuthStore } from '../../../store';
-import { TitleMedium } from '../../../components';
+import { Title } from '../../../components';
 
 export default function LectureHome() {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function LectureHome() {
 
   return (
     <>
-      <TitleMedium title="강의 목록" />
+      <Title title="강의 목록" />
       <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
         {lectures.map((lecture) => (
           <ListItem
