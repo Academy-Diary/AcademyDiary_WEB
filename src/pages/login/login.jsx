@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Box, Button, TextField, Typography, InputAdornment, IconButton, Alert, Divider } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Mosaic } from 'react-loading-indicators';
 
 import { useLogin } from '../../api/queries/user/useLogin';
 import { PATH } from '../../route/path';
@@ -12,6 +13,7 @@ function Login() {
   const [hasFailed, setHasFailed] = useState(false); // alert 띄울지 여부
   const [isEmptyId, setIsEmptyId] = useState(false);
   const [isEmptyPw, setIsEmptyPw] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const loginMutation = useLogin();
 
@@ -46,11 +48,15 @@ function Login() {
         {
           onError: () => {
             setHasFailed(true);
+            setLoading(false);
           },
         }
       );
+      setLoading(true);
     }
   };
+
+  if (isLoading) return <Mosaic color={['#006336', '#024F51', '#064420', '#F4D65F']} />;
 
   return (
     <>

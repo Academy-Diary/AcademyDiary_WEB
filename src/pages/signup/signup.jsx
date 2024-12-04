@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Link, Grid, TextField, InputAdornment, IconButton, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Mosaic } from 'react-loading-indicators';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -71,6 +72,8 @@ function SignupForm({ position, setStatus, setName }) {
   const [duplicated, setDuplicated] = useState(false);
   const [checkedDup, setCheckedDup] = useState(false); // 중복체크 여부
 
+  const [isLoading, setLoading] = useState(false); // 로딩페이지 띄우기 위한 state
+
   const checkDupMutation = useCheckDuplicate();
   const signupMutation = useSignup();
 
@@ -105,6 +108,7 @@ function SignupForm({ position, setStatus, setName }) {
     else if (duplicated) alert('사용 가능한 아이디로 다시 시도해주세요.');
     else if (data.get('password') !== data.get('password2')) alert('입력한 두 비밀번호가 일치하지 않습니다.');
     else {
+      setLoading(true);
       const submitData = {
         user_id: data.get('userid'),
         password: data.get('password'),
@@ -123,6 +127,7 @@ function SignupForm({ position, setStatus, setName }) {
           console.log(res.message);
         },
         onError: (error) => {
+          setLoading(false);
           if (error.errorCode === 409) alert('이미 등록된 이메일(전화번호)입니다. \n다른 이메일(전화번호)로 다시 시도해주세요.');
           else alert('서버 오류로 회원가입에 실패하였습니다. \n나중에 다시 시도해주세요.');
           console.log(error.message);
@@ -131,6 +136,7 @@ function SignupForm({ position, setStatus, setName }) {
     }
   };
 
+  if (isLoading) return <Mosaic color={['#006336', '#024F51', '#064420', '#F4D65F']} />;
   return (
     <Box>
       <Typography variant="h6" align="center" mb={1}>

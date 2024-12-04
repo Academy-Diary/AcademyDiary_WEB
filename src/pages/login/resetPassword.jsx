@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material';
+import { Mosaic } from 'react-loading-indicators';
 
 import { CustomLink } from '../../components';
 import { PATH } from '../../route/path';
@@ -9,6 +10,7 @@ export default function ResetPassword() {
   const [sent, setSent] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isError, setIsError] = useState(false); // 이메일, 전화번호 형식 오류
+  const [isLoading, setLoading] = useState(false); // 로딩
 
   const resetPwMutation = useResetPw();
 
@@ -20,12 +22,14 @@ export default function ResetPassword() {
       phone_number: data.get('phonenumber'),
       email: data.get('email'),
     };
-
+    setLoading(true);
     resetPwMutation.mutate(submitData, {
       onSuccess: () => {
+        setLoading(false);
         setSent(true);
       },
       onError: (error) => {
+        setLoading(false);
         if (error.errorCode === 400) {
           setErrorMsg('이메일 혹은 전화번호 형식을 올바르게 입력해주세요.');
           setIsError(true);
@@ -39,6 +43,8 @@ export default function ResetPassword() {
       },
     });
   };
+
+  if (isLoading) return <Mosaic color={['#006336', '#024F51', '#064420', '#F4D65F']} />;
 
   return (
     <>
