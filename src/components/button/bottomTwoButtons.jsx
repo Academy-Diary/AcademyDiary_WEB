@@ -14,10 +14,10 @@ import { Box, Button } from '@mui/material';
 export default function BottomTwoButtons({ first, second, onClickFirst, onClickSecond }) {
   return (
     <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-      <Button size="large" variant="outlined" sx={{ width: 120, mr: 2 }} onClick={onClickFirst}>
+      <Button size="large" variant="outlined" sx={{ width: 120, mr: 2, borderColor: '#006336', color: '#006336' }} onClick={onClickFirst}>
         {first}
       </Button>
-      <Button size="large" variant="contained" sx={{ width: 120 }} onClick={onClickSecond}>
+      <Button size="large" variant="contained" sx={{ width: 120, backgroundColor: '#006336' }} onClick={onClickSecond}>
         {second}
       </Button>
     </Box>

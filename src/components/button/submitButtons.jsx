@@ -17,10 +17,10 @@ export default function SubmitButtons({ submitTitle }) {
 
   return (
     <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-      <Button size="large" variant="outlined" sx={{ width: 100, mr: 2 }} onClick={handleCancel}>
+      <Button size="large" variant="outlined" sx={{ width: 100, mr: 2, color: '#006336', borderColor: '#006336' }} onClick={handleCancel}>
         취소
       </Button>
-      <Button size="large" variant="contained" sx={{ width: 120 }} type="submit">
+      <Button size="large" variant="contained" sx={{ width: 120, bgcolor: '#006336' }} type="submit">
         {submitTitle}
       </Button>
     </Box>

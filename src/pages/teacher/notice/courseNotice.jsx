@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Pagination } from '@mui/material';
-import { AddButton, Notice, TitleMedium } from '../../../components';
+import { AddButton, Notice, Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useNoticeList } from '../../../api/queries/notice/useNoticeList';
 import { useNoticeDelete } from '../../../api/queries/notice/useNoticeCRUD';
@@ -54,7 +54,7 @@ export default function CourseNotice() {
 
   return (
     <>
-      <TitleMedium title={`${lecture.lecture_name} 공지사항`} />
+      <Title title={`${lecture.lecture_name} 공지사항`} />
       <Notice notices={notices !== undefined ? notices.notice_list : []} updateURL={`/teacher/class/${params.courseid}/notice/update`} handleClickDelete={handleClickDelete} />
       <Pagination count={notices !== undefined ? Math.trunc(notices.notice_count / 10) + 1 : 1} sx={{ mt: 10 }} page={pageNo} onChange={handleChangePage} />
       <AddButton title="새 공지사항 등록" onClick={handleClickAdd} />

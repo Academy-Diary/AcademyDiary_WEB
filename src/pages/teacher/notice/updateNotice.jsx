@@ -85,13 +85,16 @@ export default function TeacherUpdateNotice() {
             <TextField label="내용" value={content} onChange={(e) => setContent(e.target.value)} fullWidth multiline rows={14} />
           </Grid>
           <Grid item xs={12}>
-            <Button component="label" role={undefined} tabIndex={-1} startIcon={<AttachFile />}>
+            <Button component="label" role={undefined} tabIndex={-1} startIcon={<AttachFile />} sx={{ color: '#006336' }}>
               파일 첨부
               <VisuallyHiddenInput type="file" onChange={handleFileAdd} multiple />
             </Button>
             {files.map((file) => (
               <Container key={file.name}>
-                {file.name} <Button onClick={() => handleFileDelete(file.name)}>삭제</Button>
+                {file.name}{' '}
+                <Button onClick={() => handleFileDelete(file.name)} sx={{ color: '#006336' }}>
+                  삭제
+                </Button>
               </Container>
             ))}
           </Grid>

@@ -6,7 +6,7 @@ import { Add } from '@mui/icons-material';
 export default function AddButton({ title, onClick }) {
   return (
     <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-      <Button size="large" variant="contained" startIcon={<Add />} onClick={onClick}>
+      <Button size="large" variant="contained" startIcon={<Add />} onClick={onClick} sx={{ backgroundColor: '#006336' }}>
         {title}
       </Button>
     </Box>
