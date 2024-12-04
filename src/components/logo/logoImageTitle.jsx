@@ -9,7 +9,7 @@ import Colors from '../../styles/colors';
  */
 export default function LogoImageTitle() {
   return (
-    <>
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box component="img" src={logo} sx={{ width: 80 }} />
       <Typography
         variant="h5"
@@ -24,6 +24,6 @@ export default function LogoImageTitle() {
       >
         아카데미 다이어리
       </Typography>
-    </>
+    </Box>
   );
 }
