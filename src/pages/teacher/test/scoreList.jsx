@@ -17,6 +17,7 @@ export default function ScoreList() {
   const examInfo = location.info;
 
   const [isEditing, setEditing] = useState({});
+  const [search, setSearch] = useState('');
 
   const { data: attendees } = useAttendeeList(courseid); // 강의 수강생 목록
   const { data: scores, refetch: refetchScore } = useScoreList(courseid, testid); // 시험에 대한 점수 목록
@@ -100,7 +101,7 @@ export default function ScoreList() {
       <Grid xs={4}>
         <TextField
           variant="outlined"
-          label="Search"
+          label="검색"
           fullWidth
           InputProps={{
             endAdornment: (
@@ -111,6 +112,7 @@ export default function ScoreList() {
               </InputAdornment>
             ),
           }}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </Grid>
       <Grid xs={3} sx={{ my: 2 }}>
@@ -142,6 +144,7 @@ export default function ScoreList() {
         </Box>
       </Grid>
       {attendees?.map((attendee) => {
+        if (!attendee.user_name.includes(search)) return null;
         const score = scores?.scoreList.filter((n) => n.user_id === attendee.user_id)[0];
         return (
           <>
@@ -180,25 +183,19 @@ export default function ScoreList() {
                 </Box>
               )}
             </Grid>
-            <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
-              <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
-                삭제하기
-              </Button>
-              {!isQuiz ? (
-                <Button
-                  size="large"
-                  variant="contained"
-                  onClick={() => {
-                    navigate('add-score');
-                  }}
-                >
-                  전체성적입력
-                </Button>
-              ) : null}
-            </Box>
           </>
         );
       })}
+      <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
+        <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
+          삭제하기
+        </Button>
+        {!isQuiz ? (
+          <Button size="large" variant="contained" onClick={handleAddScore}>
+            전체성적입력
+          </Button>
+        ) : null}
+      </Box>
     </Grid>
   );
 }
