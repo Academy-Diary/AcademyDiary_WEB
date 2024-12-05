@@ -2,6 +2,7 @@ export { default as TeacherHeader } from './layouts/header/teacherHeader';
 export { default as DirectorHeader } from './layouts/header/directorHeader';
 
 export { default as TeacherSideBar } from './layouts/sidebar/teacherSidebar';
+export { default as DirectorSidebar } from './layouts/sidebar/directorSidebar';
 
 export { default as LogoTitle } from './logo/logoTitle';
 export { default as LogoImageTitle } from './logo/logoImageTitle';

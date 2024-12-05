@@ -4,10 +4,11 @@ import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
 
 import DirectorHeader from './header/directorHeader';
+import DirectorSidebar from './sidebar/directorSidebar';
 import Colors from '../../styles/colors';
 
 /**
- *@description 원장화면 헤더 있는 레이아웃
+ *@description 원장화면 헤더와 사이드바 있는 레이아웃
 
  @example 
  <Director>
@@ -27,12 +28,13 @@ export default function Director() {
       }}
     >
       <DirectorHeader />
+      <DirectorSidebar />
       <Box
         sx={{
           position: 'fixed',
           width: '85%',
-          height: 'calc(100vh - 64px)',
-          top: '64px',
+          height: 'calc(100vh - 80px)',
+          top: '80px',
           right: 0,
           backgroundColor: Colors.White,
           borderTopLeftRadius: 30,
