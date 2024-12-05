@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from '@mui/material/styles';
@@ -53,7 +53,8 @@ export default function DirectorSidebar() {
         <StyledListItemButton
           selected={pathname.startsWith('/director/manage-members') && !expand}
           onClick={() => {
-            handleClickExpand();
+            setExpand(!expand);
+            setExpand2(false);
           }}
           divider
         >
@@ -97,6 +98,9 @@ export default function DirectorSidebar() {
         <StyledListItemButton
           selected={pathname.startsWith('/director/manage-courses')}
           onClick={() => {
+            setExpand(false);
+            setExpand2(false);
+
             navigate('/director/manage-courses');
           }}
           divider
@@ -109,7 +113,8 @@ export default function DirectorSidebar() {
         <StyledListItemButton
           selected={pathname.startsWith('/director/tuition-fees') && !expand2}
           onClick={() => {
-            handleClickExpand2();
+            setExpand2(!expand2);
+            setExpand(false);
           }}
           divider
         >
@@ -153,6 +158,9 @@ export default function DirectorSidebar() {
         <StyledListItemButton
           selected={pathname.startsWith('/director/notice')}
           onClick={() => {
+            setExpand(false);
+            setExpand2(false);
+
             navigate('/director/notice');
           }}
           divider
