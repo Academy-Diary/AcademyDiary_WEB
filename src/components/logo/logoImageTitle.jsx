@@ -23,6 +23,7 @@ export default function LogoImageTitle({ role }) {
         align="center"
         sx={{
           color: Colors.Black,
+          fontWeight: 600,
           WebkitUserSelect: 'none',
           MozUserSelect: 'none',
           msUserSelect: 'none',
