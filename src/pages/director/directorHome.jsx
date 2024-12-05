@@ -73,7 +73,7 @@ export default function DirectorHome() {
 
   return (
     <>
-      <Title title={academyInfo?.academy_name} subtitle={`학생 수: ${academyInfo?.headcount}명`} />
+      <Title title={academyInfo?.academy_name} subtitle={`학생 수: ${academyInfo?.student_headcount}명`} />
       <Box sx={{ mb: 2, px: 2, backgroundColor: 'lightgrey' }}>
         <TitleMedium title="진행중인 강의" />
         <List>
