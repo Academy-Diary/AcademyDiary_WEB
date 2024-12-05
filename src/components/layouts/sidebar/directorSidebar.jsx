@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { styled } from '@mui/material/styles';
@@ -21,6 +21,11 @@ const StyledListItemButton = styled(ListItemButton)({
     },
   },
 });
+const StyledNestedListItemButton = styled(StyledListItemButton)({
+  '&': {
+    height: 50,
+  },
+});
 
 export default function DirectorSidebar() {
   const navigate = useNavigate();
@@ -28,13 +33,6 @@ export default function DirectorSidebar() {
 
   const [expand, setExpand] = useState(false);
   const [expand2, setExpand2] = useState(false);
-
-  const handleClickExpand = () => {
-    setExpand(!expand);
-  };
-  const handleClickExpand2 = () => {
-    setExpand2(!expand2);
-  };
 
   return (
     <Box
@@ -66,7 +64,7 @@ export default function DirectorSidebar() {
         </StyledListItemButton>
         <Collapse in={expand} timeout="auto">
           <List>
-            <StyledListItemButton
+            <StyledNestedListItemButton
               selected={pathname === '/director/manage-members/teachers'}
               onClick={() => {
                 navigate('/director/manage-members/teachers');
@@ -74,8 +72,8 @@ export default function DirectorSidebar() {
               divider
             >
               <ListItemText primary="강사 관리" />
-            </StyledListItemButton>
-            <StyledListItemButton
+            </StyledNestedListItemButton>
+            <StyledNestedListItemButton
               selected={pathname === '/director/manage-members/students'}
               onClick={() => {
                 navigate('/director/manage-members/students');
@@ -83,8 +81,8 @@ export default function DirectorSidebar() {
               divider
             >
               <ListItemText primary="학생 관리" />
-            </StyledListItemButton>
-            <StyledListItemButton
+            </StyledNestedListItemButton>
+            <StyledNestedListItemButton
               selected={pathname === '/director/manage-members/request-list'}
               onClick={() => {
                 navigate('/director/manage-members/request-list');
@@ -92,7 +90,7 @@ export default function DirectorSidebar() {
               divider
             >
               <ListItemText primary="등록 요청 목록" />
-            </StyledListItemButton>
+            </StyledNestedListItemButton>
           </List>
         </Collapse>
         <StyledListItemButton
@@ -126,7 +124,7 @@ export default function DirectorSidebar() {
         </StyledListItemButton>
         <Collapse in={expand2} timeout="auto">
           <List>
-            <StyledListItemButton
+            <StyledNestedListItemButton
               selected={pathname === '/director/tuition-fees/payment-list'}
               onClick={() => {
                 navigate('/director/tuition-fees/payment-list');
@@ -134,8 +132,8 @@ export default function DirectorSidebar() {
               divider
             >
               <ListItemText primary="학원비 납부 목록" />
-            </StyledListItemButton>
-            <StyledListItemButton
+            </StyledNestedListItemButton>
+            <StyledNestedListItemButton
               selected={pathname === '/director/tuition-fees/claim'}
               onClick={() => {
                 navigate('/director/tuition-fees/claim');
@@ -143,8 +141,8 @@ export default function DirectorSidebar() {
               divider
             >
               <ListItemText primary="학원비 청구" />
-            </StyledListItemButton>
-            <StyledListItemButton
+            </StyledNestedListItemButton>
+            <StyledNestedListItemButton
               selected={pathname === '/director/tuition-fees/make-class'}
               onClick={() => {
                 navigate('/director/tuition-fees/make-class');
@@ -152,7 +150,7 @@ export default function DirectorSidebar() {
               divider
             >
               <ListItemText primary="학원비 구성" />
-            </StyledListItemButton>
+            </StyledNestedListItemButton>
           </List>
         </Collapse>
         <StyledListItemButton
