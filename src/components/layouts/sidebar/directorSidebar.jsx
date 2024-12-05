@@ -1,27 +1,23 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Button, Menu, MenuItem } from '@mui/material';
+import { Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { CampaignRounded, CreditCardRounded, ExpandLess, ExpandMore, GroupsRounded, SchoolRounded } from '@mui/icons-material';
 
 import Colors from '../../../styles/colors';
 
 export default function DirectorSidebar() {
   const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [anchorEl2, setAnchorEl2] = useState(null);
+  const [selected, setSelected] = useState(null); // 선택된 메뉴 인덱스
+  const [expand, setExpand] = useState(false);
+  const [expand2, setExpand2] = useState(false);
 
-  const handleMouseOver = (e) => {
-    setAnchorEl(e.currentTarget);
+  const handleClickExpand = () => {
+    setExpand(!expand);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleMouseOver2 = (e) => {
-    setAnchorEl2(e.currentTarget);
-  };
-  const handleClose2 = () => {
-    setAnchorEl2(null);
+  const handleClickExpand2 = () => {
+    setExpand2(!expand2);
   };
 
   return (
@@ -32,74 +28,113 @@ export default function DirectorSidebar() {
         bottom: 0,
         width: '15%',
         height: 'calc(100vh - 80px)',
+        paddingTop: 5,
         backgroundColor: Colors.DarkBeige,
         borderTopRightRadius: 30,
       }}
     >
-      <Button color="inherit" size="large" sx={{ mx: 4 }} onMouseOver={handleMouseOver}>
-        구성원 관리
-      </Button>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem
+      <List component="nav">
+        <ListItemButton
+          selected={selected === 0 && expand}
           onClick={() => {
-            handleClose();
-            navigate('/director/manage-members/request-list');
+            setSelected(0);
+            handleClickExpand();
           }}
         >
-          등록 요청 목록
-        </MenuItem>
-        <MenuItem
+          <ListItemIcon>
+            <GroupsRounded />
+          </ListItemIcon>
+          <ListItemText primary="구성원 관리" />
+          {expand ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={expand} timeout="auto">
+          <List>
+            <ListItemButton
+              onClick={() => {
+                navigate('/director/manage-members/teachers');
+              }}
+            >
+              <ListItemText primary="강사 관리" />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                navigate('/director/manage-members/students');
+              }}
+            >
+              <ListItemText primary="학생 관리" />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                navigate('/director/manage-members/request-list');
+              }}
+            >
+              <ListItemText primary="등록 요청 목록" />
+            </ListItemButton>
+          </List>
+        </Collapse>
+        <ListItemButton
+          selected={selected === 1}
           onClick={() => {
-            handleClose();
-            navigate('/director/manage-members/teachers');
+            setSelected(1);
+            navigate('/director/manage-courses');
           }}
         >
-          강사 관리
-        </MenuItem>
-        <MenuItem
+          <ListItemIcon>
+            <SchoolRounded />
+          </ListItemIcon>
+          <ListItemText primary="강의 관리" />
+        </ListItemButton>
+        <ListItemButton
+          selected={selected === 2 && expand2}
           onClick={() => {
-            handleClose();
-            navigate('/director/manage-members/students');
+            setSelected(2);
+            handleClickExpand2();
           }}
         >
-          학생 관리
-        </MenuItem>
-      </Menu>
-      <Button color="inherit" size="large" sx={{ mx: 4 }} onClick={() => navigate('/director/manage-courses')}>
-        강의 관리
-      </Button>
-      <Button color="inherit" size="large" sx={{ mx: 4 }} onMouseOver={handleMouseOver2}>
-        학원비
-      </Button>
-      <Menu anchorEl={anchorEl2} open={Boolean(anchorEl2)} onClose={handleClose2}>
-        <MenuItem
+          <ListItemIcon>
+            <CreditCardRounded />
+          </ListItemIcon>
+          <ListItemText primary="학원비" />
+          {expand2 ? <ExpandLess /> : <ExpandMore />}
+        </ListItemButton>
+        <Collapse in={expand2} timeout="auto">
+          <List>
+            <ListItemButton
+              onClick={() => {
+                navigate('/director/tuition-fees/payment-list');
+              }}
+            >
+              <ListItemText primary="학원비 납부 목록" />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                navigate('/director/tuition-fees/claim');
+              }}
+            >
+              <ListItemText primary="학원비 청구" />
+            </ListItemButton>
+            <ListItemButton
+              onClick={() => {
+                navigate('/director/tuition-fees/make-class');
+              }}
+            >
+              <ListItemText primary="학원비 구성" />
+            </ListItemButton>
+          </List>
+        </Collapse>
+        <ListItemButton
+          selected={selected === 3}
           onClick={() => {
-            handleClose2();
-            navigate('/director/tuition-fees/payment-list');
+            setSelected(3);
+            navigate('/director/notice');
           }}
         >
-          학원비 납부 목록
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            handleClose2();
-            navigate('/director/tuition-fees/claim');
-          }}
-        >
-          학원비 청구
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            handleClose2();
-            navigate('/director/tuition-fees/make-class');
-          }}
-        >
-          학원비 구성
-        </MenuItem>
-      </Menu>
-      <Button color="inherit" size="large" sx={{ mx: 4 }} onClick={() => navigate('/director/notice')}>
-        전체 공지
-      </Button>
+          <ListItemIcon>
+            <CampaignRounded />
+          </ListItemIcon>
+          <ListItemText primary="전체공지" />
+        </ListItemButton>
+      </List>
     </Box>
   );
 }
