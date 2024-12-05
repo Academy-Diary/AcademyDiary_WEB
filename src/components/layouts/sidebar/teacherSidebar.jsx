@@ -21,6 +21,9 @@ export default function TeacherSidebar() {
   };
   useEffect(() => {
     if (pathname === '/teacher' || pathname === '/teacher/profile') setClicked({ 'My 강의 목록': false, '학생 상담': false, '학원 공지': false });
+    else if (pathname.includes('/teacher/class')) setClicked({ 'My 강의 목록': true, '학생 상담': false, '학원 공지': false });
+    else if (pathname.includes('/teacher/counseling')) setClicked({ 'My 강의 목록': false, '학생 상담': true, '학원 공지': false });
+    else if (pathname.includes('/teacher/notice')) setClicked({ 'My 강의 목록': false, '학생 상담': false, '학원 공지': true });
   }, [pathname]);
   return (
     <Box sx={{ backgroundColor: '#DFD3C3', height: '89vh', borderTopRightRadius: 30 }}>
