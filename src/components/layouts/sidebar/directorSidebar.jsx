@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { CampaignRounded, CreditCardRounded, ExpandLess, ExpandMore, GroupsRounded, SchoolRounded } from '@mui/icons-material';
@@ -8,8 +8,8 @@ import Colors from '../../../styles/colors';
 
 export default function DirectorSidebar() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
-  const [selected, setSelected] = useState(null); // 선택된 메뉴 인덱스
   const [expand, setExpand] = useState(false);
   const [expand2, setExpand2] = useState(false);
 
@@ -35,9 +35,8 @@ export default function DirectorSidebar() {
     >
       <List component="nav">
         <ListItemButton
-          selected={selected === 0 && expand}
+          selected={pathname.startsWith('/director/manage-members') && !expand}
           onClick={() => {
-            setSelected(0);
             handleClickExpand();
           }}
         >
@@ -50,6 +49,7 @@ export default function DirectorSidebar() {
         <Collapse in={expand} timeout="auto">
           <List>
             <ListItemButton
+              selected={pathname === '/director/manage-members/teachers'}
               onClick={() => {
                 navigate('/director/manage-members/teachers');
               }}
@@ -57,6 +57,7 @@ export default function DirectorSidebar() {
               <ListItemText primary="강사 관리" />
             </ListItemButton>
             <ListItemButton
+              selected={pathname === '/director/manage-members/students'}
               onClick={() => {
                 navigate('/director/manage-members/students');
               }}
@@ -64,6 +65,7 @@ export default function DirectorSidebar() {
               <ListItemText primary="학생 관리" />
             </ListItemButton>
             <ListItemButton
+              selected={pathname === '/director/manage-members/request-list'}
               onClick={() => {
                 navigate('/director/manage-members/request-list');
               }}
@@ -73,9 +75,8 @@ export default function DirectorSidebar() {
           </List>
         </Collapse>
         <ListItemButton
-          selected={selected === 1}
+          selected={pathname.startsWith('/director/manage-courses')}
           onClick={() => {
-            setSelected(1);
             navigate('/director/manage-courses');
           }}
         >
@@ -85,9 +86,8 @@ export default function DirectorSidebar() {
           <ListItemText primary="강의 관리" />
         </ListItemButton>
         <ListItemButton
-          selected={selected === 2 && expand2}
+          selected={pathname.startsWith('/director/tuition-fees') && !expand2}
           onClick={() => {
-            setSelected(2);
             handleClickExpand2();
           }}
         >
@@ -100,6 +100,7 @@ export default function DirectorSidebar() {
         <Collapse in={expand2} timeout="auto">
           <List>
             <ListItemButton
+              selected={pathname === '/director/tuition-fees/payment-list'}
               onClick={() => {
                 navigate('/director/tuition-fees/payment-list');
               }}
@@ -107,6 +108,7 @@ export default function DirectorSidebar() {
               <ListItemText primary="학원비 납부 목록" />
             </ListItemButton>
             <ListItemButton
+              selected={pathname === '/director/tuition-fees/claim'}
               onClick={() => {
                 navigate('/director/tuition-fees/claim');
               }}
@@ -114,6 +116,7 @@ export default function DirectorSidebar() {
               <ListItemText primary="학원비 청구" />
             </ListItemButton>
             <ListItemButton
+              selected={pathname === '/director/tuition-fees/make-class'}
               onClick={() => {
                 navigate('/director/tuition-fees/make-class');
               }}
@@ -123,9 +126,8 @@ export default function DirectorSidebar() {
           </List>
         </Collapse>
         <ListItemButton
-          selected={selected === 3}
+          selected={pathname.startsWith('/director/notice')}
           onClick={() => {
-            setSelected(3);
             navigate('/director/notice');
           }}
         >
