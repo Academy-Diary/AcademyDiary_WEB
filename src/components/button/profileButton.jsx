@@ -44,7 +44,7 @@ export default function ProfileButton({ position }) {
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <Box sx={{ paddingX: 2 }}>
           <Typography variant="subtitle1">
-            {user?.user_name}
+            {user?.user_name} {position === 'director' ? '원장' : '강사'}
             <br />
           </Typography>
           <Typography variant="subtitle2" sx={{ color: 'grey' }}>
