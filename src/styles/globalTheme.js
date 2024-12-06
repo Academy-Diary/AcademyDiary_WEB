@@ -13,6 +13,7 @@ const theme = createTheme({
     },
   },
   typography: {
+    fontFamily: 'Pretendard-Regular, system-ui',
     h4: {
       fontFamily: 'Pretendard-Bold, system-ui',
     },
