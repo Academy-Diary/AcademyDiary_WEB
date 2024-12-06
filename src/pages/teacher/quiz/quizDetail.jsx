@@ -74,10 +74,10 @@ export default function QuizDetail() {
           </Grid>
         </Grid>
       </Grid>
-      <Grid md={6} sx={{ bgcolor: '#ababab', padding: '20px' }}>
+      <Grid md={6} sx={{ bgcolor: '#D9D9D9', padding: '20px' }}>
         {/* 오른쪽 절반 */}
         <Title title={quizInfo?.title} />
-        <Typography variant="subtitle1">{quizNum + 1}번 문제, 정답, 해설입니다.</Typography>
+        <Typography variant="subtitle1">{quizInfo?.keyword}에 관련한 문제입니다.</Typography>
         <Box sx={{ width: '100%', height: '400px', border: '1px solid #000000', padding: '5px' }}>
           {quiz != null && !betweenQuiz ? (
             <>
@@ -90,12 +90,12 @@ export default function QuizDetail() {
                 ))}
               </RadioGroup>
 
-              <Typography variant="subtitle1">{quiz[quizNum].explanation}</Typography>
+              <Typography variant="subtitle1">해설 : {quiz[quizNum].explanation}</Typography>
             </>
           ) : null}
         </Box>
         <Grid container justifyContent="space-between" mt={10}>
-          <Button variant="contained" onClick={handleBefore}>
+          <Button variant="outlined" onClick={handleBefore}>
             이전 문제
           </Button>
           <Button variant="contained" onClick={handleNext}>

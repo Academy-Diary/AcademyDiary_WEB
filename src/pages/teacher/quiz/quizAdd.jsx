@@ -76,7 +76,7 @@ export default function QuizDetail() {
             </Grid>
           </Grid>
         </Grid>
-        <Grid md={6} sx={{ bgcolor: '#ababab', padding: '20px' }}>
+        <Grid md={6} sx={{ bgcolor: '#D9D9D9', padding: '20px' }}>
           {/* 오른쪽 절반 */}
           <Grid container sx={{ justifyContent: 'center', alignItems: 'center' }} height="100%">
             <Button variant="contained" sx={{}} size="small" type="submit">

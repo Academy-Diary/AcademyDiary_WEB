@@ -53,8 +53,8 @@ export default function QuizHome() {
       <Title title={`${lecture.lecture_name} 퀴즈`} />
       <Grid container>
         {quizs?.map((test) => (
-          <Grid md={6} xs={12} sx={{ padding: '10px' }}>
-            <Box sx={{ width: '100%', bgcolor: '#ababab' }}>
+          <Grid md={6} xs={12} sx={{ padding: '30px' }}>
+            <Box sx={{ width: '100%', bgcolor: '#EEEEEE', boxShadow: '0px 6px 20px 0px #848484', borderRadius: '3px' }}>
               <Grid container sx={{ padding: '10px' }}>
                 <Grid md={8}>
                   <Typography variant="h5">{test.exam_name}</Typography>
