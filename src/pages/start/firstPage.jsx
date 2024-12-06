@@ -2,6 +2,7 @@ import React from 'react';
 import { Typography, Button, Box } from '@mui/material';
 
 import logo from '../../assets/logo.png';
+import kakaoLogin from '../../assets/kakaotalk_logo.png';
 import { LogoTitle } from '../../components';
 
 export default function FirstPage() {
@@ -18,6 +19,19 @@ export default function FirstPage() {
       <Button variant="contained" size="large" sx={{ m: 1 }} fullWidth href="/signup" color="secondary">
         회원가입
       </Button>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Box component="img" src={kakaoLogin} sx={{ m: 1, width: 30 }} />
+        <Typography
+          sx={{
+            WebkitUserSelect: 'none',
+            MozUserSelect: 'none',
+            msUserSelect: 'none',
+            userSelect: 'none',
+          }}
+        >
+          카카오 계정으로 로그인
+        </Typography>
+      </Box>
     </>
   );
 }
