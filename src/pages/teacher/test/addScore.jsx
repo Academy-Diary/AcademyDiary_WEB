@@ -1,27 +1,10 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { Box, Divider, Grid, TextField, Typography } from '@mui/material';
 import { BottomTwoButtons, Title } from '../../../components';
 import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
 import { useScoreAdd } from '../../../api/queries/test/useScore';
 import { useUserAuthStore } from '../../../store';
-
-// const courses = [
-//   { id: 1, name: '미적분', students: 60 },
-//   { id: 2, name: '확률과통계', students: 30 },
-//   { id: 3, name: '영어', students: 20 },
-//   { id: 4, name: '국어', students: 55 },
-// ];
-
-// const students = [
-//   { id: 1, name: '김대성' },
-//   { id: 2, name: '김민수' },
-//   { id: 3, name: '김선우' },
-//   { id: 4, name: '권해담' },
-//   { id: 5, name: '이태윤' },
-//   { id: 6, name: '서민석' },
-// ];
 
 export default function AddScore() {
   const { courseid, testid } = useParams();
@@ -44,45 +27,38 @@ export default function AddScore() {
           시행일: {examInfo.exam_date.split('T')[0]}, 최고점: {examInfo.high_score}, 평균: {examInfo.average_score}, 최저점: {examInfo.low_score}
         </Typography>
       </Grid>
-      <Grid xs={3} sx={{ my: 2 }}>
-        <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-          <Typography variant="subtitle" sx={{ padding: 2 }}>
-            이름
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid xs={3} sx={{ my: 2 }}>
-        <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-          <Typography variant="subtitle" sx={{ padding: 2 }}>
-            점수
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid xs={3} sx={{ my: 2 }}>
-        <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-          <Typography variant="subtitle" sx={{ padding: 2 }}>
-            이름
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid xs={3} sx={{ my: 2 }}>
-        <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-          <Typography variant="subtitle" sx={{ padding: 2 }}>
-            점수
-          </Typography>
-        </Box>
-      </Grid>
-      {students?.map((score) => (
+      <Box sx={{ display: 'flex', width: '100%', my: 2, background: '#EEEEEE', borderRadius: 2 }}>
+        <Grid xs={2} sx={{ padding: 2 }}>
+          <Typography variant="subtitle">이름</Typography>
+        </Grid>
+        <Grid xs={2} sx={{ padding: 2 }}>
+          <Typography variant="subtitle">점수</Typography>
+        </Grid>
+        <Grid xs={2} />
+        <Divider orientation="vertical" variant="middle" flexItem sx={{ borderColor: 'black' }} />
+        <Grid xs={2} sx={{ padding: 2 }}>
+          <Typography variant="subtitle">이름</Typography>
+        </Grid>
+        <Grid xs={2} sx={{ padding: 2 }}>
+          <Typography variant="subtitle">점수</Typography>
+        </Grid>
+        <Grid xs={2} />
+      </Box>
+      {students?.map((score, idx) => (
         <>
-          <Grid xs={3}>
-            <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-              <Typography sx={{ padding: 2 }}>{score.user_name}</Typography>
-            </Box>
-          </Grid>
-          <Grid xs={3}>
-            <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-              <TextField name={score.user_id} sx={{ py: 1 }} size="small" />
-            </Box>
+          <Grid xs={6} sx={{ display: 'flex', width: '50%' }}>
+            {idx % 2 === 1 ? <Divider orientation="vertical" variant="middle" flexItem sx={{ borderColor: 'black' }} /> : null}
+            <Grid xs={4}>
+              <Box fullWidth sx={{ backgroundColor: '#EEEEEE' }}>
+                <Typography sx={{ padding: 2 }}>{score.user_name}</Typography>
+              </Box>
+            </Grid>
+            <Grid xs={4}>
+              <Box fullWidth sx={{ backgroundColor: '#EEEEEE' }}>
+                <TextField name={score.user_id} sx={{ py: 1 }} size="small" />
+              </Box>
+            </Grid>
+            <Grid xs={4} sx={{ backgroundColor: '#EEEEEE' }} />
           </Grid>
           <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
             <BottomTwoButtons
