@@ -7,6 +7,10 @@ const Colors = {
   Brown20: 'rgba(117, 83, 65, 0.2)', // 투명도 20
   Brown30: 'rgba(117, 83, 65, 0.3)', // 투명도 30
   Grey: '#5C5C5C',
+  Ivory: '#FFFAE1',
+  Red: '#A61010',
+  Yellow: '#FFD317',
+  Green: '#005C33',
 };
 
 export default Colors;

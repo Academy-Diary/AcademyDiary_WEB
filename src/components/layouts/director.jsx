@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Box } from '@mui/material';
+import { BookmarkRounded } from '@mui/icons-material';
 
 import DirectorHeader from './header/directorHeader';
 import DirectorSidebar from './sidebar/directorSidebar';
@@ -22,6 +23,7 @@ export default function Director() {
     <Box
       component="main"
       sx={{
+        position: 'relative',
         width: '100%',
         height: '100vh',
         backgroundColor: Colors.Beige,
@@ -45,6 +47,33 @@ export default function Director() {
           <Outlet />
         </Box>
       </Box>
+      <BookmarkRounded
+        sx={{
+          position: 'absolute',
+          top: '60px',
+          right: 200,
+          fontSize: 50,
+          color: Colors.Yellow,
+        }}
+      />
+      <BookmarkRounded
+        sx={{
+          position: 'absolute',
+          top: '60px',
+          right: 160,
+          fontSize: 50,
+          color: Colors.Green,
+        }}
+      />
+      <BookmarkRounded
+        sx={{
+          position: 'absolute',
+          top: '60px',
+          right: 120,
+          fontSize: 50,
+          color: Colors.Red,
+        }}
+      />
     </Box>
   );
 }
