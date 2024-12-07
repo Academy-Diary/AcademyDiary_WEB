@@ -7,6 +7,7 @@ import { TitleMedium, AddButton } from '../../../components';
 import { useLectureStore } from '../../../store';
 import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 import { useDeleteLecture } from '../../../api/queries/lectures/useDeleteLecture';
+import Colors from '../../../styles/colors';
 
 // Lecture List
 //
@@ -68,7 +69,7 @@ export default function ManageCourses() {
       <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
         {isSuccess
           ? lectures.map((lecture) => (
-              <ListItem key={lecture.lecture_id} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
+              <ListItem key={lecture.lecture_id} sx={{ height: 100, mb: 2, backgroundColor: Colors.LightGrey }}>
                 <ListItemText primary={lecture.lecture_name} secondary={lecture.teacher_name} />
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <ListItemText align="right" secondary={`수강 인원: ${lecture.headcount}`} sx={{ mb: 2 }} />
