@@ -45,25 +45,36 @@ export default function TeacherSidebar() {
         console.log(origin);
       }}
     >
-      <Box sx={{ position: 'absolute', top: '70px', left: '10px' }}>
-        <img width="48px" src={clip} alt="" />
-      </Box>
       <List sx={{ pt: 10 }}>
-        {items.map((item) => (
-          <ListItemButton
-            key={item.name}
-            onClick={() => {
-              handleMenu(item.name);
-              navigate(item.link);
-            }}
-            onMouseOver={() => handleMenu(item.name)}
-            sx={{ backgroundColor: `${item.bgcolor}`, mb: 2, '&:hover': { backgroundColor: `${item.bgcolor}` } }}
-          >
-            <img width="32px" alt="" src={item.icon} />
-            <ListItemText sx={{ ml: 2 }}>{item.name}</ListItemText>
-            {isClicked[item.name] ? <Box width="20px" height="100%" backgroundColor={item.bgcolor} sx={{ position: 'absolute', left: '12.45vw' }} /> : null}
-          </ListItemButton>
-        ))}
+        {items.map((item) =>
+          isClicked[`${item.name}`] ? (
+            <ListItemButton
+              key={item.name}
+              onClick={() => {
+                handleMenu(item.name);
+                navigate(item.link);
+              }}
+              onMouseOver={() => handleMenu(item.name)}
+              sx={{ mb: 2, padding: 2, bgcolor: 'rgb(202, 185, 170)' }}
+            >
+              <img width="32px" alt="" src={item.icon} />
+              <ListItemText sx={{ ml: 2 }}>{item.name}</ListItemText>
+            </ListItemButton>
+          ) : (
+            <ListItemButton
+              key={item.name}
+              onClick={() => {
+                handleMenu(item.name);
+                navigate(item.link);
+              }}
+              onMouseOver={() => handleMenu(item.name)}
+              sx={{ mb: 2, padding: 2 }}
+            >
+              <img width="32px" alt="" src={item.icon} />
+              <ListItemText sx={{ ml: 2 }}>{item.name}</ListItemText>
+            </ListItemButton>
+          )
+        )}
       </List>
     </Box>
   );
