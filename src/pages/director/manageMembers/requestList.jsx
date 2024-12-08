@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
 import { Typography, List, ListItem, ListItemText, Button, Grid, ListItemButton, ListItemIcon, Checkbox, Divider, Box } from '@mui/material';
+
 import { SimpleDialog, TitleMedium } from '../../../components';
 import useRequestList from '../../../api/queries/members/useRequestList';
 import { useUserAuthStore } from '../../../store';
 import { useDecideRegisters } from '../../../api/queries/members/useDecideRegisters';
+
+import teacherIcon from '../../../assets/icons/teacher.png';
+import studentIcon from '../../../assets/icons/student.png';
 
 // Teacher Data
 // {
@@ -158,72 +162,72 @@ export default function RequestList() {
     <>
       <TitleMedium title="등록 요청 목록" />
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Box p={2}>
+        <Grid item xs={6} sx={{ mr: 2 }}>
+          <Box sx={{ height: 35, display: 'flex', gap: 1, alignItems: 'center' }}>
+            <Box component="img" src={teacherIcon} sx={{ height: 35 }} />
             <Typography sx={{ fontWeight: 'bold' }}>강사 요청 목록</Typography>
-            <List sx={{ overflow: 'auto', height: '65vh' }}>
-              <ListItem>
-                <Button onClick={handleToggleTeachers} disableRipple>
-                  {checkedAllTeacher ? '전체 해제' : '전체 선택'}
-                </Button>
-              </ListItem>
-              {teacherIsSuccess
-                ? teacherData.map((teacher) => {
-                    const teacherInfo = teacher.user;
+          </Box>
+          <List sx={{ overflow: 'auto', height: '65vh' }}>
+            <Button onClick={handleToggleTeachers} disableRipple size="small">
+              {checkedAllTeacher ? '전체 해제' : '전체 선택'}
+            </Button>
+            {teacherIsSuccess
+              ? teacherData.map((teacher) => {
+                  const teacherInfo = teacher.user;
 
-                    return (
-                      <ListItemButton key={teacherInfo.user_id} onClick={() => handleClickTeacher(teacher)}>
-                        <ListItemIcon>
-                          <Checkbox checked={checkedTeachers.indexOf(teacher) !== -1} />
-                        </ListItemIcon>
-                        <ListItemText primary={`${teacherInfo.user_name} 강사`} />
-                      </ListItemButton>
-                    );
-                  })
-                : []}
-            </List>
-            <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove('강사')}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={() => handleClickDecline('강사')}>
-                거절
-              </Button>
-            </Box>
+                  return (
+                    <ListItemButton key={teacherInfo.user_id} onClick={() => handleClickTeacher(teacher)}>
+                      <ListItemIcon>
+                        <Checkbox checked={checkedTeachers.indexOf(teacher) !== -1} />
+                      </ListItemIcon>
+                      <ListItemText primary={`${teacherInfo.user_name} 강사`} />
+                    </ListItemButton>
+                  );
+                })
+              : []}
+          </List>
+          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+            <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove('강사')}>
+              승인
+            </Button>
+            <Button variant="contained" onClick={() => handleClickDecline('강사')}>
+              거절
+            </Button>
           </Box>
         </Grid>
         <Divider orientation="vertical" variant="middle" flexItem />
         <Grid item xs={5.5}>
-          <Box p={2}>
+          <Box sx={{ height: 35, display: 'flex', gap: 1, alignItems: 'center' }}>
+            <Box component="img" src={studentIcon} sx={{ width: 25 }} />
             <Typography sx={{ fontWeight: 'bold' }}>학생 요청 목록</Typography>
-            <List sx={{ overflow: 'auto', height: '65vh' }}>
-              <ListItem>
-                <Button onClick={handleToggleStudents}>{checkedAllStudent ? '전체 해제' : '전체 선택'}</Button>
-              </ListItem>
-              {studentIsSuccess
-                ? studentData.map((student) => {
-                    const studentInfo = student.user;
-                    const parentName = studentInfo.parent ? studentInfo.parent.user_name : '';
+          </Box>
+          <List sx={{ overflow: 'auto', height: '65vh' }}>
+            <Button onClick={handleToggleStudents} disableRipple size="small">
+              {checkedAllStudent ? '전체 해제' : '전체 선택'}
+            </Button>
+            {studentIsSuccess
+              ? studentData.map((student) => {
+                  const studentInfo = student.user;
+                  const parentName = studentInfo.parent ? studentInfo.parent.user_name : '';
 
-                    return (
-                      <ListItemButton key={studentInfo.user_id} onClick={() => handleClickStudent(student)} disableRipple>
-                        <ListItemIcon>
-                          <Checkbox checked={checkedStudents.indexOf(student) !== -1} />
-                        </ListItemIcon>
-                        <ListItemText primary={studentInfo.user_name} secondary={`학부모: ${parentName}`} />
-                      </ListItemButton>
-                    );
-                  })
-                : []}
-            </List>
-            <Box sx={{ display: 'flex', justifyContent: 'end' }}>
-              <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove('학생')}>
-                승인
-              </Button>
-              <Button variant="contained" onClick={() => handleClickDecline('학생')}>
-                거절
-              </Button>
-            </Box>
+                  return (
+                    <ListItemButton key={studentInfo.user_id} onClick={() => handleClickStudent(student)} disableRipple>
+                      <ListItemIcon>
+                        <Checkbox checked={checkedStudents.indexOf(student) !== -1} />
+                      </ListItemIcon>
+                      <ListItemText primary={studentInfo.user_name} secondary={`학부모: ${parentName}`} />
+                    </ListItemButton>
+                  );
+                })
+              : []}
+          </List>
+          <Box sx={{ display: 'flex', justifyContent: 'end' }}>
+            <Button variant="outlined" sx={{ mr: 1 }} onClick={() => handleClickApprove('학생')}>
+              승인
+            </Button>
+            <Button variant="contained" onClick={() => handleClickDecline('학생')}>
+              거절
+            </Button>
           </Box>
         </Grid>
       </Grid>
