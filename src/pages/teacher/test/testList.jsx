@@ -29,13 +29,13 @@ export default function TestList() {
   const lecture = lectures.filter((n) => n.lecture_id === lectureId)[0];
   const { data: exams } = useGetExamList(lectureId);
   const examList = exams?.exams;
-  console.log(examList);
 
   const [category, setOriginCategory] = useState([]);
   const [unSelectCategory, setUnCategory] = useState(null); // 선택되지 않은 카테고리
   const [selectCategory, setCategory] = useState([]); // 선택 된 카테고리
   const [filterEl, setFilterEl] = useState(null); // 필터링 버튼 클릭시 메뉴 열리게
   const [settingEl, setSettingEl] = useState(null); // 설정 버튼 클릭 시 메뉴 열리게
+  const [search, setSearch] = useState('');
 
   const newcategoryRef = useRef();
   useEffect(() => {
@@ -114,7 +114,7 @@ export default function TestList() {
         <Typography align="left">수강생 {lecture.headcount}명</Typography>
         <TableContainer component={Paper} sx={{ padding: 3, maxHeight: '70vh', overflowY: 'auto' }}>
           <Container sx={{ display: 'flex' }}>
-            <TextField label="Search" sx={{ mb: 1 }} />
+            <TextField label="시험 이름 검색" sx={{ mb: 1 }} onChange={(e) => setSearch(e.target.value)} />
             <IconButton onClick={handleFilterClick}>
               <FilterAlt fontSize="large" />
             </IconButton>
@@ -129,9 +129,6 @@ export default function TestList() {
                 })}
               </Paper>
             </Menu>
-            <Button variant="contained" size="large" sx={{ my: 'auto' }}>
-              검색
-            </Button>
             <IconButton sx={{ marginLeft: 'auto' }} onClick={handleSettingClick}>
               <Settings fontSize="large" />
             </IconButton>
@@ -169,7 +166,7 @@ export default function TestList() {
             </TableHead>
             <TableBody>
               {examList?.map((exam) => {
-                if ((selectCategory.length !== 0 && exam.exam_type_id === selectCategory[0].exam_type_id) || selectCategory.length === 0) {
+                if ((selectCategory.length !== 0 && exam.exam_type_id === selectCategory[0].exam_type_id) || (selectCategory.length === 0 && exam.exam_name.includes(search)) || search.length === 0) {
                   const categoryName = category.filter((e) => e.exam_type_id === exam.exam_type_id)[0]?.exam_type_name;
                   return (
                     <TableRow key={exam.exam_id} onClick={() => handleRowClick(exam.exam_id, categoryName === '퀴즈')}>

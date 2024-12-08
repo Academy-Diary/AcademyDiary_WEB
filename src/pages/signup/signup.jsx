@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, Link, Grid, TextField, InputAdornment, IconButton, Alert, CircularProgress } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Mosaic } from 'react-loading-indicators';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -72,6 +73,8 @@ function SignupForm({ position, setStatus, setName }) {
   const [checkedDup, setCheckedDup] = useState(false); // 중복체크 여부
   const [isLoading, setIsLoading] = useState(false); // 로딩 스핀
 
+  const [isLoading, setLoading] = useState(false); // 로딩페이지 띄우기 위한 state
+
   const checkDupMutation = useCheckDuplicate();
   const signupMutation = useSignup();
 
@@ -106,6 +109,7 @@ function SignupForm({ position, setStatus, setName }) {
     else if (duplicated) alert('사용 가능한 아이디로 다시 시도해주세요.');
     else if (data.get('password') !== data.get('password2')) alert('입력한 두 비밀번호가 일치하지 않습니다.');
     else {
+      setLoading(true);
       const submitData = {
         user_id: data.get('userid'),
         password: data.get('password'),
@@ -135,6 +139,7 @@ function SignupForm({ position, setStatus, setName }) {
     }
   };
 
+  if (isLoading) return <Mosaic color={['#006336', '#024F51', '#064420', '#F4D65F']} />;
   return (
     <>
       <Typography variant="h6" align="center" mb={2}>

@@ -44,6 +44,8 @@ export default function ResetPassword() {
     });
   };
 
+  if (isLoading) return <Mosaic color={['#006336', '#024F51', '#064420', '#F4D65F']} />;
+
   return (
     <>
       <Typography variant="h5" align="center" sx={{ mt: 3, mb: 5 }}>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Box, Button, TextField, Typography, InputAdornment, IconButton, Alert, Divider, CircularProgress } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Mosaic } from 'react-loading-indicators';
 
 import { useLogin } from '../../api/queries/user/useLogin';
 import { PATH } from '../../route/path';
@@ -53,8 +54,11 @@ function Login() {
           },
         }
       );
+      setLoading(true);
     }
   };
+
+  if (isLoading) return <Mosaic color={['#006336', '#024F51', '#064420', '#F4D65F']} />;
 
   return (
     <>
