@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Typography } from '@mui/material';
 
 /**
@@ -8,6 +10,12 @@ import { Typography } from '@mui/material';
  *
  */
 export default function LogoTitle({ mt, mb }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/');
+  };
+
   return (
     <Typography
       variant="h4"
@@ -20,6 +28,7 @@ export default function LogoTitle({ mt, mb }) {
         msUserSelect: 'none',
         userSelect: 'none',
       }}
+      onClick={handleClick}
     >
       아카데미 다이어리
     </Typography>

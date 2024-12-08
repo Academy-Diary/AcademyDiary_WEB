@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, Link, Grid, TextField, InputAdornment, IconButton, Alert } from '@mui/material';
+import { Box, Button, Typography, Link, Grid, TextField, InputAdornment, IconButton, Alert, CircularProgress } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Mosaic } from 'react-loading-indicators';
 import dayjs from 'dayjs';
@@ -71,6 +71,7 @@ function SignupForm({ position, setStatus, setName }) {
   const [birthDate, setBirthDate] = useState(null);
   const [duplicated, setDuplicated] = useState(false);
   const [checkedDup, setCheckedDup] = useState(false); // 중복체크 여부
+  const [isLoading, setIsLoading] = useState(false); // 로딩 스핀
 
   const [isLoading, setLoading] = useState(false); // 로딩페이지 띄우기 위한 state
 
@@ -120,17 +121,19 @@ function SignupForm({ position, setStatus, setName }) {
       };
 
       // console.log(submitData);
+      setIsLoading(true);
       signupMutation.mutate(submitData, {
         onSuccess: (res) => {
+          setIsLoading(false);
           setName(submitData.user_name);
           setStatus(2);
-          console.log(res.message);
+          // console.log(res.message);
         },
         onError: (error) => {
-          setLoading(false);
+          setIsLoading(false);
           if (error.errorCode === 409) alert('이미 등록된 이메일(전화번호)입니다. \n다른 이메일(전화번호)로 다시 시도해주세요.');
           else alert('서버 오류로 회원가입에 실패하였습니다. \n나중에 다시 시도해주세요.');
-          console.log(error.message);
+          // console.log(error.message);
         },
       });
     }
@@ -138,14 +141,11 @@ function SignupForm({ position, setStatus, setName }) {
 
   if (isLoading) return <Mosaic color={['#006336', '#024F51', '#064420', '#F4D65F']} />;
   return (
-    <Box>
-      <Typography variant="h6" align="center" mb={1}>
+    <>
+      <Typography variant="h6" align="center" mb={2}>
         {position === 'CHIEF' ? '학원 대표 ' : '강사 '}회원가입
       </Typography>
-      <Typography variant="body1" align="center" mb={10}>
-        {position === 'director' && '학원 대표'}
-        {position === 'teacher' && '학원 강사'}
-      </Typography>
+      {isLoading && <CircularProgress />}
       <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
         <Grid container spacing={2}>
           <Grid item xs={8}>
@@ -212,7 +212,7 @@ function SignupForm({ position, setStatus, setName }) {
           </Grid>
         </Grid>
       </Box>
-    </Box>
+    </>
   );
 }
 

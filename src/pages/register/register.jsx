@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 
-import { Box, Container, Typography, Button, TextField, Grid, Alert } from '@mui/material';
+import { Box, Container, Typography, Button, TextField, Grid, Alert, CircularProgress } from '@mui/material';
 
 import { useUserAuthStore } from '../../store';
 import { useRegisterAcademy, useRegisterTeacher } from '../../api/queries/register/useRegister';
@@ -37,8 +37,8 @@ export default function Register({ position }) {
           left: '50%',
           transform: 'translateX(-50%)',
           backgroundColor: Colors.White,
-          borderTopLeftRadius: 10,
-          borderTopRightRadius: 10,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
         }}
       />
       <Container component="main" maxWidth="md">
@@ -103,6 +103,7 @@ function RegisterAcademy({ setStatus }) {
 
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // 로딩 스핀
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -115,11 +116,14 @@ function RegisterAcademy({ setStatus }) {
     };
 
     // console.log(submitData);
+    setIsLoading(true);
     registerAcademyMutation.mutate(submitData, {
       onSuccess: () => {
+        setIsLoading(false);
         setStatus(3);
       },
       onError: (error) => {
+        setIsLoading(false);
         setIsError(true);
         if (error.errorCode === 409) {
           setErrorMsg('이미 등록 요청된 상태입니다.');
@@ -132,10 +136,15 @@ function RegisterAcademy({ setStatus }) {
 
   return (
     <Box component="form" onSubmit={handleSubmit} mt={5}>
-      <Typography variant="h5" align="center" mb={10}>
+      <Typography variant="h5" align="center" mb={5}>
         학원 등록
       </Typography>
-      <Grid container spacing={2} mb={3}>
+      {isLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <CircularProgress />
+        </Box>
+      )}
+      <Grid container spacing={2} my={3}>
         <Grid item xs={12}>
           <TextField name="academyname" id="academyname" label="학원 이름" required fullWidth />
         </Grid>
@@ -163,6 +172,7 @@ function RegisterTeacher({ setStatus }) {
 
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // 로딩 스핀
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -174,11 +184,14 @@ function RegisterTeacher({ setStatus }) {
     };
 
     // console.log(submitData);
+    setIsLoading(true);
     registerTeacherMutation.mutate(submitData, {
       onSuccess: () => {
+        setIsLoading(false);
         setStatus(3);
       },
       onError: (error) => {
+        setIsLoading(false);
         setIsError(true);
         if (error.errorCode === 404) {
           setErrorMsg('학원을 찾을 수 없습니다. 초대키를 확인해주세요.');
@@ -196,6 +209,11 @@ function RegisterTeacher({ setStatus }) {
       <Typography variant="h5" align="center" mb={10}>
         강사 등록
       </Typography>
+      {isLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3 }}>
+          <CircularProgress />
+        </Box>
+      )}
       <TextField name="academykey" id="academykey" label="학원 초대키" required fullWidth />
       {isError && (
         <Alert severity="error" sx={{ mt: 2 }}>
