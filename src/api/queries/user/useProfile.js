@@ -34,6 +34,7 @@ export const useUpdateProfile = (userId) => {
 
 export const useUpdatePassword = (userId) => {
   const navigate = useNavigate();
+  const { user } = useUserAuthStore();
 
   return useMutation({
     mutationFn: async (password) => {
@@ -42,7 +43,7 @@ export const useUpdatePassword = (userId) => {
     },
     onSuccess: () => {
       alert('비밀번호가 성공적으로 변경되었습니다!');
-      navigate(-1);
+      navigate(`/${user.role === 'CHIEF' ? 'director' : 'teacher'}/profile`);
     },
     onError: (error) => {
       console.log('Error occured at useUpdatePassword: ', error);
