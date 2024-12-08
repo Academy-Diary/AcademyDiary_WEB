@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { Box, Button, TextField, Grid, Typography, Alert } from '@mui/material';
-import { CustomLink, TitleMedium } from '../../components';
+import { Box, Button, TextField, Grid, Typography, Alert, CircularProgress } from '@mui/material';
+import { CustomLink } from '../../components';
 import { PATH } from '../../route/path';
 import useFindId from '../../api/queries/user/useFindId';
 
@@ -10,6 +10,7 @@ export default function FindId() {
   const [userId, setUserId] = useState('');
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // 로딩 스핀
 
   const findIdMutation = useFindId();
 
@@ -22,13 +23,16 @@ export default function FindId() {
     };
 
     // console.log(submitData);
+    setIsLoading(true);
     findIdMutation.mutate(submitData, {
       onSuccess: (res) => {
         setFound(true);
         setUserId(res.data.user_id);
+        setIsLoading(false);
       },
       onError: (error) => {
         setIsError(true);
+        setIsLoading(false);
         if (error.errorCode === 400) setErrorMsg('이메일 혹은 전화번호 형식을 올바르게 입력해주세요.');
         else if (error.errorCode === 404) setErrorMsg('계정이 존재하지 않습니다.');
         else if (error.errorCode === 500) setErrorMsg('서버 오류로 아이디를 찾을 수 없습니다.');
@@ -41,6 +45,7 @@ export default function FindId() {
       <Typography variant="h5" align="center" sx={{ mt: 3, mb: 7 }}>
         아이디 찾기
       </Typography>
+      {isLoading && <CircularProgress />}
       {found ? (
         <Grid container spacing={5} sx={{ mt: 5 }}>
           <Grid item xs={12}>

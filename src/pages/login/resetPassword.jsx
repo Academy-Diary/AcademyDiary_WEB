@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Box, Button, Grid, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, CircularProgress, Grid, TextField, Typography } from '@mui/material';
 
 import { CustomLink } from '../../components';
 import { PATH } from '../../route/path';
@@ -9,6 +9,7 @@ export default function ResetPassword() {
   const [sent, setSent] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isError, setIsError] = useState(false); // 이메일, 전화번호 형식 오류
+  const [isLoading, setIsLoading] = useState(false); // 로딩 스핀
 
   const resetPwMutation = useResetPw();
 
@@ -21,11 +22,14 @@ export default function ResetPassword() {
       email: data.get('email'),
     };
 
+    setIsLoading(true);
     resetPwMutation.mutate(submitData, {
       onSuccess: () => {
+        setIsLoading(false);
         setSent(true);
       },
       onError: (error) => {
+        setIsLoading(false);
         if (error.errorCode === 400) {
           setErrorMsg('이메일 혹은 전화번호 형식을 올바르게 입력해주세요.');
           setIsError(true);
@@ -60,6 +64,7 @@ export default function ResetPassword() {
             가입하신 정보를 적어주시면 <br />
             비밀번호 변경 메일을 보내드릴게요.
           </Typography>
+          {isLoading && <CircularProgress sx={{ mt: 2 }} />}
           <Box component="form" sx={{ mt: 5 }} onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>

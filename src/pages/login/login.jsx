@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Button, TextField, Typography, InputAdornment, IconButton, Alert, Divider } from '@mui/material';
+import { Box, Button, TextField, Typography, InputAdornment, IconButton, Alert, Divider, CircularProgress } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 import { useLogin } from '../../api/queries/user/useLogin';
@@ -12,6 +12,7 @@ function Login() {
   const [hasFailed, setHasFailed] = useState(false); // alert 띄울지 여부
   const [isEmptyId, setIsEmptyId] = useState(false);
   const [isEmptyPw, setIsEmptyPw] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // 로딩 스핀
 
   const loginMutation = useLogin();
 
@@ -38,6 +39,8 @@ function Login() {
       if (!data.get('userId')) setIsEmptyId(true);
       if (!data.get('password')) setIsEmptyPw(true);
     } else {
+      setIsLoading(true);
+
       loginMutation.mutate(
         {
           user_id: data.get('userId'),
@@ -46,6 +49,7 @@ function Login() {
         {
           onError: () => {
             setHasFailed(true);
+            setIsLoading(false);
           },
         }
       );
@@ -58,6 +62,7 @@ function Login() {
       <Typography variant="h5" align="center" mb={3}>
         로그인
       </Typography>
+      {isLoading && <CircularProgress />}
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
         <TextField margin="normal" required fullWidth id="userId" label="아이디" name="userId" autoComplete="on" autoFocus error={hasFailed || isEmptyId} onChange={handleChangeId} />
         <TextField
