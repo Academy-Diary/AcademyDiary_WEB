@@ -66,7 +66,7 @@ export default function ManageCourses() {
   return (
     <>
       <TitleMedium title="강의 목록" />
-      <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
+      <List sx={{ maxHeight: '65vh', overflow: 'auto' }}>
         {isSuccess
           ? lectures.map((lecture) => (
               <ListItem key={lecture.lecture_id} sx={{ height: 100, mb: 2, backgroundColor: Colors.LightGrey }}>
