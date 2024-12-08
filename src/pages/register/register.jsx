@@ -37,8 +37,8 @@ export default function Register({ position }) {
           left: '50%',
           transform: 'translateX(-50%)',
           backgroundColor: Colors.White,
-          borderTopLeftRadius: 10,
-          borderTopRightRadius: 10,
+          borderTopLeftRadius: 30,
+          borderTopRightRadius: 30,
         }}
       />
       <Container component="main" maxWidth="md">
