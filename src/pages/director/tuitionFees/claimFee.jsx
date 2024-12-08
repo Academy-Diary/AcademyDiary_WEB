@@ -37,6 +37,7 @@ import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
 import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
 import { useMakeBill } from '../../../api/queries/tuitionFees/useMakeBill';
+import Colors from '../../../styles/colors';
 
 // const students = [
 //   {
@@ -88,7 +89,8 @@ export default function ClaimFee() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setOpenPreview(true);
+    if (selectedStudents.length > 0 && selectedClasses.length > 0 && dueDate) setOpenPreview(true);
+    else alert('모든 항목을 입력해주세요.');
   };
   const handleClaim = () => {
     const submitData = {
@@ -115,11 +117,19 @@ export default function ClaimFee() {
       <Box component="form" sx={{ mt: 5 }} onSubmit={handleSubmit}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
-            학생 선택
-            <IconButton onClick={() => setOpenSelect(true)}>
-              <OpenInNew />
-            </IconButton>
-            <Typography>{selectedStudents.map((s, idx) => `${s.user_name}(${s.phone_number.slice(9)})${idx < selectedStudents.length - 1 ? ', ' : ''}`)}</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={1}>
+                <Typography>학생 선택</Typography>
+              </Grid>
+              <Grid item xs={11}>
+                <IconButton onClick={() => setOpenSelect(true)} sx={{ p: 0 }}>
+                  <OpenInNew />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography>{selectedStudents.map((s, idx) => `${s.user_name}(${s.phone_number.slice(9)})${idx < selectedStudents.length - 1 ? ', ' : ''}`)}</Typography>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <Typography>수강반 선택</Typography>
@@ -140,8 +150,8 @@ export default function ClaimFee() {
             </LocalizationProvider>
           </Grid>
         </Grid>
-        <Box sx={{ position: 'fixed', left: '3vw', bottom: '5vh' }}>
-          <Typography variant="h6">{`총 청구 비용: ${getTotalFee(selectedClasses.map((c) => c.expense))} ₩`}</Typography>
+        <Box sx={{ position: 'absolute', left: '3vw', bottom: '5vh' }}>
+          <Typography variant="h6">{`총 청구 비용: ${getTotalFee(selectedClasses.map((c) => c.expense)).toLocaleString()} ₩`}</Typography>
         </Box>
         <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
           <Button type="submit" size="large" variant="contained">
@@ -151,7 +161,7 @@ export default function ClaimFee() {
         <Dialog open={openSelect} onClose={() => setOpenSelect(false)} maxWidth="sm" fullWidth>
           <DialogTitle>학생 선택</DialogTitle>
           <DialogContent>
-            <FormControl sx={{ mt: 2, minWidth: 200 }}>
+            <FormControl sx={{ my: 2, minWidth: 200 }}>
               <InputLabel>강의 선택</InputLabel>
               <Select label="강의 선택" value={selectedLectureId} onChange={handleChangeSelect}>
                 {lectures?.map((lecture) => (
@@ -180,19 +190,21 @@ export default function ClaimFee() {
                 <Typography>{selectedStudents.map((s, idx) => `${s.user_name}(${s.phone_number.slice(9)})${idx < selectedStudents.length - 1 ? ', ' : ''}`)}</Typography>
               </Grid>
               <Grid item xs={12}>
-                <Box sx={{ border: '1px solid black', padding: 2 }}>
+                <Box sx={{ backgroundColor: Colors.LightGrey, padding: 3, my: 1 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <Typography>수강반</Typography>
                     </Grid>
                     <Grid item xs={9}>
-                      <Typography>{selectedClasses.map((c, idx) => (idx < selectedClasses.length - 1 ? `${c.class_name}(${c.expense}), ` : `${c.class_name}(${c.expense})`))}</Typography>
+                      <Typography>
+                        {selectedClasses.map((c, idx) => (idx < selectedClasses.length - 1 ? `${c.class_name}(${c.expense.toLocaleString()}), ` : `${c.class_name}(${c.expense.toLocaleString()})`))}
+                      </Typography>
                     </Grid>
                     <Grid item xs={3}>
                       <Typography>총 청구 비용</Typography>
                     </Grid>
                     <Grid item xs={9}>
-                      <Typography>{getTotalFee(selectedClasses.map((c) => c.expense))}₩</Typography>
+                      <Typography>{getTotalFee(selectedClasses.map((c) => c.expense)).toLocaleString()}₩</Typography>
                     </Grid>
                     <Grid item xs={3}>
                       <Typography>납부 기한</Typography>
