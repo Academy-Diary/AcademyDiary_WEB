@@ -97,7 +97,7 @@ export default function ManageCourses() {
         <Dialog open={open} onClose={handleCloseDialog}>
           <DialogTitle>{selected.lecture_name} 강의를 폐강하시겠습니까?</DialogTitle>
           <DialogContent>
-            <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
+            <Box sx={{ padding: 2, backgroundColor: Colors.LightGrey }}>
               <DialogContentText>강의명: {selected.lecture_name}</DialogContentText>
               <DialogContentText>강사명: {selected.teacher_name}</DialogContentText>
               <DialogContentText>수강인원: {selected.headcount}</DialogContentText>
