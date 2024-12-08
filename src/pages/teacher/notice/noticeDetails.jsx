@@ -76,6 +76,7 @@ export default function TeacherNoticeDetails() {
             onClick={() => {
               navigate('/teacher/notice');
             }}
+            sx={{ backgroundColor: '#006336' }}
           >
             목록으로
           </Button>

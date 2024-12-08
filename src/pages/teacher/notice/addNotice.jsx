@@ -66,7 +66,7 @@ export default function TeacherAddNotice() {
             <TextField name="content" label="내용" fullWidth multiline rows={14} />
           </Grid>
           <Grid item xs={12}>
-            <Button component="label" role={undefined} tabIndex={-1} startIcon={<AttachFile />}>
+            <Button component="label" role={undefined} tabIndex={-1} startIcon={<AttachFile />} sx={{ color: '#006336' }}>
               파일첨부
               <VisuallyHiddenInput type="file" onChange={handleFileAdd} multiple />
             </Button>

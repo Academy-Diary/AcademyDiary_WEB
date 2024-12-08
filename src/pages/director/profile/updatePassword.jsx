@@ -39,7 +39,7 @@ export default function UpdatePassword() {
   };
 
   return (
-    <Container sx={{ width: '50vw', p: 5 }}>
+    <Container sx={{ width: 400, p: 5 }}>
       <Box component="form" onSubmit={handleSubmit}>
         <TitleMedium title="비밀번호 변경" />
         <TextField

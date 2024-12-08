@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Tabs, Tab, List, ListItemText, Checkbox, Button } from '@mui/material';
+import { Box, Tabs, Tab, List, ListItemText, Checkbox, Button, styled } from '@mui/material';
 
 import { SimpleDialog, TitleMedium } from '../../../components';
 import { useUserAuthStore } from '../../../store';
 import { useBillList } from '../../../api/queries/tuitionFees/useBillList';
 import { useUpdatePaid } from '../../../api/queries/tuitionFees/useUpdatePaid';
+import Colors from '../../../styles/colors';
 
 // const billList = [
 //   {
@@ -19,6 +20,17 @@ import { useUpdatePaid } from '../../../api/queries/tuitionFees/useUpdatePaid';
 //     ]
 //   },
 // ];
+
+const RedListItemText = styled(ListItemText)({
+  '& .MuiTypography-body2': {
+    color: Colors.Red, // secondary 텍스트의 색상만 변경
+  },
+});
+const BlueListItemText = styled(ListItemText)({
+  '& .MuiTypography-body2': {
+    color: Colors.Blue, // secondary 텍스트의 색상만 변경
+  },
+});
 
 function TabPanel({ value, index, children }) {
   return <div>{value === index && <Box>{children}</Box>}</div>;
@@ -96,32 +108,34 @@ export default function PaymentList() {
         </Box>
         <TabPanel value={tabIndex} index={0}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-            <Button variant="contained" onClick={handleCheckAll}>
-              {allChecked ? '전체해제' : '전체선택'}
-            </Button>
-            <Button variant="contained" onClick={handleClickUpdate}>
-              납부 완료
-            </Button>
+            {unpaidIsSuccess && (
+              <>
+                <Button onClick={handleCheckAll}>{allChecked ? '전체해제' : '전체선택'}</Button>
+                <Button variant="contained" onClick={handleClickUpdate}>
+                  납부 완료
+                </Button>
+              </>
+            )}
           </Box>
           <List sx={{ maxHeight: '60vh', overflow: 'auto' }}>
             {unpaidIsSuccess
               ? unpaidBills.map((unpaid) => (
-                  <Box key={unpaid.bill_id} onClick={() => handleCheckBill(unpaid)} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
+                  <Box key={unpaid.bill_id} onClick={() => handleCheckBill(unpaid)} sx={{ display: 'flex', p: 2, mb: 2, backgroundColor: Colors.LightGrey }}>
                     <Checkbox checked={checkedBills.indexOf(unpaid) !== -1} />
                     <ListItemText primary={unpaid.user_name} secondary={`수강반: ${unpaid.class_name.join(', ')}/ 기간: ${unpaid.deadline.split('T')[0]}`} />
-                    <ListItemText align="right" primary={unpaid.amount} secondary="미납" sx={{ mb: 2 }} />
+                    <RedListItemText align="right" primary={unpaid.amount} secondary="미납" sx={{ mb: 2 }} />
                   </Box>
                 ))
               : []}
           </List>
         </TabPanel>
         <TabPanel value={tabIndex} index={1}>
-          <List sx={{ maxHeight: '60vh', overflow: 'auto' }}>
+          <List sx={{ maxHeight: '60vh', overflow: 'auto', mt: 2 }}>
             {paidIsSuccess
               ? paidBills.map((paid) => (
-                  <Box key={paid.bill_id} sx={{ display: 'flex', p: 2, my: 2, backgroundColor: 'lightgray' }}>
+                  <Box key={paid.bill_id} sx={{ display: 'flex', p: 2, mb: 2, backgroundColor: Colors.LightGrey }}>
                     <ListItemText primary={paid.user_name} secondary={`수강반: ${paid.class_name.join(', ')}/ 기간: ${paid.deadline.split('T')[0]}`} />
-                    <ListItemText align="right" primary={paid.amount} secondary="납부 완료" sx={{ mb: 2 }} />
+                    <BlueListItemText align="right" primary={paid.amount} secondary="납부 완료" sx={{ mb: 2 }} />
                   </Box>
                 ))
               : []}

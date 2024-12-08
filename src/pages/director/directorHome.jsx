@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Box, Card, CardContent, Divider, Grid, List, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Card, CardContent, Divider, Grid, List, ListItem, ListItemText, Typography, styled } from '@mui/material';
 
-import { Title, TitleMedium } from '../../components';
+import { Title } from '../../components';
 import { useLectureList } from '../../api/queries/lectures/useLectureList';
 import { useNoticeList } from '../../api/queries/notice/useNoticeList';
 import useRequestList from '../../api/queries/members/useRequestList';
@@ -39,6 +39,13 @@ import { useAcademyInfo } from '../../api/queries/user/useAcademyInfo';
 //   ],
 // };
 
+const StyledCard = styled(Box)({
+  border: '1.5px solid black',
+  borderRadius: 10,
+  padding: 16,
+  height: 350,
+});
+
 export default function DirectorHome() {
   const navigate = useNavigate();
   const [liveLectures, setLiveLectures] = useState([]);
@@ -73,59 +80,74 @@ export default function DirectorHome() {
 
   return (
     <>
-      <Title title={academyInfo?.academy_name} subtitle={`학생 수: ${academyInfo?.headcount}명`} />
-      <Box sx={{ mb: 2, px: 2, backgroundColor: 'lightgrey' }}>
-        <TitleMedium title="진행중인 강의" />
-        <List>
-          {liveLectures.map((lecture) => (
-            <ListItem key={lecture.lecture_id}>
-              <ListItemText primary={`${lecture.lecture_name} (${lecture.teacher_name})`} secondary={`강의 시간: ${lecture.start_time}~${lecture.end_time}`} />
-              <ListItemText primary={`수강생: ${lecture.headcount}명`} />
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-      <Box sx={{ mb: 2, px: 2, pb: 2, backgroundColor: 'lightgrey' }}>
-        <TitleMedium title="학원 공지사항" />
-        <Grid container spacing={2}>
-          {notices &&
-            notices.notice_count > 0 &&
-            notices.notice_list.slice(0, 2).map((notice) => (
-              <Grid item xs={6} key={notice.notice_id}>
-                <Card sx={{ width: 400, height: 200 }} onClick={() => handleClickNoticeCard(notice.notice_id)}>
-                  <CardContent>
-                    <Typography variant="h6">{notice.title}</Typography>
-                    <Typography sx={{ justifySelf: 'end', mb: 2, fontSize: 14 }}>{`조회수 ${notice.views}명`}</Typography>
-                    <Typography>{notice.content}</Typography>
-                  </CardContent>
-                </Card>
+      <Title title={academyInfo?.academy_name} subtitle={`학생 수: ${academyInfo?.student_headcount}명`} />
+      <Grid container spacing={4} sx={{ mt: 1 }}>
+        <Grid item xs={6}>
+          <StyledCard>
+            <Typography variant="h6" sx={{ mb: 3 }}>
+              진행중인 강의
+            </Typography>
+            <List sx={{ height: 250, overflow: 'auto' }}>
+              {liveLectures.map((lecture) => (
+                <ListItem key={lecture.lecture_id} divider>
+                  <ListItemText primary={lecture.lecture_name} secondary={`강사: ${lecture.teacher_name}`} />
+                  <ListItemText primary={`${lecture.start_time}~${lecture.end_time}`} />
+                  <ListItemText primary={`수강생 ${lecture.headcount}명`} />
+                </ListItem>
+              ))}
+            </List>
+          </StyledCard>
+        </Grid>
+        <Grid item xs={6}>
+          <StyledCard>
+            <Typography variant="h6" sx={{ mb: 5 }}>
+              최근 등록 요청
+            </Typography>
+            <Grid container spacing={2} sx={{ height: 200 }}>
+              <Grid item xs={6}>
+                <Typography sx={{ mb: 2, fontWeight: 'bold' }}>강사</Typography>
+                {teacherReqList &&
+                  teacherReqList.slice(0, 3).map((teacher) => {
+                    const teacherInfo = teacher.user;
+                    return <Typography key={teacherInfo.user_id} sx={{ mb: 1 }}>{`${teacherInfo.user_name} 강사`}</Typography>;
+                  })}
               </Grid>
-            ))}
+              <Divider orientation="vertical" variant="middle" flexItem />
+              <Grid item xs={5}>
+                <Typography sx={{ mb: 2, fontWeight: 'bold' }}>학생 (학부모)</Typography>
+                {studentReqList &&
+                  studentReqList.slice(0, 3).map((student) => {
+                    const studentInfo = student.user;
+                    const parentInfo = studentInfo.parent;
+                    return <Typography key={studentInfo.user_id} sx={{ mb: 1 }}>{`${studentInfo.user_name} (${parentInfo ? parentInfo.user_name : ''})`}</Typography>;
+                  })}
+              </Grid>
+            </Grid>
+          </StyledCard>
         </Grid>
-      </Box>
-      <Box sx={{ mb: 2, px: 2, pb: 4, backgroundColor: 'lightgrey' }}>
-        <TitleMedium title="최근 등록요청" />
-        <Grid container spacing={1}>
-          <Grid item xs={6}>
-            <Typography sx={{ mb: 2, fontWeight: 'bold' }}>강사</Typography>
-            {teacherReqList &&
-              teacherReqList.slice(0, 3).map((teacher) => {
-                const teacherInfo = teacher.user;
-                return <Typography key={teacherInfo.user_id}>{`${teacherInfo.user_name} 강사`}</Typography>;
-              })}
-          </Grid>
-          <Divider orientation="vertical" variant="middle" flexItem />
-          <Grid item xs={5}>
-            <Typography sx={{ mb: 2, fontWeight: 'bold' }}>학생 (학부모)</Typography>
-            {studentReqList &&
-              studentReqList.slice(0, 3).map((student) => {
-                const studentInfo = student.user;
-                const parentInfo = studentInfo.parent;
-                return <Typography key={studentInfo.user_id}>{`${studentInfo.user_name} (${parentInfo ? parentInfo.user_name : ''})`}</Typography>;
-              })}
-          </Grid>
+        <Grid item xs={12}>
+          <StyledCard>
+            <Typography variant="h6" sx={{ mb: 5 }}>
+              학원 공지사항
+            </Typography>
+            <Grid container spacing={1}>
+              {notices &&
+                notices.notice_count > 0 &&
+                notices.notice_list.slice(0, 3).map((notice) => (
+                  <Grid item xs={4} key={notice.notice_id}>
+                    <Card elevation={3} sx={{ width: 350, height: 200 }} onClick={() => handleClickNoticeCard(notice.notice_id)}>
+                      <CardContent>
+                        <Typography variant="h6">{notice.title}</Typography>
+                        <Typography sx={{ justifySelf: 'end', mb: 2, fontSize: 14 }}>{`조회수 ${notice.views}명`}</Typography>
+                        <Typography>{notice.content}</Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+            </Grid>
+          </StyledCard>
         </Grid>
-      </Box>
+      </Grid>
     </>
   );
 }

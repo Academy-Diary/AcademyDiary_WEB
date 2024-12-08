@@ -85,7 +85,7 @@ export default function ManageTeachers() {
     <>
       <TitleMedium title="강사 관리" />
       <Typography mb={2}>강사 인원: {teachers?.length}</Typography>
-      <OutlinedInput endAdornment={<Search />} placeholder="강사명 또는 과목" onChange={handleInputSearch} sx={{ mb: 2 }} />
+      <OutlinedInput endAdornment={<Search />} placeholder="강사명 또는 과목" onChange={handleInputSearch} sx={{ mb: 2, width: 250 }} />
       <TableContainer component={Paper} sx={{ maxHeight: '60vh', width: '80vw' }}>
         <Table stickyHeader sx={{ minWidth: 650 }}>
           <TableHead>

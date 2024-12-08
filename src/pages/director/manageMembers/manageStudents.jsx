@@ -79,7 +79,7 @@ export default function ManageStudents() {
     <>
       <TitleMedium title="학생 관리" />
       <Typography mb={2}>학생 인원: {students?.length}</Typography>
-      <OutlinedInput placeholder="학생 또는 학부모 이름" endAdornment={<Search />} onChange={handleInputSearch} sx={{ mb: 2 }} />
+      <OutlinedInput placeholder="학생 또는 학부모 이름" endAdornment={<Search />} onChange={handleInputSearch} sx={{ mb: 2, width: 250 }} />
       <TableContainer component={Paper} sx={{ maxHeight: '65vh', width: '80vw' }}>
         <Table stickyHeader sx={{ minWidth: 650 }}>
           <TableHead>
