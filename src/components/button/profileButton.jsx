@@ -10,7 +10,7 @@ import { useProfileImage } from '../../api/queries/user/useProfile';
 import Colors from '../../styles/colors';
 
 /**
- * 마우스 오버 시 프로필 보기, 로그아웃 메뉴가 펼쳐지는 프로필 버튼
+ * 클릭 시 프로필 보기, 로그아웃 메뉴가 펼쳐지는 프로필 버튼
  */
 export default function ProfileButton({ position }) {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function ProfileButton({ position }) {
     if (imageUrl) updateProfileImg(`${imageUrl}?timestamp=${new Date().getTime()}`);
   }, [imageUrl, updateProfileImg]);
 
-  const handleMouseOver = (event) => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -39,7 +39,7 @@ export default function ProfileButton({ position }) {
 
   return (
     <>
-      <IconButton onMouseOver={handleMouseOver}>
+      <IconButton onClick={handleClick} disableRipple>
         <Avatar src={profileImg} />
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
