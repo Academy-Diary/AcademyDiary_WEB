@@ -2,13 +2,14 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
 
-import { Avatar, Box, Container, Grid, IconButton, Typography } from '@mui/material';
-import { Edit } from '@mui/icons-material';
+import { Avatar, Box, Card, Grid, IconButton, Typography } from '@mui/material';
+import { EditOutlined } from '@mui/icons-material';
 
 import { useUserAuthStore } from '../../../store';
-import { CustomLink } from '../../../components';
+import { CustomLink, TitleMedium } from '../../../components';
 import { PATH } from '../../../route/path';
 import { useAcademyInfo } from '../../../api/queries/user/useAcademyInfo';
+import Colors from '../../../styles/colors';
 
 // const user = {
 //   "user_id": "testuser",
@@ -41,40 +42,50 @@ export default function DirectorProfile() {
   };
 
   return (
-    <Container sx={{ width: '50vw', padding: 5 }}>
-      <Grid container spacing={5}>
-        <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Avatar src={profileImg} sx={{ width: 100, height: 100 }} />
-        </Grid>
-        <Grid item xs={8} sx={{ display: 'flex', alignItems: 'center' }}>
-          <Typography variant="h6">{user.user_name} 원장</Typography>
-          <IconButton sx={{ m: 2 }} onClick={handleClickUpdate}>
-            <Edit />
-          </IconButton>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">개인 정보</Typography>
-          <Box sx={{ p: 2, backgroundColor: 'lightgray' }}>
-            <Typography variant="body1">생년월일: {dayjs(user.birth_date).format('YYYY-MM-DD')}</Typography>
-            <Typography variant="body1">전화번호: {user.phone_number}</Typography>
-            <Typography variant="body1">이메일: {user.email}</Typography>
+    <>
+      <TitleMedium title="프로필" />
+      <Grid container sx={{ width: '70vw', mt: 3 }}>
+        <Grid item xs={4}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Avatar src={profileImg} sx={{ width: 150, height: 150, mb: 2 }} />
+            <Typography sx={{ fontWeight: 500 }}>프로필 사진</Typography>
           </Box>
         </Grid>
-        {hasRegistered && (
-          <Grid item xs={12}>
-            <Typography variant="h6">학원 정보</Typography>
-            <Box sx={{ p: 2, backgroundColor: 'lightgray' }}>
-              <Typography variant="body1">이름: {academyInfo?.academy_name}</Typography>
-              <Typography variant="body1">전화번호: {academyInfo?.phone_number}</Typography>
-              <Typography variant="body1">주소: {academyInfo?.address}</Typography>
-              <Typography variant="body1">이메일: {academyInfo?.academy_email}</Typography>
-            </Box>
+        <Grid item xs={8}>
+          <Grid container spacing={4}>
+            <Grid item xs={1.5}>
+              <Typography variant="h6">{user.user_name}</Typography>
+            </Grid>
+            <Grid item xs={10.5}>
+              <IconButton onClick={handleClickUpdate} sx={{ p: 0 }}>
+                <EditOutlined />
+              </IconButton>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography sx={{ fontWeight: 500, mb: 1 }}>개인 정보</Typography>
+              <Card sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2, backgroundColor: Colors.LightGrey }}>
+                <Typography>• 생년월일: {dayjs(user.birth_date).format('YYYY-MM-DD')}</Typography>
+                <Typography>• 전화번호: {user.phone_number}</Typography>
+                <Typography>• 이메일: {user.email}</Typography>
+              </Card>
+            </Grid>
+            {hasRegistered && (
+              <Grid item xs={12}>
+                <Typography sx={{ fontWeight: 500, mb: 1 }}>학원 정보</Typography>
+                <Card sx={{ display: 'flex', flexDirection: 'column', gap: 1, p: 2, backgroundColor: Colors.LightGrey }}>
+                  <Typography>• 이름: {academyInfo?.academy_name}</Typography>
+                  <Typography>• 전화번호: {academyInfo?.phone_number}</Typography>
+                  <Typography>• 주소: {academyInfo?.address}</Typography>
+                  <Typography>• 이메일: {academyInfo?.academy_email}</Typography>
+                </Card>
+              </Grid>
+            )}
+            <Grid item xs={12}>
+              <CustomLink to={PATH.DIRECTOR.PROFILE.UPDATE_PW} text="비밀번호 변경" />
+            </Grid>
           </Grid>
-        )}
-        <Grid item xs={6}>
-          <CustomLink to={PATH.DIRECTOR.PROFILE.UPDATE_PW} text="비밀번호 변경" />
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 }
