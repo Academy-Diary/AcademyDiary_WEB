@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 import { Box, Button, TextField, Grid, Typography, Alert } from '@mui/material';
-import { CustomLink, TitleMedium } from '../../components';
+import { Mosaic } from 'react-loading-indicators';
+import { CustomLink } from '../../components';
 import { PATH } from '../../route/path';
 import useFindId from '../../api/queries/user/useFindId';
 
@@ -10,6 +11,8 @@ export default function FindId() {
   const [userId, setUserId] = useState('');
   const [isError, setIsError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  const [isLoading, setLoading] = useState(false);
 
   const findIdMutation = useFindId();
 
@@ -21,13 +24,16 @@ export default function FindId() {
       phone_number: data.get('phonenumber'),
     };
 
+    setLoading(true);
     // console.log(submitData);
     findIdMutation.mutate(submitData, {
       onSuccess: (res) => {
+        setLoading(false);
         setFound(true);
         setUserId(res.data.user_id);
       },
       onError: (error) => {
+        setLoading(false);
         setIsError(true);
         if (error.errorCode === 400) setErrorMsg('이메일 혹은 전화번호 형식을 올바르게 입력해주세요.');
         else if (error.errorCode === 404) setErrorMsg('계정이 존재하지 않습니다.');
@@ -35,6 +41,8 @@ export default function FindId() {
       },
     });
   };
+
+  if (isLoading) return <Mosaic color={['#006336', '#024F51', '#064420', '#F4D65F']} />;
 
   return (
     <>
