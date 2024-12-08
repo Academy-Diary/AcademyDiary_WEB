@@ -12,8 +12,6 @@ export default function FindId() {
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false); // 로딩 스핀
 
-  const [isLoading, setLoading] = useState(false);
-
   const findIdMutation = useFindId();
 
   const handleSubmit = (event) => {
@@ -24,28 +22,23 @@ export default function FindId() {
       phone_number: data.get('phonenumber'),
     };
 
-    setLoading(true);
     // console.log(submitData);
     setIsLoading(true);
     findIdMutation.mutate(submitData, {
       onSuccess: (res) => {
-        setLoading(false);
+        setIsLoading(false);
         setFound(true);
         setUserId(res.data.user_id);
-        setIsLoading(false);
       },
       onError: (error) => {
-        setLoading(false);
-        setIsError(true);
         setIsLoading(false);
+        setIsError(true);
         if (error.errorCode === 400) setErrorMsg('이메일 혹은 전화번호 형식을 올바르게 입력해주세요.');
         else if (error.errorCode === 404) setErrorMsg('계정이 존재하지 않습니다.');
         else if (error.errorCode === 500) setErrorMsg('서버 오류로 아이디를 찾을 수 없습니다.');
       },
     });
   };
-
-  if (isLoading) return <Mosaic color={['#006336', '#024F51', '#064420', '#F4D65F']} />;
 
   return (
     <>
