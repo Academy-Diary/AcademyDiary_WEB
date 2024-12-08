@@ -7,7 +7,7 @@ import { useLectures } from '../../api/queries/lectures/useLectures';
 import { useNoticeList } from '../../api/queries/notice/useNoticeList';
 import { useAcademyInfo } from '../../api/queries/user/useAcademyInfo';
 
-import checkIcon from '../../img/check.png';
+import checkIcon from '../../assets/icons/check.png';
 
 export default function TeacherHome() {
   const { user, lectures } = useUserAuthStore();
