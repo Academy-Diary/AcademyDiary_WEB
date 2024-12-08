@@ -88,7 +88,8 @@ export default function ClaimFee() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setOpenPreview(true);
+    if (selectedStudents.length > 0 && selectedClasses.length > 0 && dueDate) setOpenPreview(true);
+    else alert('모든 항목을 입력해주세요.');
   };
   const handleClaim = () => {
     const submitData = {
