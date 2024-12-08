@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { Box, Button, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, IconButton, InputAdornment, TextField, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Title } from '../../../components';
 import { useUserAuthStore } from '../../../store';
@@ -115,56 +115,42 @@ export default function ScoreList() {
           onChange={(e) => setSearch(e.target.value)}
         />
       </Grid>
-      <Grid xs={3} sx={{ my: 2 }}>
-        <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-          <Typography variant="subtitle" sx={{ padding: 2 }}>
-            이름
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid xs={3} sx={{ my: 2 }}>
-        <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-          <Typography variant="subtitle" sx={{ padding: 2 }}>
-            점수
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid xs={3} sx={{ my: 2 }}>
-        <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-          <Typography variant="subtitle" sx={{ padding: 2 }}>
-            이름
-          </Typography>
-        </Box>
-      </Grid>
-      <Grid xs={3} sx={{ my: 2 }}>
-        <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-          <Typography variant="subtitle" sx={{ padding: 2 }}>
-            점수
-          </Typography>
-        </Box>
-      </Grid>
-      {attendees?.map((attendee) => {
+      <Box sx={{ display: 'flex', width: '100%', my: 2, background: '#EEEEEE', borderRadius: 2 }}>
+        <Grid xs={2} sx={{ padding: 2 }}>
+          <Typography variant="subtitle">이름</Typography>
+        </Grid>
+        <Grid xs={2} sx={{ padding: 2 }}>
+          <Typography variant="subtitle">점수</Typography>
+        </Grid>
+        <Grid xs={2} />
+        <Divider orientation="vertical" variant="middle" flexItem sx={{ borderColor: 'black' }} />
+        <Grid xs={2} sx={{ padding: 2 }}>
+          <Typography variant="subtitle">이름</Typography>
+        </Grid>
+        <Grid xs={2} sx={{ padding: 2 }}>
+          <Typography variant="subtitle">점수</Typography>
+        </Grid>
+        <Grid xs={2} />
+      </Box>
+      {attendees?.map((attendee, idx) => {
         if (!attendee.user_name.includes(search)) return null;
         const score = scores?.scoreList.filter((n) => n.user_id === attendee.user_id)[0];
         return (
-          <>
-            <Grid xs={3}>
-              <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-                <Typography sx={{ padding: 2 }}>{attendee.user_name}</Typography>
-              </Box>
+          <Grid xs={6} sx={{ display: 'flex', width: '50%' }}>
+            {idx % 2 === 1 ? <Divider orientation="vertical" variant="middle" flexItem sx={{ borderColor: 'black' }} /> : null}
+            <Grid xs={4} sx={{ backgroundColor: '#EEEEEE' }}>
+              <Typography sx={{ padding: 2 }}>{attendee.user_name}</Typography>
             </Grid>
-            <Grid xs={2}>
-              <Box fullWidth sx={{ backgroundColor: 'lightgray' }}>
-                {!isEditing[attendee.user_id] ? (
-                  <Typography sx={{ padding: 2 }}>{score !== undefined ? score.score : 0}</Typography>
-                ) : (
-                  <TextField name={attendee.user_id} sx={{ py: 1 }} defaultValue={score !== undefined ? score.score : 0} size="small" />
-                )}
-              </Box>
+            <Grid xs={4} sx={{ backgroundColor: '#EEEEEE' }}>
+              {!isEditing[attendee.user_id] ? (
+                <Typography sx={{ padding: 2 }}>{score !== undefined ? score.score : 0}</Typography>
+              ) : (
+                <TextField name={attendee.user_id} sx={{ py: 1 }} defaultValue={score !== undefined ? score.score : 0} size="small" />
+              )}
             </Grid>
-            <Grid xs={1}>
+            <Grid xs={4}>
               {!isQuiz ? (
-                <Box fullWidth sx={{ backgroundColor: 'lightgray', py: 1.57 }}>
+                <Box fullWidth sx={{ backgroundColor: '#EEEEEE', py: 1.57 }}>
                   {!isEditing[attendee.user_id] ? (
                     <Button variant="contained" size="small" onClick={(e) => handleEdit(attendee.user_id, e)}>
                       수정
@@ -176,14 +162,24 @@ export default function ScoreList() {
                   )}
                 </Box>
               ) : (
-                <Box fullWidth sx={{ backgroundColor: 'lightgray', py: 1.57 }}>
+                <Box fullWidth sx={{ backgroundColor: '#EEEEEE', py: 1.57 }}>
                   <Button variant="contained" size="small" disabled>
                     수정
                   </Button>
                 </Box>
               )}
             </Grid>
-          </>
+            <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>
+              <Button size="large" variant="outlined" color="error" sx={{ mr: 2 }} onClick={handleDelete}>
+                삭제하기
+              </Button>
+              {!isQuiz ? (
+                <Button size="large" variant="contained" onClick={handleAddScore}>
+                  전체성적입력
+                </Button>
+              ) : null}
+            </Box>
+          </Grid>
         );
       })}
       <Box sx={{ position: 'fixed', bottom: '3vh', right: '3vw' }}>

@@ -34,8 +34,8 @@ export default function TeacherHome() {
                 Today&apos;s Lectures
               </Typography>
               {lectures.map((lecture) => {
-                const time1 = lecture.start_time.split('T')[1].split('.')[0].split(':');
-                const time2 = lecture.end_time.split('T')[1].split('.')[0].split(':');
+                const time1 = lecture.start_time;
+                const time2 = lecture.end_time;
                 const week = ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'];
                 const today = week[new Date().getDay()];
                 if (lecture.days.includes(today))
@@ -47,7 +47,7 @@ export default function TeacherHome() {
                           <Typography sx={{ ml: '15px', fontFamily: 'Inter' }}>{lecture.lecture_name}</Typography>
                         </Box>
                         <Typography sx={{ fontFamily: 'Inter' }}>
-                          {time1[0]}:{time1[1]}~{time2[0]}:{time2[1]}
+                          {time1}~{time2}
                         </Typography>
                         <Typography sx={{ fontFamily: 'Inter' }}>수강생 {lecture.headcount}명</Typography>
                       </Grid>

@@ -17,6 +17,7 @@ import {
   TextField,
   DialogActions,
   DialogContentText,
+  Typography,
 } from '@mui/material';
 
 import { TitleMedium, AddButton } from '../../../components';
@@ -25,6 +26,7 @@ import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
 import { useMakeClass } from '../../../api/queries/tuitionFees/useMakeClass';
 import { useUpdateClass } from '../../../api/queries/tuitionFees/useUpdateClass';
 import { useDeleteClass } from '../../../api/queries/tuitionFees/useDeleteClass';
+import Colors from '../../../styles/colors';
 
 function DialogForm({ type, open, handleCloseFormDialog, selected }) {
   const title = type === 'add' ? '수강반 추가' : '수강반 수정';
@@ -81,12 +83,12 @@ function DialogForm({ type, open, handleCloseFormDialog, selected }) {
   return (
     <Dialog component="form" open={open} onClose={handleCloseFormDialog} onSubmit={handleSubmit}>
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent sx={{ mt: 3 }}>
+      <DialogContent sx={{ mt: 2 }}>
         <TextField name="class_name" label="수강반 이름" defaultValue={type === 'update' ? selected.class_name : null} required fullWidth sx={{ my: 2 }} />
         <TextField name="duration" label="기간 (일)" type="number" defaultValue={type === 'update' ? selected.duration : null} required fullWidth sx={{ mb: 2 }} />
         <TextField name="expense" label="가격" type="number" defaultValue={type === 'update' ? selected.expense : null} required fullWidth sx={{ mb: 2 }} />
       </DialogContent>
-      <DialogActions sx={{ m: 3 }}>
+      <DialogActions sx={{ m: 2 }}>
         <Button variant="outlined" onClick={handleCloseFormDialog}>
           취소
         </Button>
@@ -149,7 +151,7 @@ export default function MakeClass() {
             <TableRow>
               <TableCell>수강반 이름</TableCell>
               <TableCell align="right">기간 (일)</TableCell>
-              <TableCell align="right">가격</TableCell>
+              <TableCell align="right">가격 (원)</TableCell>
               <TableCell />
             </TableRow>
           </TableHead>
@@ -159,7 +161,7 @@ export default function MakeClass() {
                   <TableRow key={c.class_id}>
                     <TableCell>{c.class_name}</TableCell>
                     <TableCell align="right">{c.duration}</TableCell>
-                    <TableCell align="right">{c.expense}</TableCell>
+                    <TableCell align="right">{c.expense.toLocaleString()}</TableCell>
                     <TableCell sx={{ width: '25%' }}>
                       <Grid container spacing={1}>
                         <Grid item xs={4} />
@@ -184,17 +186,23 @@ export default function MakeClass() {
       <AddButton title="수강반 추가" onClick={() => handleOpenFormDialog('add')} />
       <DialogForm type={dialogType} open={openFormDialog} handleCloseFormDialog={handleCloseFormDialog} selected={selected} />
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>해당 수강반을 삭제하시겠습니까?</DialogTitle>
+        <DialogTitle>
+          <Typography variant="h6">해당 수강반을 삭제하시겠습니까?</Typography>
+        </DialogTitle>
         <DialogContent>
-          <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
-            <DialogContentText>수강반 이름: {selected.class_name}</DialogContentText>
-            <DialogContentText>기간 (일): {selected.duration}</DialogContentText>
-            <DialogContentText>가격: {selected.expense}</DialogContentText>
+          <Box sx={{ width: 400, my: 1, p: 2, backgroundColor: Colors.LightGrey, display: 'flex', flexDirection: 'column', gap: 1 }}>
+            <Typography>수강반 이름: {selected.class_name}</Typography>
+            <Typography>기간: {selected.duration}일</Typography>
+            <Typography>가격: {selected.expense?.toLocaleString()}원</Typography>
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>취소</Button>
-          <Button onClick={handleDelete}>삭제</Button>
+          <Button variant="outlined" onClick={handleCloseDeleteDialog}>
+            취소
+          </Button>
+          <Button variant="contained" onClick={handleDelete}>
+            삭제
+          </Button>
         </DialogActions>
       </Dialog>
     </>

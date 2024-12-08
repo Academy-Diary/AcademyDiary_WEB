@@ -7,6 +7,7 @@ import { TitleMedium, AddButton } from '../../../components';
 import { useLectureStore } from '../../../store';
 import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 import { useDeleteLecture } from '../../../api/queries/lectures/useDeleteLecture';
+import Colors from '../../../styles/colors';
 
 // Lecture List
 //
@@ -65,10 +66,10 @@ export default function ManageCourses() {
   return (
     <>
       <TitleMedium title="강의 목록" />
-      <List sx={{ maxHeight: '70vh', overflow: 'auto' }}>
+      <List sx={{ maxHeight: '65vh', overflow: 'auto' }}>
         {isSuccess
           ? lectures.map((lecture) => (
-              <ListItem key={lecture.lecture_id} sx={{ height: 120, marginY: 2, backgroundColor: 'lightgray' }}>
+              <ListItem key={lecture.lecture_id} sx={{ height: 100, mb: 2, backgroundColor: Colors.LightGrey }}>
                 <ListItemText primary={lecture.lecture_name} secondary={lecture.teacher_name} />
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   <ListItemText align="right" secondary={`수강 인원: ${lecture.headcount}`} sx={{ mb: 2 }} />
@@ -96,7 +97,7 @@ export default function ManageCourses() {
         <Dialog open={open} onClose={handleCloseDialog}>
           <DialogTitle>{selected.lecture_name} 강의를 폐강하시겠습니까?</DialogTitle>
           <DialogContent>
-            <Box sx={{ padding: 2, backgroundColor: 'lightgrey' }}>
+            <Box sx={{ padding: 2, backgroundColor: Colors.LightGrey }}>
               <DialogContentText>강의명: {selected.lecture_name}</DialogContentText>
               <DialogContentText>강사명: {selected.teacher_name}</DialogContentText>
               <DialogContentText>수강인원: {selected.headcount}</DialogContentText>
