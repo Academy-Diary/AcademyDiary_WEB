@@ -37,6 +37,7 @@ import { useClassList } from '../../../api/queries/tuitionFees/useClassList';
 import { useLectureList } from '../../../api/queries/lectures/useLectureList';
 import { useAttendeeList } from '../../../api/queries/lectures/useAttendeeList';
 import { useMakeBill } from '../../../api/queries/tuitionFees/useMakeBill';
+import Colors from '../../../styles/colors';
 
 // const students = [
 //   {
@@ -116,11 +117,19 @@ export default function ClaimFee() {
       <Box component="form" sx={{ mt: 5 }} onSubmit={handleSubmit}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
-            학생 선택
-            <IconButton onClick={() => setOpenSelect(true)}>
-              <OpenInNew />
-            </IconButton>
-            <Typography>{selectedStudents.map((s, idx) => `${s.user_name}(${s.phone_number.slice(9)})${idx < selectedStudents.length - 1 ? ', ' : ''}`)}</Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={1}>
+                <Typography>학생 선택</Typography>
+              </Grid>
+              <Grid item xs={11}>
+                <IconButton onClick={() => setOpenSelect(true)} sx={{ p: 0 }}>
+                  <OpenInNew />
+                </IconButton>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography>{selectedStudents.map((s, idx) => `${s.user_name}(${s.phone_number.slice(9)})${idx < selectedStudents.length - 1 ? ', ' : ''}`)}</Typography>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <Typography>수강반 선택</Typography>
@@ -181,7 +190,7 @@ export default function ClaimFee() {
                 <Typography>{selectedStudents.map((s, idx) => `${s.user_name}(${s.phone_number.slice(9)})${idx < selectedStudents.length - 1 ? ', ' : ''}`)}</Typography>
               </Grid>
               <Grid item xs={12}>
-                <Box sx={{ border: '1px solid black', padding: 2 }}>
+                <Box sx={{ backgroundColor: Colors.LightGrey, padding: 3, my: 1 }}>
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <Typography>수강반</Typography>
