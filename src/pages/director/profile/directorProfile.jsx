@@ -80,9 +80,6 @@ export default function DirectorProfile() {
                 </Card>
               </Grid>
             )}
-            <Grid item xs={12}>
-              <CustomLink to={PATH.DIRECTOR.PROFILE.UPDATE_PW} text="비밀번호 변경" />
-            </Grid>
           </Grid>
         </Grid>
       </Grid>

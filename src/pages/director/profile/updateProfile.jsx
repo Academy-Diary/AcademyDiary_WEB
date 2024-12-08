@@ -11,12 +11,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { SimpleDialog, SubmitButtons } from '../../../components';
+import { CustomLink, SimpleDialog, SubmitButtons } from '../../../components';
 import { useUpdateProfile, useUpdateProfileImage } from '../../../api/queries/user/useProfile';
 import { useAcademyInfo, useUpdateAcademyInfo } from '../../../api/queries/user/useAcademyInfo';
 import { useUserAuthStore } from '../../../store';
 import { useCancelAccount } from '../../../api/queries/user/useCancelAccount';
 import { useCheckPassword } from '../../../api/queries/user/useCheckPw';
+import { PATH } from '../../../route/path';
 
 const VisuallyHiddenInput = styled('input')({
   display: 'none',
@@ -203,9 +204,8 @@ function UpdateProfileForm() {
           </Grid>
         )}
       </Grid>
-      <Button sx={{ mt: 3 }} onClick={handleOpenDialog}>
-        회원 탈퇴
-      </Button>
+      <CustomLink to={PATH.DIRECTOR.PROFILE.UPDATE_PW} text="비밀번호 변경" />
+      <Button onClick={handleOpenDialog}>회원 탈퇴</Button>
       <SimpleDialog openDialog={openDialog} handleClose={handleCloseDialog} text="정말로 탈퇴하시겠습니까?" second="탈퇴" handleClickSecond={handleCancelAccount} />
       <Snackbar
         open={openSnackbar}
