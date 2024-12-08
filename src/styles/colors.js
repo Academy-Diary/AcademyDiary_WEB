@@ -12,6 +12,7 @@ const Colors = {
   Red: '#A61010',
   Yellow: '#FFD317',
   Green: '#005C33',
+  Blue: '#002FFF',
 };
 
 export default Colors;
