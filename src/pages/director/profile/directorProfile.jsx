@@ -53,16 +53,16 @@ export default function DirectorProfile() {
         </Grid>
         <Grid item xs={8}>
           <Grid container spacing={4}>
-            <Grid item xs={1.5}>
+            <Grid item xs={2}>
               <Typography variant="h6">{user.user_name}</Typography>
             </Grid>
-            <Grid item xs={10.5}>
+            <Grid item xs={10}>
               <IconButton onClick={handleClickUpdate} sx={{ p: 0 }}>
                 <EditOutlined />
               </IconButton>
             </Grid>
             <Grid item xs={12}>
-              <Typography sx={{ fontWeight: 500, mb: 1 }}>개인 정보</Typography>
+              <Typography sx={{ fontWeight: 500, mb: 1, mt: 2 }}>개인 정보</Typography>
               <Card sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2, backgroundColor: Colors.LightGrey }}>
                 <Typography>• 생년월일: {dayjs(user.birth_date).format('YYYY-MM-DD')}</Typography>
                 <Typography>• 전화번호: {user.phone_number}</Typography>
