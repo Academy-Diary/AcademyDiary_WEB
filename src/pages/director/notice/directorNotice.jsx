@@ -36,11 +36,11 @@ export default function DirectorNotice() {
   const deleteNoticeMutation = useNoticeDelete();
 
   useEffect(() => {
-    if (notices) {
+    if (notices && page === 1) {
       // 공지가 없으면 academyId&0&0으로
       setLastNoticeId(notices.notice_count !== 0 ? notices.notice_list[0].notice_id : `${user.academy_id}&0&0`);
     }
-  }, [notices, user]);
+  }, [notices, user, page]);
 
   const handleChangePage = (e, value) => {
     setPage(value);
