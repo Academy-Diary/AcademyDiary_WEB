@@ -33,12 +33,12 @@ export default function CourseNotice() {
   const [lastNoticeId, setLastNoticeId] = useState('');
 
   useEffect(() => {
-    if (notices) {
+    if (notices && pageNo === 1) {
       // 공지를 불러왔을 때 마지막 noticeId.
       // 공지가 없다면 user.academy_id&courseId&0 으로 세팅.
       setLastNoticeId(notices.notice_count !== 0 ? notices.notice_list[0].notice_id : `${user.academy_id}&${courseID}&0`);
     }
-  }, [notices, courseID, user]);
+  }, [notices, courseID, user, pageNo]);
 
   const handleClickAdd = () => {
     navigate(`/teacher/class/${params.courseid}/notice/add`, { state: { noticeId: lastNoticeId } });
